@@ -1,0 +1,3410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Co-Founder Transparency & Management Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-surface: #0f172a;
+      --bg-card: #141e33;
+      --bg-card-hover: #1a2742;
+      --bg-input: #1b263b;
+      --border-subtle: #1e293b;
+      --border-medium: #334155;
+      --border-accent: #4f46e5;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: rgba(99, 102, 241, 0.15);
+      
+      --emerald: #10b981;
+      --emerald-light: rgba(16, 185, 129, 0.15);
+      --amber: #f59e0b;
+      --amber-light: rgba(245, 158, 11, 0.15);
+      --rose: #f43f5e;
+      --rose-light: rgba(244, 63, 94, 0.15);
+      --cyan: #06b6d4;
+      --cyan-light: rgba(6, 182, 212, 0.15);
+      --purple: #8b5cf6;
+      --purple-light: rgba(139, 92, 246, 0.15);
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-full: 9999px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Privacy Blur Mode */
+    body.privacy-active .privacy-sensitive {
+      filter: blur(7px);
+      user-select: none;
+      transition: filter 0.15s ease;
+    }
+
+    body.privacy-active .privacy-sensitive:hover {
+      filter: blur(4px);
+    }
+
+    body.privacy-active .privacy-mask-text {
+      display: inline-block;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-base);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-medium);
+      border-radius: var(--radius-full);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+      color: #fff;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* Partner Identity Switcher */
+    .partner-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .partner-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .partner-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    .partner-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Action Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.45);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--bg-card-hover);
+      border-color: var(--border-medium);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-muted);
+      border-color: var(--border-medium);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--primary);
+    }
+
+    .btn-danger {
+      background: var(--rose-light);
+      color: var(--rose);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: var(--rose);
+      color: #fff;
+    }
+
+    .btn-emerald {
+      background: var(--emerald-light);
+      color: var(--emerald);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .btn-emerald:hover:not(:disabled) {
+      background: var(--emerald);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-icon-only {
+      padding: 0.5rem;
+      width: 36px;
+      height: 36px;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-transform: capitalize;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: currentColor;
+    }
+
+    .badge-primary { background: var(--primary-light); color: var(--primary); }
+    .badge-emerald { background: var(--emerald-light); color: var(--emerald); }
+    .badge-amber { background: var(--amber-light); color: var(--amber); }
+    .badge-rose { background: var(--rose-light); color: var(--rose); }
+    .badge-cyan { background: var(--cyan-light); color: var(--cyan); }
+    .badge-purple { background: var(--purple-light); color: var(--purple); }
+    .badge-gray { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
+
+    /* Main Content Layout */
+    .container {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Mode Alerts */
+    .system-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+    .system-banner.banner-privacy {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+    }
+
+    /* KPI Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.15rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-medium);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .kpi-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.01em;
+    }
+
+    .kpi-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kpi-value {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0.35rem;
+      word-break: break-all;
+    }
+
+    .kpi-subtext {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Gauge Card Special Layout */
+    .gauge-card {
+      grid-column: span 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .gauge-svg-container {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-text-center {
+      position: absolute;
+      font-size: 0.85rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Analytics Charts Section */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1.2fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 1200px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .chart-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    /* Filter & Controls Toolbar */
+    .toolbar-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .input-search {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 0.55rem 0.85rem 0.55rem 2.4rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+
+    .input-search:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .select-control {
+      background: var(--bg-input);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 0.5rem 0.75rem;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .select-control:focus {
+      border-color: var(--primary);
+    }
+
+    /* Data Table Section */
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.82rem;
+    }
+
+    .data-table th {
+      background: #111a2e;
+      color: var(--text-muted);
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .data-table th.sortable {
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .data-table th.sortable:hover {
+      color: var(--text-main);
+      background: #16223b;
+    }
+
+    .data-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+      color: var(--text-main);
+    }
+
+    .data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .project-id-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .project-title-cell {
+      font-weight: 600;
+      color: var(--text-main);
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .project-category-cell {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .client-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .client-name {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .client-contact {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .currency-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .actions-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      justify-content: flex-end;
+    }
+
+    .table-footer {
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.4);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Slide-over Drawer */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 520px;
+      max-width: 90vw;
+      height: 100vh;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
+      z-index: 51;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .drawer-panel.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .drawer-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .drawer-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .drawer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .drawer-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-xl);
+      transform: scale(0.96);
+      transition: transform 0.2s ease;
+      overflow: hidden;
+    }
+
+    .modal-backdrop.open .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    /* Form Grids */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .form-full {
+      grid-column: span 2;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-control {
+      background: var(--bg-input);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 0.55rem 0.8rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition);
+      width: 100%;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    textarea.form-control {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .form-hint {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    .balance-preview-box {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px dashed var(--primary);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Audit Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border-subtle);
+    }
+
+    .timeline-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1.5rem;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 2px solid var(--primary);
+    }
+
+    .timeline-time {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .timeline-content {
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      color: #fff;
+      padding: 0.75rem 1.15rem;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: var(--shadow-xl);
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      pointer-events: auto;
+      max-width: 360px;
+    }
+
+    @keyframes toastIn {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Status inline dropdown */
+    .status-select-inline {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      border: 1px solid transparent;
+      outline: none;
+      cursor: pointer;
+      background: var(--bg-card);
+      color: var(--text-main);
+      transition: var(--transition);
+    }
+
+    .status-select-inline:hover {
+      border-color: var(--border-medium);
+    }
+
+    /* PIN Keypad for Unlock */
+    .pin-input-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+
+    .pin-digit {
+      width: 50px;
+      height: 60px;
+      font-size: 1.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-align: center;
+      background: var(--bg-input);
+      border: 2px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .pin-digit:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    /* Utility Helpers */
+    .text-emerald { color: var(--emerald) !important; }
+    .text-amber { color: var(--amber) !important; }
+    .text-rose { color: var(--rose) !important; }
+    .text-primary { color: var(--primary) !important; }
+    .text-muted { color: var(--text-muted) !important; }
+    .font-mono { font-family: 'JetBrains Mono', monospace !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="brand-title">
+        <span>Co-Founder Transparency Portal</span>
+        <span class="brand-subtitle">Financial & Operations Management</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Multi-User Identity Switcher -->
+      <div class="partner-switcher" title="Active Logged-in Partner Identity">
+        <button id="btnPartnerA" class="partner-btn active" onclick="setPartnerIdentity('Partner A (Operations Lead)')">
+          <span class="partner-avatar">PA</span>
+          <span>Partner A (Ops Lead)</span>
+        </button>
+        <button id="btnPartnerB" class="partner-btn" onclick="setPartnerIdentity('Partner B (Auditor/Executive)')">
+          <span class="partner-avatar">PB</span>
+          <span>Partner B (Auditor)</span>
+        </button>
+      </div>
+
+      <!-- Quick PIN Privacy Mode Toggle -->
+      <button id="btnPrivacyToggle" class="btn btn-secondary" onclick="togglePrivacyMode()" title="Toggle PIN Masking for Public Spaces">
+        <svg id="privacyEyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span id="privacyLabel">Privacy Mode</span>
+      </button>
+
+      <!-- Read-Only Mode Toggle -->
+      <button id="btnReadOnlyToggle" class="btn btn-secondary" onclick="toggleReadOnlyMode()" title="Toggle Read-Only Mode to Prevent Accidental Edits">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span id="readOnlyLabel">Read-Only</span>
+      </button>
+
+      <!-- Full Audit Trail Modal Trigger -->
+      <button class="btn btn-outline" onclick="openAuditModal()" title="View Complete Audit History">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+        </svg>
+        <span>Audit Trail</span>
+      </button>
+
+      <!-- Settings / Sheet Sync -->
+      <button class="btn btn-outline btn-icon-only" onclick="openSettingsModal()" title="Settings & Google Sheets API Sync">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+
+      <!-- New Project Action Button -->
+      <button id="btnNewProject" class="btn btn-primary" onclick="openNewProjectModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14m-7-7v14"/>
+        </svg>
+        <span>New Project Intake</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Status Banners -->
+    <div id="readOnlyBanner" class="system-banner" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span><strong>Read-Only Inspection Mode is active.</strong> Project modifications, quick payments, and status changes are disabled.</span>
+      </div>
+      <button class="btn btn-sm btn-outline" onclick="toggleReadOnlyMode()">Exit Read-Only</button>
+    </div>
+
+    <div id="privacyBanner" class="system-banner banner-privacy" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61M2 2l20 20"/></svg>
+        <span><strong>Public PIN Privacy Shield Active.</strong> Sensitive monetary numbers are blurred and masked.</span>
+      </div>
+      <button class="btn btn-sm btn-outline" onclick="promptUnlockPrivacy()">Enter PIN to Unlock</button>
+    </div>
+
+    <!-- 1.2 REAL-TIME FINANCIAL & OPERATIONAL DASHBOARD (7 KPI CARDS) -->
+    <section class="kpi-grid">
+      <!-- Card 1: Gross Lifetime Quoted Revenue -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Gross Lifetime Quoted</span>
+          <div class="kpi-icon-wrap" style="background: rgba(99, 102, 241, 0.15); color: var(--primary);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value privacy-sensitive" id="kpiGrossRevenue">₹0</div>
+        <div class="kpi-subtext">
+          <span id="kpiTotalProjectsCount">0</span> total projects contracted
+        </div>
+      </div>
+
+      <!-- Card 2: Total Cleared Income -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Cleared Income (Filtered)</span>
+          <div class="kpi-icon-wrap" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value text-emerald privacy-sensitive" id="kpiClearedIncome">₹0</div>
+        <div class="kpi-subtext" id="kpiClearedPeriodNote">Across active filter range</div>
+      </div>
+
+      <!-- Card 3: Total Outstanding Dues -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Outstanding Receivables</span>
+          <div class="kpi-icon-wrap" style="background: rgba(244, 63, 94, 0.15); color: var(--rose);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value text-rose privacy-sensitive" id="kpiOutstandingDues">₹0</div>
+        <div class="kpi-subtext" id="kpiUnpaidProjectsCount">0 accounts pending clearance</div>
+      </div>
+
+      <!-- Card 4: Monthly Active Pipeline Tally -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Active In Pipeline</span>
+          <div class="kpi-icon-wrap" style="background: rgba(245, 158, 11, 0.15); color: var(--amber);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value text-amber" id="kpiActivePipeline">0</div>
+        <div class="kpi-subtext">In Progress & Client Revision</div>
+      </div>
+
+      <!-- Card 5: Total Delivered Projects Count -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Delivered & Completed</span>
+          <div class="kpi-icon-wrap" style="background: rgba(6, 182, 212, 0.15); color: var(--cyan);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value text-cyan" id="kpiDeliveredCount">0</div>
+        <div class="kpi-subtext">Successful completions</div>
+      </div>
+
+      <!-- Card 6: Average Order Value (AOV) -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Average Order Value (AOV)</span>
+          <div class="kpi-icon-wrap" style="background: rgba(139, 92, 246, 0.15); color: var(--purple);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value privacy-sensitive" id="kpiAOV">₹0</div>
+        <div class="kpi-subtext">Quoted / Total Orders</div>
+      </div>
+
+      <!-- Card 7: Collection Percentage Gauge -->
+      <div class="kpi-card gauge-card">
+        <div>
+          <span class="kpi-title">Collection Rate</span>
+          <div class="kpi-value privacy-sensitive" id="kpiCollectionRate" style="margin-top: 0.35rem;">0%</div>
+          <div class="kpi-subtext">Cash Cleared vs Quoted</div>
+        </div>
+        <div class="gauge-svg-container">
+          <svg width="76" height="76" viewBox="0 0 36 36">
+            <path stroke="rgba(255,255,255,0.08)" stroke-width="3.5" fill="none"
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path id="gaugeCircle" stroke="var(--emerald)" stroke-width="3.5" stroke-linecap="round" fill="none"
+              stroke-dasharray="0, 100"
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <span class="gauge-text-center privacy-sensitive" id="gaugePctText">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1.5 ANALYTICS & VISUAL METRICS MODULE -->
+    <section class="charts-grid">
+      <!-- Monthly Cleared vs Pending (6 months) -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div class="chart-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 16v-4m5 4V8m5 8v-6"/></svg>
+            <span>Monthly Cashflow: Cleared vs Pending (Past 6 Months)</span>
+          </div>
+          <div style="display: flex; gap: 0.75rem; font-size: 0.72rem;">
+            <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 8px; height: 8px; background: var(--emerald); border-radius: 2px;"></span> Cleared</span>
+            <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 8px; height: 8px; background: var(--rose); border-radius: 2px;"></span> Pending</span>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="canvasCashflow"></canvas>
+        </div>
+      </div>
+
+      <!-- Project Status Donut -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div class="chart-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10h-10z"/></svg>
+            <span>Status Pipeline Breakdown</span>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="canvasStatusDonut"></canvas>
+        </div>
+      </div>
+
+      <!-- Category Revenue Breakdown -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div class="chart-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Category-wise Revenue Breakdown</span>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="canvasCategoryRevenue"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1.4 DYNAMIC DATA TABLE & REAL-TIME FILTERING ENGINE -->
+    <section class="toolbar-panel">
+      <div class="toolbar-row">
+        <!-- Global Search -->
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" class="input-search" placeholder="Search by Project ID, Title, Client Name, WhatsApp..." oninput="handleSearchChange()">
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-group">
+          <!-- Execution Status Filter -->
+          <select id="filterExecutionStatus" class="select-control" onchange="renderTable()">
+            <option value="ALL">All Execution Statuses</option>
+            <option value="New Lead">New Lead</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Draft Submitted">Draft Submitted</option>
+            <option value="Client Revision">Client Revision</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+
+          <!-- Payment Status Filter -->
+          <select id="filterPaymentStatus" class="select-control" onchange="renderTable()">
+            <option value="ALL">All Payment Statuses</option>
+            <option value="Unpaid">Unpaid</option>
+            <option value="Partial Advance">Partial Advance</option>
+            <option value="Fully Paid">Fully Paid</option>
+            <option value="Refunded">Refunded</option>
+          </select>
+
+          <!-- Category Filter -->
+          <select id="filterCategory" class="select-control" onchange="renderTable()">
+            <option value="ALL">All Categories</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Management">Management</option>
+            <option value="Software Development">Software Development</option>
+            <option value="Thesis">Thesis</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <!-- Date Range Filter -->
+          <select id="filterDateRange" class="select-control" onchange="handleDateFilterChange()">
+            <option value="ALL_TIME">All-Time</option>
+            <option value="TODAY">Today</option>
+            <option value="THIS_WEEK">This Week</option>
+            <option value="THIS_MONTH">This Month</option>
+            <option value="CUSTOM">Custom Date Range</option>
+          </select>
+
+          <div id="customDateInputs" style="display: none; align-items: center; gap: 0.35rem;">
+            <input type="date" id="filterStartDate" class="select-control" style="padding: 0.4rem;" onchange="renderTable()">
+            <span style="color: var(--text-dim); font-size: 0.75rem;">to</span>
+            <input type="date" id="filterEndDate" class="select-control" style="padding: 0.4rem;" onchange="renderTable()">
+          </div>
+
+          <!-- Export CSV -->
+          <button class="btn btn-secondary btn-sm" onclick="exportToCSV()" title="Export Filtered Projects to CSV">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export CSV</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Projects Table -->
+    <section class="table-container">
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="sortable" onclick="sortTable('Project_ID')">
+                Project ID <span id="sort_Project_ID">↕</span>
+              </th>
+              <th>Assignment Title & Category</th>
+              <th>Client Contact</th>
+              <th class="sortable" onclick="sortTable('Delivery_Deadline')">
+                Target Deadline <span id="sort_Delivery_Deadline">↕</span>
+              </th>
+              <th class="sortable" onclick="sortTable('Total_Quote')">
+                Total Quoted <span id="sort_Total_Quote">↕</span>
+              </th>
+              <th>Paid</th>
+              <th>Outstanding</th>
+              <th>Payment Status</th>
+              <th>Execution Status</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="projectsTableBody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <div id="tableRecordCount">Showing 0 of 0 projects</div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span style="font-size: 0.72rem; color: var(--text-dim);">Real-time Sync Active</span>
+          <div style="width: 7px; height: 7px; border-radius: 50%; background: var(--emerald);"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS & DRAWERS -->
+  <!-- ========================================================================= -->
+
+  <!-- 1.3 ADVANCED PROJECT INGESTION & EDIT MODAL -->
+  <div id="projectModalBackdrop" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span id="projectModalTitle">New Project Intake</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-sm" onclick="closeProjectModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="projectForm" onsubmit="handleProjectFormSubmit(event)">
+          <input type="hidden" id="formMode" value="CREATE">
+
+          <div class="form-grid">
+            <!-- 1. Unique Project ID -->
+            <div class="form-group">
+              <label class="form-label">Project Unique ID <span class="text-rose">*</span></label>
+              <input type="text" id="inpProjectId" class="form-control font-mono" required readonly style="background: rgba(255,255,255,0.03);">
+              <span class="form-hint">Auto-formatted sequence</span>
+            </div>
+
+            <!-- 4. Project Category -->
+            <div class="form-group">
+              <label class="form-label">Category <span class="text-rose">*</span></label>
+              <select id="inpCategory" class="form-control" required>
+                <option value="Engineering">Engineering</option>
+                <option value="Management">Management</option>
+                <option value="Software Development">Software Development</option>
+                <option value="Thesis">Thesis / Research</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- 2. Project Title -->
+            <div class="form-group form-full">
+              <label class="form-label">Project / Assignment Name <span class="text-rose">*</span></label>
+              <input type="text" id="inpProjectName" class="form-control" placeholder="e.g. IoT Smart Farming Architecture Paper" required>
+            </div>
+
+            <!-- 3. Client Name & Contact -->
+            <div class="form-group">
+              <label class="form-label">Client Name <span class="text-rose">*</span></label>
+              <input type="text" id="inpClientName" class="form-control" placeholder="e.g. Rohit Sharma" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Client WhatsApp / Phone <span class="text-rose">*</span></label>
+              <input type="text" id="inpClientContact" class="form-control font-mono" placeholder="e.g. 919876543210" required>
+              <span class="form-hint">Include country code (e.g. 91...) for WhatsApp links</span>
+            </div>
+
+            <!-- 5. Total Quoted Amount (₹) -->
+            <div class="form-group">
+              <label class="form-label">Total Quoted Amount (₹) <span class="text-rose">*</span></label>
+              <input type="number" id="inpTotalQuote" class="form-control font-mono" min="0" step="100" placeholder="0" required oninput="calculateBalanceIndicator()">
+              <span class="form-hint" id="quoteWordsPreview">₹0</span>
+            </div>
+
+            <!-- 6. Advance Payment Collected (₹) -->
+            <div class="form-group">
+              <label class="form-label">Advance Payment Collected (₹) <span class="text-rose">*</span></label>
+              <input type="number" id="inpAmountPaid" class="form-control font-mono" min="0" step="100" placeholder="0" required oninput="calculateBalanceIndicator()">
+              <span class="form-hint" id="advanceWordsPreview">₹0</span>
+            </div>
+
+            <!-- 7. Outstanding Balance Indicator (Auto-calculated) -->
+            <div class="form-full balance-preview-box">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Calculated Outstanding Balance:</span>
+                <div id="previewBalanceAmount" class="currency-mono" style="font-size: 1.25rem; font-weight: 700; color: var(--rose);">₹0</div>
+              </div>
+              <div id="previewBalanceBadge" class="badge badge-rose">Unpaid</div>
+            </div>
+
+            <!-- 8. Payment Channel Used -->
+            <div class="form-group">
+              <label class="form-label">Payment Channel Used <span class="text-rose">*</span></label>
+              <select id="inpPaymentChannel" class="form-control" required>
+                <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+                <option value="Direct Bank Transfer">Direct Bank Transfer (IMPS/NEFT)</option>
+                <option value="Razorpay">Razorpay Gateway</option>
+                <option value="Cash">Cash</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- 9. Payment Status -->
+            <div class="form-group">
+              <label class="form-label">Payment Status <span class="text-rose">*</span></label>
+              <select id="inpPaymentStatus" class="form-control" required>
+                <option value="Unpaid">Unpaid</option>
+                <option value="Partial Advance">Partial Advance</option>
+                <option value="Fully Paid">Fully Paid</option>
+                <option value="Refunded">Refunded</option>
+              </select>
+            </div>
+
+            <!-- 10. Project Execution Status -->
+            <div class="form-group">
+              <label class="form-label">Execution Status <span class="text-rose">*</span></label>
+              <select id="inpProjectStatus" class="form-control" required>
+                <option value="New Lead">New Lead</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Draft Submitted">Draft Submitted</option>
+                <option value="Client Revision">Client Revision</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <!-- 11. Target Delivery Deadline & Intake Date -->
+            <div class="form-group">
+              <label class="form-label">Delivery Deadline <span class="text-rose">*</span></label>
+              <input type="date" id="inpDeliveryDeadline" class="form-control" required>
+            </div>
+
+            <!-- 12. Logged By Partner Designation -->
+            <div class="form-group form-full">
+              <label class="form-label">Logged By Partner Designation</label>
+              <input type="text" id="inpLoggedBy" class="form-control" readonly style="background: rgba(255,255,255,0.03);">
+            </div>
+
+            <!-- 13. Client Guidelines & Internal Notes -->
+            <div class="form-group form-full">
+              <label class="form-label">Client Guidelines & Internal Partner Notes</label>
+              <textarea id="inpInternalNotes" class="form-control" placeholder="Key deliverables, client drive links, reference papers, formatting rules, or special promises..."></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeProjectModal()">Cancel</button>
+        <button type="submit" form="projectForm" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span id="btnSaveProjectText">Save Project Record</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK PAYMENT CLEARANCE MODAL -->
+  <div id="quickPaymentModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span>Quick Payment Clearance</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-sm" onclick="closeQuickPaymentModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="quickPayProjectId">
+
+        <div class="drawer-card" style="background: rgba(99, 102, 241, 0.05); border-color: rgba(99, 102, 241, 0.2);">
+          <div style="font-weight: 700; font-size: 0.95rem;" id="qpProjectTitle">Assignment Title</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);" id="qpClientInfo">Client: -</div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Quoted:</div>
+              <div id="qpQuoted" class="currency-mono privacy-sensitive" style="font-weight: 700;">₹0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Paid So Far:</div>
+              <div id="qpPaid" class="currency-mono privacy-sensitive text-emerald" style="font-weight: 700;">₹0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Pending:</div>
+              <div id="qpPending" class="currency-mono privacy-sensitive text-rose" style="font-weight: 700;">₹0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 0.5rem;">
+          <label class="form-label">Payment Amount to Clear (₹) <span class="text-rose">*</span></label>
+          <input type="number" id="qpPaymentInput" class="form-control font-mono" style="font-size: 1.25rem; font-weight: 700;" min="1" step="100" required>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-sm btn-outline" onclick="fillQuickPayFull()">Clear Full Balance</button>
+          <button type="button" class="btn btn-sm btn-outline" onclick="fillQuickPayHalf()">Pay 50% Balance</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Payment Channel</label>
+          <select id="qpPaymentChannel" class="form-control">
+            <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+            <option value="Direct Bank Transfer">Direct Bank Transfer (IMPS/NEFT)</option>
+            <option value="Razorpay">Razorpay Gateway</option>
+            <option value="Cash">Cash</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Transaction Reference / UTR (Optional)</label>
+          <input type="text" id="qpTransactionRef" class="form-control font-mono" placeholder="e.g. UPI Ref #328492019482">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeQuickPaymentModal()">Cancel</button>
+        <button type="button" class="btn btn-emerald" onclick="submitQuickPayment()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Record & Clear Payment</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW SLIDE-OVER DRAWER -->
+  <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeDetailDrawer()"></div>
+  <aside id="detailDrawer" class="drawer-panel">
+    <div class="drawer-header">
+      <div>
+        <span id="drawerProjectId" class="badge badge-primary font-mono" style="font-size: 0.8rem;">PRJ-XXXX-XXX</span>
+        <h3 id="drawerProjectTitle" style="margin-top: 0.35rem; font-size: 1.1rem; font-weight: 700;">Project Details</h3>
+      </div>
+      <button class="btn btn-outline btn-icon-only btn-sm" onclick="closeDetailDrawer()">✕</button>
+    </div>
+    
+    <div class="drawer-body">
+      <!-- Quick Status Badges -->
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <span id="drawerProjectStatusBadge" class="badge badge-amber">In Progress</span>
+        <span id="drawerPaymentStatusBadge" class="badge badge-emerald">Fully Paid</span>
+        <span id="drawerCategoryBadge" class="badge badge-purple">Engineering</span>
+      </div>
+
+      <!-- Financial Overview Card -->
+      <div class="drawer-card">
+        <div class="drawer-section-title">Financial Summary</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Quoted:</div>
+            <div id="drawerQuoted" class="currency-mono privacy-sensitive" style="font-size: 1.15rem; font-weight: 700;">₹0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Amount Cleared:</div>
+            <div id="drawerPaid" class="currency-mono privacy-sensitive text-emerald" style="font-size: 1.15rem; font-weight: 700;">₹0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Pending Balance:</div>
+            <div id="drawerPending" class="currency-mono privacy-sensitive text-rose" style="font-size: 1.15rem; font-weight: 700;">₹0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client & Timeline Card -->
+      <div class="drawer-card">
+        <div class="drawer-section-title">Client & Deadlines</div>
+        <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem;">
+          <div><strong>Client:</strong> <span id="drawerClientName">-</span></div>
+          <div><strong>Contact:</strong> <span id="drawerClientContact" class="font-mono">-</span></div>
+          <div><strong>Target Delivery:</strong> <span id="drawerDeadline">-</span></div>
+          <div><strong>Intake Logged:</strong> <span id="drawerCreated">-</span></div>
+          <div><strong>Logged By:</strong> <span id="drawerLoggedBy">-</span></div>
+        </div>
+      </div>
+
+      <!-- Partner Notes & Client Guidelines -->
+      <div class="drawer-card">
+        <div class="drawer-section-title">Guidelines & Internal Notes</div>
+        <div id="drawerNotes" style="font-size: 0.82rem; color: var(--text-muted); white-space: pre-wrap; line-height: 1.6;">
+          No notes recorded.
+        </div>
+      </div>
+
+      <!-- Project Audit Log -->
+      <div>
+        <div class="drawer-section-title">Project Audit History</div>
+        <div id="drawerTimeline" class="timeline">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="btn btn-outline" id="drawerBtnWhatsApp" onclick="triggerDrawerWhatsApp()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span>Send WhatsApp Receipt</span>
+      </button>
+      <button class="btn btn-secondary" id="drawerBtnEdit" onclick="editFromDrawer()">Edit Record</button>
+    </div>
+  </aside>
+
+  <!-- AUDIT TRAIL FULL EXPLORER MODAL -->
+  <div id="auditModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 800px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+          <span>Co-Founder Transparency Audit Log</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-sm" onclick="closeAuditModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+          Every project creation, balance payment, and status modification is permanently recorded with tamper-evident timestamps and partner attribution.
+        </div>
+        <div id="fullAuditTimeline" class="timeline">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAuditModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS & GOOGLE SHEETS SYNC MODAL -->
+  <div id="settingsModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Portal Settings & Database Sync</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-sm" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Google Apps Script Web App Endpoint URL</label>
+          <input type="url" id="inpApiUrl" class="form-control font-mono" placeholder="https://script.google.com/macros/s/AKfycbx.../exec">
+          <span class="form-hint">Paste your deployed Apps Script Web App URL to switch from local mode to Google Sheets.</span>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem;">
+          <button class="btn btn-secondary btn-sm" onclick="testSheetConnection()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span>Test Connection & Sync</span>
+          </button>
+          <span id="syncStatusBadge" class="badge badge-gray">Local Standalone Mode</span>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 1rem 0;">
+
+        <div class="form-group">
+          <label class="form-label">Privacy Mode PIN (4 Digits)</label>
+          <input type="password" id="inpPrivacyPin" class="form-control font-mono" maxlength="4" placeholder="1234">
+          <span class="form-hint">Default PIN is 1234. Used to unlock masked numbers.</span>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 1rem 0;">
+
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <label class="form-label">Demo Data & Diagnostics</label>
+          <button class="btn btn-outline btn-sm" onclick="loadSampleData(true)">
+            Reset to Sample Indian Agency Data
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN UNLOCK MODAL -->
+  <div id="pinModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 360px; text-align: center;">
+      <div class="modal-header" style="justify-content: center;">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Enter PIN to Unmask</span>
+        </div>
+      </div>
+      <div class="modal-body" style="align-items: center;">
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Enter your 4-digit co-founder PIN to reveal financial revenue figures.</p>
+        
+        <div class="pin-input-wrap">
+          <input type="password" maxlength="1" class="pin-digit" id="pin1" oninput="handlePinKey(1)">
+          <input type="password" maxlength="1" class="pin-digit" id="pin2" oninput="handlePinKey(2)">
+          <input type="password" maxlength="1" class="pin-digit" id="pin3" oninput="handlePinKey(3)">
+          <input type="password" maxlength="1" class="pin-digit" id="pin4" oninput="handlePinKey(4)">
+        </div>
+
+        <div id="pinErrorMsg" style="color: var(--rose); font-size: 0.78rem; display: none;">Incorrect PIN. Default is 1234.</div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn btn-outline" onclick="closePinModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="verifyPin()">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT STATE ENGINE & REACTIVE LOGIC -->
+  <!-- ========================================================================= -->
+  <script>
+    /**
+     * STATE MANAGEMENT & LOCAL STORAGE
+     */
+    const STORAGE_KEY_PROJECTS = 'ctmp_projects_v2';
+    const STORAGE_KEY_AUDITS = 'ctmp_audits_v2';
+    const STORAGE_KEY_SETTINGS = 'ctmp_settings_v2';
+
+    let appState = {
+      projects: [],
+      auditTrails: [],
+      activePartner: 'Partner A (Operations Lead)',
+      isPrivacyActive: false,
+      isReadOnly: false,
+      userPin: '1234',
+      apiUrl: '',
+      sortColumn: 'Creation_Timestamp',
+      sortDirection: 'desc',
+      searchQuery: '',
+      activeDrawerProjectId: null
+    };
+
+    /**
+     * INITIAL SEED DATA FOR REALISTIC INDIAN ACADEMIC/PROJECT CONSULTING BUSINESS
+     */
+    const SAMPLE_SEED_PROJECTS = [
+      {
+        Project_ID: "PRJ-2026-001",
+        Project_Name: "Smart Grid Power Distribution Simulation in MATLAB",
+        Client_Name: "Aarav Patel",
+        Client_Contact: "919820112233",
+        Category: "Engineering",
+        Total_Quote: 45000,
+        Amount_Paid: 30000,
+        Pending_Balance: 15000,
+        Payment_Status: "Partial Advance",
+        Project_Status: "In Progress",
+        Delivery_Deadline: "2026-09-28",
+        Creation_Timestamp: "2026-09-15T10:30:00.000Z",
+        Logged_By: "Partner A (Operations Lead)",
+        Internal_Notes: "Client requires IEEE format paper + MATLAB Simulink files with power loss graphs."
+      },
+      {
+        Project_ID: "PRJ-2026-002",
+        Project_Name: "Cross-Border E-Commerce Supply Chain Optimization Thesis",
+        Client_Name: "Pooja Hegde",
+        Client_Contact: "919876543210",
+        Category: "Management",
+        Total_Quote: 65000,
+        Amount_Paid: 65000,
+        Pending_Balance: 0,
+        Payment_Status: "Fully Paid",
+        Project_Status: "Completed",
+        Delivery_Deadline: "2026-09-20",
+        Creation_Timestamp: "2026-09-02T14:15:00.000Z",
+        Logged_By: "Partner B (Auditor/Executive)",
+        Internal_Notes: "Final draft submitted, plagiarism report < 5% approved, balance settled via Razorpay."
+      },
+      {
+        Project_ID: "PRJ-2026-003",
+        Project_Name: "Full-Stack Hospital Patient Portal (FastAPI & React)",
+        Client_Name: "Vikram Malhotra",
+        Client_Contact: "919711224455",
+        Category: "Software Development",
+        Total_Quote: 120000,
+        Amount_Paid: 50000,
+        Pending_Balance: 70000,
+        Payment_Status: "Partial Advance",
+        Project_Status: "Draft Submitted",
+        Delivery_Deadline: "2026-10-05",
+        Creation_Timestamp: "2026-09-10T11:00:00.000Z",
+        Logged_By: "Partner A (Operations Lead)",
+        Internal_Notes: "GitHub repository shared. Client testing milestone 1 authentication & appointment booking."
+      },
+      {
+        Project_ID: "PRJ-2026-004",
+        Project_Name: "Corporate Sustainability ESG Brand Identity & Pitch Deck",
+        Client_Name: "Neha Sen",
+        Client_Contact: "919933445566",
+        Category: "Graphic Design",
+        Total_Quote: 35000,
+        Amount_Paid: 0,
+        Pending_Balance: 35000,
+        Payment_Status: "Unpaid",
+        Project_Status: "New Lead",
+        Delivery_Deadline: "2026-10-12",
+        Creation_Timestamp: "2026-09-21T09:45:00.000Z",
+        Logged_By: "Partner A (Operations Lead)",
+        Internal_Notes: "Initial scope call completed. Awaiting client advance payment of 50% via UPI."
+      },
+      {
+        Project_ID: "PRJ-2026-005",
+        Project_Name: "Quantum Computing Cryptographic Protocol Benchmark",
+        Client_Name: "Dr. Sandeep Rao",
+        Client_Contact: "919845012345",
+        Category: "Thesis",
+        Total_Quote: 85000,
+        Amount_Paid: 85000,
+        Pending_Balance: 0,
+        Payment_Status: "Fully Paid",
+        Project_Status: "Client Revision",
+        Delivery_Deadline: "2026-09-25",
+        Creation_Timestamp: "2026-08-25T16:20:00.000Z",
+        Logged_By: "Partner B (Auditor/Executive)",
+        Internal_Notes: "Reviewer comments received from journal. Adding 2 more comparative benchmark tables."
+      }
+    ];
+
+    /**
+     * INITIALIZATION ON PAGE LOAD
+     */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSettings();
+      loadData();
+      renderAll();
+      initChartResizeListener();
+    });
+
+    function loadSettings() {
+      try {
+        const storedSettings = localStorage.getItem(STORAGE_KEY_SETTINGS);
+        if (storedSettings) {
+          const s = JSON.parse(storedSettings);
+          appState.apiUrl = s.apiUrl || '';
+          appState.userPin = s.userPin || '1234';
+          if (s.activePartner) appState.activePartner = s.activePartner;
+        }
+      } catch (e) {
+        console.error('Failed to load settings:', e);
+      }
+      updatePartnerUI();
+      document.getElementById('inpApiUrl').value = appState.apiUrl;
+      document.getElementById('inpPrivacyPin').value = appState.userPin;
+    }
+
+    function loadData() {
+      try {
+        const storedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS);
+        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS);
+
+        if (storedProjects) {
+          appState.projects = JSON.parse(storedProjects);
+        } else {
+          appState.projects = JSON.parse(JSON.stringify(SAMPLE_SEED_PROJECTS));
+          saveProjectsToStorage();
+        }
+
+        if (storedAudits) {
+          appState.auditTrails = JSON.parse(storedAudits);
+        } else {
+          appState.auditTrails = [
+            {
+              Log_ID: "LOG-INIT-01",
+              Project_ID: "PRJ-2026-001",
+              Action_Type: "CREATE_PROJECT",
+              Change_Description: "Project created with quote ₹45,000 and advance ₹30,000 by Partner A.",
+              Timestamp: "2026-09-15T10:30:00.000Z"
+            },
+            {
+              Log_ID: "LOG-INIT-02",
+              Project_ID: "PRJ-2026-002",
+              Action_Type: "QUICK_PAYMENT",
+              Change_Description: "Final payment clearance of ₹30,000 settled by Partner B. Marked Fully Paid.",
+              Timestamp: "2026-09-20T16:00:00.000Z"
+            }
+          ];
+          saveAuditsToStorage();
+        }
+      } catch (e) {
+        console.error('Error loading data:', e);
+      }
+
+      // If Google Sheet API is configured, initiate sync
+      if (appState.apiUrl) {
+        syncWithGoogleSheet();
+      }
+    }
+
+    function saveProjectsToStorage() {
+      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(appState.projects));
+    }
+
+    function saveAuditsToStorage() {
+      localStorage.setItem(STORAGE_KEY_AUDITS, JSON.stringify(appState.auditTrails));
+    }
+
+    function saveSettings() {
+      appState.apiUrl = document.getElementById('inpApiUrl').value.trim();
+      const pinVal = document.getElementById('inpPrivacyPin').value.trim();
+      if (pinVal.length === 4) {
+        appState.userPin = pinVal;
+      }
+      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
+        apiUrl: appState.apiUrl,
+        userPin: appState.userPin,
+        activePartner: appState.activePartner
+      }));
+      closeSettingsModal();
+      showToast('Settings saved successfully', 'success');
+      if (appState.apiUrl) {
+        syncWithGoogleSheet();
+      }
+    }
+
+    function loadSampleData(force = false) {
+      if (force && !confirm('Reset current local data back to the standard sample dataset?')) {
+        return;
+      }
+      appState.projects = JSON.parse(JSON.stringify(SAMPLE_SEED_PROJECTS));
+      saveProjectsToStorage();
+      logAuditTrail('SYSTEM', 'RESET_DATA', 'Database reset to standard sample dataset by ' + appState.activePartner);
+      renderAll();
+      showToast('Sample dataset restored', 'info');
+      closeSettingsModal();
+    }
+
+    /**
+     * DUAL AUTHORIZATION & SECURITY VIEW MODES
+     */
+    function setPartnerIdentity(partnerName) {
+      appState.activePartner = partnerName;
+      updatePartnerUI();
+      saveSettings();
+      showToast(`Active identity switched to ${partnerName}`, 'info');
+    }
+
+    function updatePartnerUI() {
+      const btnA = document.getElementById('btnPartnerA');
+      const btnB = document.getElementById('btnPartnerB');
+      if (appState.activePartner.includes('Partner A')) {
+        btnA.classList.add('active');
+        btnB.classList.remove('active');
+      } else {
+        btnB.classList.add('active');
+        btnA.classList.remove('active');
+      }
+    }
+
+    function togglePrivacyMode() {
+      if (appState.isPrivacyActive) {
+        promptUnlockPrivacy();
+      } else {
+        appState.isPrivacyActive = true;
+        document.body.classList.add('privacy-active');
+        document.getElementById('privacyBanner').style.display = 'flex';
+        document.getElementById('privacyLabel').textContent = 'Masked (PIN)';
+        showToast('Privacy Mode Enabled: Financial figures masked', 'info');
+      }
+    }
+
+    function promptUnlockPrivacy() {
+      openPinModal();
+    }
+
+    function openPinModal() {
+      document.getElementById('pinModalBackdrop').classList.add('open');
+      document.getElementById('pinErrorMsg').style.display = 'none';
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById('pin' + i);
+        el.value = '';
+      }
+      setTimeout(() => document.getElementById('pin1').focus(), 100);
+    }
+
+    function closePinModal() {
+      document.getElementById('pinModalBackdrop').classList.remove('open');
+    }
+
+    function handlePinKey(idx) {
+      const cur = document.getElementById('pin' + idx);
+      if (cur.value.length >= 1 && idx < 4) {
+        document.getElementById('pin' + (idx + 1)).focus();
+      } else if (idx === 4 && cur.value.length === 1) {
+        verifyPin();
+      }
+    }
+
+    function verifyPin() {
+      const entered = '' +
+        document.getElementById('pin1').value +
+        document.getElementById('pin2').value +
+        document.getElementById('pin3').value +
+        document.getElementById('pin4').value;
+
+      if (entered === appState.userPin) {
+        appState.isPrivacyActive = false;
+        document.body.classList.remove('privacy-active');
+        document.getElementById('privacyBanner').style.display = 'none';
+        document.getElementById('privacyLabel').textContent = 'Privacy Mode';
+        closePinModal();
+        showToast('Privacy Shield Unlocked', 'success');
+      } else {
+        document.getElementById('pinErrorMsg').style.display = 'block';
+        document.getElementById('pin1').value = '';
+        document.getElementById('pin2').value = '';
+        document.getElementById('pin3').value = '';
+        document.getElementById('pin4').value = '';
+        document.getElementById('pin1').focus();
+      }
+    }
+
+    function toggleReadOnlyMode() {
+      appState.isReadOnly = !appState.isReadOnly;
+      const banner = document.getElementById('readOnlyBanner');
+      const btnNew = document.getElementById('btnNewProject');
+      const label = document.getElementById('readOnlyLabel');
+
+      if (appState.isReadOnly) {
+        banner.style.display = 'flex';
+        btnNew.disabled = true;
+        label.textContent = 'Read-Only (Active)';
+        label.parentElement.classList.add('btn-emerald');
+        showToast('Read-Only mode enabled: modifications locked', 'info');
+      } else {
+        banner.style.display = 'none';
+        btnNew.disabled = false;
+        label.textContent = 'Read-Only';
+        label.parentElement.classList.remove('btn-emerald');
+        showToast('Edit mode enabled', 'info');
+      }
+      renderTable();
+    }
+
+    /**
+     * NUMBER FORMATTING & INDIAN CURRENCY
+     */
+    function formatINR(val) {
+      const num = Number(val) || 0;
+      return '₹' + num.toLocaleString('en-IN');
+    }
+
+    function getRelativeDateBadge(dateStr) {
+      if (!dateStr) return '';
+      const target = new Date(dateStr);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      target.setHours(0, 0, 0, 0);
+
+      const diffTime = target - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays < 0) {
+        return `<span class="badge badge-rose">Overdue (${Math.abs(diffDays)}d ago)</span>`;
+      } else if (diffDays === 0) {
+        return `<span class="badge badge-amber">Due Today</span>`;
+      } else if (diffDays <= 3) {
+        return `<span class="badge badge-amber">${diffDays} days left</span>`;
+      } else {
+        return `<span class="badge badge-gray">${dateStr}</span>`;
+      }
+    }
+
+    /**
+     * RENDER KPI DASHBOARD CARDS
+     */
+    function renderKPIs(filteredProjects) {
+      let grossQuoted = 0;
+      let totalCleared = 0;
+      let totalReceivables = 0;
+      let activePipeline = 0;
+      let completedCount = 0;
+      let unpaidAccounts = 0;
+
+      // Lifetime values
+      appState.projects.forEach(p => {
+        grossQuoted += Number(p.Total_Quote) || 0;
+        const bal = (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0);
+        if (bal > 0) unpaidAccounts++;
+      });
+
+      // Filtered cleared income & active pipeline
+      filteredProjects.forEach(p => {
+        totalCleared += Number(p.Amount_Paid) || 0;
+        const bal = (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0);
+        totalReceivables += (bal > 0 ? bal : 0);
+
+        if (p.Project_Status === 'In Progress' || p.Project_Status === 'Client Revision') {
+          activePipeline++;
+        }
+        if (p.Project_Status === 'Completed') {
+          completedCount++;
+        }
+      });
+
+      const totalProjects = appState.projects.length;
+      const aov = totalProjects > 0 ? Math.round(grossQuoted / totalProjects) : 0;
+      
+      const lifetimePaid = appState.projects.reduce((acc, p) => acc + (Number(p.Amount_Paid) || 0), 0);
+      const collectionRate = grossQuoted > 0 ? Math.min(100, Math.round((lifetimePaid / grossQuoted) * 100)) : 0;
+
+      // Update Card DOM
+      document.getElementById('kpiGrossRevenue').textContent = formatINR(grossQuoted);
+      document.getElementById('kpiTotalProjectsCount').textContent = totalProjects;
+      document.getElementById('kpiClearedIncome').textContent = formatINR(totalCleared);
+      document.getElementById('kpiOutstandingDues').textContent = formatINR(totalReceivables);
+      document.getElementById('kpiUnpaidProjectsCount').textContent = `${unpaidAccounts} accounts with balance`;
+      document.getElementById('kpiActivePipeline').textContent = activePipeline;
+      document.getElementById('kpiDeliveredCount').textContent = completedCount;
+      document.getElementById('kpiAOV').textContent = formatINR(aov);
+      document.getElementById('kpiCollectionRate').textContent = `${collectionRate}%`;
+      document.getElementById('gaugePctText').textContent = `${collectionRate}%`;
+
+      // Update SVG gauge ring
+      const gaugeCircle = document.getElementById('gaugeCircle');
+      if (gaugeCircle) {
+        gaugeCircle.setAttribute('stroke-dasharray', `${collectionRate}, 100`);
+        if (collectionRate >= 80) {
+          gaugeCircle.setAttribute('stroke', 'var(--emerald)');
+        } else if (collectionRate >= 50) {
+          gaugeCircle.setAttribute('stroke', 'var(--amber)');
+        } else {
+          gaugeCircle.setAttribute('stroke', 'var(--rose)');
+        }
+      }
+    }
+
+    /**
+     * FILTERING & SORTING PIPELINE
+     */
+    function getFilteredProjects() {
+      const statusFilter = document.getElementById('filterExecutionStatus').value;
+      const paymentFilter = document.getElementById('filterPaymentStatus').value;
+      const categoryFilter = document.getElementById('filterCategory').value;
+      const dateRange = document.getElementById('filterDateRange').value;
+      const query = appState.searchQuery.toLowerCase().trim();
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      return appState.projects.filter(p => {
+        // Status filter
+        if (statusFilter !== 'ALL' && p.Project_Status !== statusFilter) return false;
+        // Payment filter
+        if (paymentFilter !== 'ALL' && p.Payment_Status !== paymentFilter) return false;
+        // Category filter
+        if (categoryFilter !== 'ALL' && p.Category !== categoryFilter) return false;
+
+        // Search query
+        if (query) {
+          const matchId = (p.Project_ID || '').toLowerCase().includes(query);
+          const matchTitle = (p.Project_Name || '').toLowerCase().includes(query);
+          const matchClient = (p.Client_Name || '').toLowerCase().includes(query);
+          const matchContact = (p.Client_Contact || '').toLowerCase().includes(query);
+          const matchCat = (p.Category || '').toLowerCase().includes(query);
+          if (!matchId && !matchTitle && !matchClient && !matchContact && !matchCat) return false;
+        }
+
+        // Date filter
+        if (p.Creation_Timestamp) {
+          const pDate = new Date(p.Creation_Timestamp);
+          pDate.setHours(0, 0, 0, 0);
+
+          if (dateRange === 'TODAY') {
+            if (pDate.getTime() !== today.getTime()) return false;
+          } else if (dateRange === 'THIS_WEEK') {
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            if (pDate < startOfWeek) return false;
+          } else if (dateRange === 'THIS_MONTH') {
+            if (pDate.getMonth() !== today.getMonth() || pDate.getFullYear() !== today.getFullYear()) return false;
+          } else if (dateRange === 'CUSTOM') {
+            const startVal = document.getElementById('filterStartDate').value;
+            const endVal = document.getElementById('filterEndDate').value;
+            if (startVal && pDate < new Date(startVal)) return false;
+            if (endVal && pDate > new Date(endVal + 'T23:59:59')) return false;
+          }
+        }
+
+        return true;
+      }).sort((a, b) => {
+        let valA = a[appState.sortColumn];
+        let valB = b[appState.sortColumn];
+
+        if (appState.sortColumn === 'Total_Quote' || appState.sortColumn === 'Amount_Paid' || appState.sortColumn === 'Pending_Balance') {
+          valA = Number(valA) || 0;
+          valB = Number(valB) || 0;
+        } else {
+          valA = String(valA || '').toLowerCase();
+          valB = String(valB || '').toLowerCase();
+        }
+
+        if (valA < valB) return appState.sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return appState.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    function sortTable(columnName) {
+      if (appState.sortColumn === columnName) {
+        appState.sortDirection = appState.sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        appState.sortColumn = columnName;
+        appState.sortDirection = 'desc';
+      }
+
+      ['Project_ID', 'Delivery_Deadline', 'Total_Quote'].forEach(col => {
+        const el = document.getElementById('sort_' + col);
+        if (el) {
+          if (appState.sortColumn === col) {
+            el.textContent = appState.sortDirection === 'asc' ? '▲' : '▼';
+          } else {
+            el.textContent = '↕';
+          }
+        }
+      });
+
+      renderTable();
+    }
+
+    function handleSearchChange() {
+      appState.searchQuery = document.getElementById('searchInput').value;
+      renderTable();
+    }
+
+    function handleDateFilterChange() {
+      const val = document.getElementById('filterDateRange').value;
+      const customWrap = document.getElementById('customDateInputs');
+      if (val === 'CUSTOM') {
+        customWrap.style.display = 'flex';
+      } else {
+        customWrap.style.display = 'none';
+      }
+      renderTable();
+    }
+
+    /**
+     * RENDER DATA TABLE
+     */
+    function renderTable() {
+      const filtered = getFilteredProjects();
+      renderKPIs(filtered);
+      renderCharts(filtered);
+
+      const tbody = document.getElementById('projectsTableBody');
+      tbody.innerHTML = '';
+
+      document.getElementById('tableRecordCount').textContent = `Showing ${filtered.length} of ${appState.projects.length} projects`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">
+              No projects found matching the current search filters.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const tr = document.createElement('tr');
+        const quote = Number(p.Total_Quote) || 0;
+        const paid = Number(p.Amount_Paid) || 0;
+        const pending = Math.max(0, quote - paid);
+
+        // Payment status badge style
+        let payBadgeClass = 'badge-rose';
+        if (p.Payment_Status === 'Fully Paid') payBadgeClass = 'badge-emerald';
+        else if (p.Payment_Status === 'Partial Advance') payBadgeClass = 'badge-amber';
+        else if (p.Payment_Status === 'Refunded') payBadgeClass = 'badge-gray';
+
+        // Execution status select options
+        const statuses = ['New Lead', 'In Progress', 'Draft Submitted', 'Client Revision', 'Completed', 'Cancelled'];
+        let statusOptions = statuses.map(s => `<option value="${s}" ${s === p.Project_Status ? 'selected' : ''}>${s}</option>`).join('');
+
+        const isReadOnlyAttr = appState.isReadOnly ? 'disabled' : '';
+
+        tr.innerHTML = `
+          <td>
+            <span class="project-id-cell" onclick="openDetailDrawer('${p.Project_ID}')">
+              ${p.Project_ID}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </span>
+          </td>
+          <td>
+            <div class="project-title-cell" title="${escapeHtml(p.Project_Name)}">${escapeHtml(p.Project_Name)}</div>
+            <div class="project-category-cell">${escapeHtml(p.Category || 'Other')}</div>
+          </td>
+          <td>
+            <div class="client-cell">
+              <span class="client-name">${escapeHtml(p.Client_Name)}</span>
+              <span class="client-contact">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                ${escapeHtml(p.Client_Contact)}
+              </span>
+            </div>
+          </td>
+          <td>
+            ${getRelativeDateBadge(p.Delivery_Deadline)}
+          </td>
+          <td>
+            <span class="currency-mono privacy-sensitive">${formatINR(quote)}</span>
+          </td>
+          <td>
+            <span class="currency-mono text-emerald privacy-sensitive">${formatINR(paid)}</span>
+          </td>
+          <td>
+            <span class="currency-mono text-rose privacy-sensitive">${formatINR(pending)}</span>
+          </td>
+          <td>
+            <span class="badge ${payBadgeClass}">${escapeHtml(p.Payment_Status)}</span>
+          </td>
+          <td>
+            <select class="status-select-inline" ${isReadOnlyAttr} onchange="handleInlineStatusChange('${p.Project_ID}', this.value)">
+              ${statusOptions}
+            </select>
+          </td>
+          <td>
+            <div class="actions-cell">
+              <!-- Quick Payment Clearance -->
+              <button class="btn btn-sm btn-outline btn-icon-only" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')" title="Record Quick Payment">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              </button>
+
+              <!-- WhatsApp Receipt -->
+              <button class="btn btn-sm btn-outline btn-icon-only" onclick="sendWhatsAppReceipt('${p.Project_ID}')" title="Send WhatsApp Receipt">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </button>
+
+              <!-- Edit Record -->
+              <button class="btn btn-sm btn-outline btn-icon-only" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')" title="Edit Full Details">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+              </button>
+
+              <!-- Delete Record -->
+              <button class="btn btn-sm btn-outline btn-icon-only" ${isReadOnlyAttr} onclick="deleteProject('${p.Project_ID}')" title="Delete Project">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAll() {
+      renderTable();
+    }
+
+    /**
+     * PURE HTML5 CANVAS CHARTS (NO CDN DEPENDENCIES)
+     */
+    function initChartResizeListener() {
+      window.addEventListener('resize', () => {
+        renderCharts(getFilteredProjects());
+      });
+    }
+
+    function setupCanvasDPI(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      return { ctx, width: rect.width, height: rect.height };
+    }
+
+    function renderCharts(projects) {
+      renderCashflowChart(projects);
+      renderStatusDonutChart(projects);
+      renderCategoryChart(projects);
+    }
+
+    /**
+     * CHART 1: MONTHLY CLEARED VS PENDING DUES (PAST 6 MONTHS)
+     */
+    function renderCashflowChart(projects) {
+      const canvas = document.getElementById('canvasCashflow');
+      if (!canvas) return;
+      const { ctx, width, height } = setupCanvasDPI(canvas);
+
+      // Generate last 6 month buckets
+      const months = [];
+      const monthMap = {};
+      const today = new Date();
+
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const label = d.toLocaleString('en-US', { month: 'short' });
+        months.push({ key, label, cleared: 0, pending: 0 });
+        monthMap[key] = months[months.length - 1];
+      }
+
+      projects.forEach(p => {
+        if (!p.Creation_Timestamp) return;
+        const d = new Date(p.Creation_Timestamp);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        if (monthMap[key]) {
+          const q = Number(p.Total_Quote) || 0;
+          const paid = Number(p.Amount_Paid) || 0;
+          monthMap[key].cleared += paid;
+          monthMap[key].pending += Math.max(0, q - paid);
+        }
+      });
+
+      // Find max for scaling
+      let maxVal = 10000;
+      months.forEach(m => {
+        if (m.cleared > maxVal) maxVal = m.cleared;
+        if (m.pending > maxVal) maxVal = m.pending;
+      });
+      maxVal = Math.ceil(maxVal / 10000) * 10000;
+
+      // Draw Axes & Grid
+      const padLeft = 55;
+      const padBottom = 30;
+      const padTop = 20;
+      const padRight = 15;
+      const chartW = width - padLeft - padRight;
+      const chartH = height - padTop - padBottom;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Horizontal grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+
+      const steps = 4;
+      for (let i = 0; i <= steps; i++) {
+        const y = padTop + chartH - (i * (chartH / steps));
+        const val = Math.round((maxVal / steps) * i);
+        
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(width - padRight, y);
+        ctx.stroke();
+
+        ctx.fillText('₹' + (val >= 1000 ? (val / 1000) + 'k' : val), padLeft - 8, y + 3);
+      }
+
+      // Draw Bars
+      const groupWidth = chartW / months.length;
+      const barWidth = Math.min(18, (groupWidth - 12) / 2);
+
+      months.forEach((m, idx) => {
+        const groupX = padLeft + (idx * groupWidth) + (groupWidth / 2);
+
+        // Cleared Bar (Emerald)
+        const clearedH = Math.max(0, (m.cleared / maxVal) * chartH);
+        if (clearedH > 0) {
+          const clearedY = padTop + chartH - clearedH;
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath();
+          roundRect(ctx, groupX - barWidth - 2, clearedY, barWidth, clearedH, 3);
+          ctx.fill();
+        }
+
+        // Pending Bar (Rose)
+        const pendingH = Math.max(0, (m.pending / maxVal) * chartH);
+        if (pendingH > 0) {
+          const pendingY = padTop + chartH - pendingH;
+          ctx.fillStyle = '#f43f5e';
+          ctx.beginPath();
+          roundRect(ctx, groupX + 2, pendingY, barWidth, pendingH, 3);
+          ctx.fill();
+        }
+
+        // Month label
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = 'center';
+        ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(m.label, groupX, height - 10);
+      });
+    }
+
+    /**
+     * CHART 2: PROJECT STATUS DISTRIBUTION DONUT
+     */
+    function renderStatusDonutChart(projects) {
+      const canvas = document.getElementById('canvasStatusDonut');
+      if (!canvas) return;
+      const { ctx, width, height } = setupCanvasDPI(canvas);
+
+      const counts = {
+        'New Lead': 0,
+        'In Progress': 0,
+        'Draft Submitted': 0,
+        'Client Revision': 0,
+        'Completed': 0,
+        'Cancelled': 0
+      };
+
+      const colors = {
+        'New Lead': '#6366f1',
+        'In Progress': '#f59e0b',
+        'Draft Submitted': '#8b5cf6',
+        'Client Revision': '#ec4899',
+        'Completed': '#10b981',
+        'Cancelled': '#64748b'
+      };
+
+      projects.forEach(p => {
+        if (counts[p.Project_Status] !== undefined) {
+          counts[p.Project_Status]++;
+        }
+      });
+
+      const total = projects.length;
+      ctx.clearRect(0, 0, width, height);
+
+      if (total === 0) {
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
+        ctx.fillText('No project data', width / 2, height / 2);
+        return;
+      }
+
+      const centerX = width * 0.38;
+      const centerY = height / 2;
+      const outerR = Math.min(centerX - 10, centerY - 15);
+      const innerR = outerR * 0.62;
+
+      let startAngle = -Math.PI / 2;
+
+      Object.keys(counts).forEach(status => {
+        const count = counts[status];
+        if (count === 0) return;
+        const sliceAngle = (count / total) * 2 * Math.PI;
+
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, outerR, startAngle, startAngle + sliceAngle);
+        ctx.arc(centerX, centerY, innerR, startAngle + sliceAngle, startAngle, true);
+        ctx.closePath();
+        ctx.fillStyle = colors[status];
+        ctx.fill();
+
+        startAngle += sliceAngle;
+      });
+
+      // Center text
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '700 16px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(total, centerX, centerY + 3);
+      ctx.font = '10px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('Projects', centerX, centerY + 18);
+
+      // Legend
+      const legendX = width * 0.72;
+      let legendY = 35;
+      ctx.textAlign = 'left';
+      ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+
+      Object.keys(counts).forEach(status => {
+        if (counts[status] === 0) return;
+        ctx.fillStyle = colors[status];
+        ctx.beginPath();
+        ctx.arc(legendX, legendY - 4, 5, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillText(`${status} (${counts[status]})`, legendX + 10, legendY);
+        legendY += 22;
+      });
+    }
+
+    /**
+     * CHART 3: CATEGORY-WISE REVENUE BREAKDOWN
+     */
+    function renderCategoryChart(projects) {
+      const canvas = document.getElementById('canvasCategoryRevenue');
+      if (!canvas) return;
+      const { ctx, width, height } = setupCanvasDPI(canvas);
+
+      const catRevenue = {};
+      projects.forEach(p => {
+        const c = p.Category || 'Other';
+        catRevenue[c] = (catRevenue[c] || 0) + (Number(p.Total_Quote) || 0);
+      });
+
+      const categories = Object.keys(catRevenue).sort((a, b) => catRevenue[b] - catRevenue[a]);
+      let maxRev = 10000;
+      categories.forEach(c => {
+        if (catRevenue[c] > maxRev) maxRev = catRevenue[c];
+      });
+
+      ctx.clearRect(0, 0, width, height);
+
+      const padLeft = 110;
+      const padRight = 65;
+      const barH = 16;
+      const gap = 16;
+      let startY = 22;
+
+      categories.slice(0, 5).forEach(c => {
+        const rev = catRevenue[c];
+        const barW = ((width - padLeft - padRight) * rev) / maxRev;
+
+        // Label
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(c, padLeft - 10, startY + 12);
+
+        // Bar Track
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.beginPath();
+        roundRect(ctx, padLeft, startY, width - padLeft - padRight, barH, 4);
+        ctx.fill();
+
+        // Active Bar
+        const grad = ctx.createLinearGradient(padLeft, 0, padLeft + barW, 0);
+        grad.addColorStop(0, '#6366f1');
+        grad.addColorStop(1, '#8b5cf6');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        roundRect(ctx, padLeft, startY, Math.max(4, barW), barH, 4);
+        ctx.fill();
+
+        // Value text
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('₹' + (rev >= 1000 ? Math.round(rev / 1000) + 'k' : rev), padLeft + barW + 8, startY + 12);
+
+        startY += barH + gap;
+      });
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      if (width < 2 * radius) radius = width / 2;
+      if (height < 2 * radius) radius = height / 2;
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + width, y, x + width, y + height, radius);
+      ctx.arcTo(x + width, y + height, x, y + height, radius);
+      ctx.arcTo(x, y + height, x, y, radius);
+      ctx.arcTo(x, y, x + width, y, radius);
+    }
+
+    /**
+     * PROJECT INGESTION & EDIT MODAL
+     */
+    function openNewProjectModal() {
+      if (appState.isReadOnly) {
+        showToast('Read-Only Mode active. Switch to edit mode to create projects.', 'error');
+        return;
+      }
+      document.getElementById('formMode').value = 'CREATE';
+      document.getElementById('projectModalTitle').textContent = 'New Project Intake';
+      document.getElementById('btnSaveProjectText').textContent = 'Create Project Record';
+
+      // Auto-generate project ID
+      const year = new Date().getFullYear();
+      let maxSeq = 0;
+      const idPattern = new RegExp(`^PRJ-${year}-(\\d+)$`);
+      appState.projects.forEach(p => {
+        const match = (p.Project_ID || '').match(idPattern);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxSeq) maxSeq = num;
+        }
+      });
+      const autoId = `PRJ-${year}-${String(maxSeq + 1).padStart(3, '0')}`;
+
+      document.getElementById('inpProjectId').value = autoId;
+      document.getElementById('inpProjectName').value = '';
+      document.getElementById('inpClientName').value = '';
+      document.getElementById('inpClientContact').value = '';
+      document.getElementById('inpCategory').value = 'Engineering';
+      document.getElementById('inpTotalQuote').value = '';
+      document.getElementById('inpAmountPaid').value = '';
+      document.getElementById('inpPaymentChannel').value = 'UPI';
+      document.getElementById('inpPaymentStatus').value = 'Unpaid';
+      document.getElementById('inpProjectStatus').value = 'New Lead';
+      
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 7);
+      document.getElementById('inpDeliveryDeadline').value = tomorrow.toISOString().split('T')[0];
+      
+      document.getElementById('inpLoggedBy').value = appState.activePartner;
+      document.getElementById('inpInternalNotes').value = '';
+
+      calculateBalanceIndicator();
+      document.getElementById('projectModalBackdrop').classList.add('open');
+    }
+
+    function openEditProjectModal(projectId) {
+      if (appState.isReadOnly) {
+        showToast('Read-Only Mode active. Switch to edit mode to edit projects.', 'error');
+        return;
+      }
+      const p = appState.projects.find(item => item.Project_ID === projectId);
+      if (!p) return;
+
+      document.getElementById('formMode').value = 'EDIT';
+      document.getElementById('projectModalTitle').textContent = 'Edit Project: ' + p.Project_ID;
+      document.getElementById('btnSaveProjectText').textContent = 'Update Record';
+
+      document.getElementById('inpProjectId').value = p.Project_ID;
+      document.getElementById('inpProjectName').value = p.Project_Name || '';
+      document.getElementById('inpClientName').value = p.Client_Name || '';
+      document.getElementById('inpClientContact').value = p.Client_Contact || '';
+      document.getElementById('inpCategory').value = p.Category || 'Other';
+      document.getElementById('inpTotalQuote').value = p.Total_Quote || 0;
+      document.getElementById('inpAmountPaid').value = p.Amount_Paid || 0;
+      document.getElementById('inpPaymentStatus').value = p.Payment_Status || 'Unpaid';
+      document.getElementById('inpProjectStatus').value = p.Project_Status || 'In Progress';
+      document.getElementById('inpDeliveryDeadline').value = p.Delivery_Deadline || '';
+      document.getElementById('inpLoggedBy').value = p.Logged_By || appState.activePartner;
+      document.getElementById('inpInternalNotes').value = p.Internal_Notes || '';
+
+      calculateBalanceIndicator();
+      document.getElementById('projectModalBackdrop').classList.add('open');
+    }
+
+    function closeProjectModal() {
+      document.getElementById('projectModalBackdrop').classList.remove('open');
+    }
+
+    function calculateBalanceIndicator() {
+      const quote = Number(document.getElementById('inpTotalQuote').value) || 0;
+      const advance = Number(document.getElementById('inpAmountPaid').value) || 0;
+      const balance = Math.max(0, quote - advance);
+
+      document.getElementById('quoteWordsPreview').textContent = formatINR(quote);
+      document.getElementById('advanceWordsPreview').textContent = formatINR(advance);
+      document.getElementById('previewBalanceAmount').textContent = formatINR(balance);
+
+      const badge = document.getElementById('previewBalanceBadge');
+      const statusSelect = document.getElementById('inpPaymentStatus');
+
+      if (quote === 0 && advance === 0) {
+        badge.className = 'badge badge-gray';
+        badge.textContent = 'Zero Value';
+      } else if (balance === 0 && advance >= quote) {
+        badge.className = 'badge badge-emerald';
+        badge.textContent = 'Fully Paid';
+        if (statusSelect.value === 'Unpaid' || statusSelect.value === 'Partial Advance') {
+          statusSelect.value = 'Fully Paid';
+        }
+      } else if (advance > 0 && balance > 0) {
+        badge.className = 'badge badge-amber';
+        badge.textContent = `Partial Due: ${formatINR(balance)}`;
+        if (statusSelect.value === 'Unpaid' || statusSelect.value === 'Fully Paid') {
+          statusSelect.value = 'Partial Advance';
+        }
+      } else {
+        badge.className = 'badge badge-rose';
+        badge.textContent = `Unpaid: ${formatINR(balance)}`;
+      }
+    }
+
+    function handleProjectFormSubmit(e) {
+      e.preventDefault();
+      const mode = document.getElementById('formMode').value;
+      const pId = document.getElementById('inpProjectId').value.trim();
+      const quote = Number(document.getElementById('inpTotalQuote').value) || 0;
+      const paid = Number(document.getElementById('inpAmountPaid').value) || 0;
+
+      const projectData = {
+        Project_ID: pId,
+        Project_Name: document.getElementById('inpProjectName').value.trim(),
+        Client_Name: document.getElementById('inpClientName').value.trim(),
+        Client_Contact: document.getElementById('inpClientContact').value.trim(),
+        Category: document.getElementById('inpCategory').value,
+        Total_Quote: quote,
+        Amount_Paid: paid,
+        Pending_Balance: Math.max(0, quote - paid),
+        Payment_Status: document.getElementById('inpPaymentStatus').value,
+        Project_Status: document.getElementById('inpProjectStatus').value,
+        Delivery_Deadline: document.getElementById('inpDeliveryDeadline').value,
+        Creation_Timestamp: mode === 'CREATE' ? new Date().toISOString() : (appState.projects.find(p => p.Project_ID === pId)?.Creation_Timestamp || new Date().toISOString()),
+        Logged_By: appState.activePartner,
+        Internal_Notes: document.getElementById('inpInternalNotes').value.trim()
+      };
+
+      if (mode === 'CREATE') {
+        appState.projects.unshift(projectData);
+        logAuditTrail(
+          projectData.Project_ID,
+          'CREATE_PROJECT',
+          `Created project "${projectData.Project_Name}" with quote ${formatINR(quote)} and advance ${formatINR(paid)}.`
+        );
+        showToast(`Project ${projectData.Project_ID} created successfully`, 'success');
+        dispatchApiPost('CREATE_PROJECT', { project: projectData, actor: appState.activePartner });
+      } else {
+        const idx = appState.projects.findIndex(p => p.Project_ID === pId);
+        if (idx !== -1) {
+          appState.projects[idx] = projectData;
+          logAuditTrail(
+            projectData.Project_ID,
+            'UPDATE_PROJECT',
+            `Updated project details: Status is "${projectData.Project_Status}", Quoted ${formatINR(quote)}, Cleared ${formatINR(paid)}.`
+          );
+          showToast(`Project ${projectData.Project_ID} updated`, 'success');
+          dispatchApiPost('UPDATE_PROJECT', { project: projectData, actor: appState.activePartner });
+        }
+      }
+
+      saveProjectsToStorage();
+      closeProjectModal();
+      renderAll();
+
+      if (appState.activeDrawerProjectId === pId) {
+        openDetailDrawer(pId);
+      }
+    }
+
+    /**
+     * INLINE EXECUTION STATUS UPDATE
+     */
+    function handleInlineStatusChange(projectId, newStatus) {
+      if (appState.isReadOnly) {
+        showToast('Read-Only mode is enabled. Cannot modify status.', 'error');
+        renderTable();
+        return;
+      }
+      const project = appState.projects.find(p => p.Project_ID === projectId);
+      if (!project) return;
+
+      const oldStatus = project.Project_Status;
+      project.Project_Status = newStatus;
+      saveProjectsToStorage();
+
+      logAuditTrail(
+        projectId,
+        'STATUS_CHANGE',
+        `Status changed from "${oldStatus}" to "${newStatus}" by ${appState.activePartner}.`
+      );
+
+      showToast(`Status updated to "${newStatus}"`, 'success');
+      renderAll();
+
+      dispatchApiPost('QUICK_STATUS', { projectId, newStatus, actor: appState.activePartner });
+    }
+
+    /**
+     * QUICK PAYMENT CLEARANCE MODAL
+     */
+    function openQuickPaymentModal(projectId) {
+      if (appState.isReadOnly) {
+        showToast('Read-Only Mode active. Switch to edit mode to record payments.', 'error');
+        return;
+      }
+      const p = appState.projects.find(item => item.Project_ID === projectId);
+      if (!p) return;
+
+      const quote = Number(p.Total_Quote) || 0;
+      const paid = Number(p.Amount_Paid) || 0;
+      const pending = Math.max(0, quote - paid);
+
+      document.getElementById('quickPayProjectId').value = projectId;
+      document.getElementById('qpProjectTitle').textContent = `[${p.Project_ID}] ${p.Project_Name}`;
+      document.getElementById('qpClientInfo').textContent = `Client: ${p.Client_Name} (${p.Client_Contact})`;
+      document.getElementById('qpQuoted').textContent = formatINR(quote);
+      document.getElementById('qpPaid').textContent = formatINR(paid);
+      document.getElementById('qpPending').textContent = formatINR(pending);
+      document.getElementById('qpPaymentInput').value = pending > 0 ? pending : '';
+      document.getElementById('qpTransactionRef').value = '';
+
+      document.getElementById('quickPaymentModalBackdrop').classList.add('open');
+      setTimeout(() => document.getElementById('qpPaymentInput').focus(), 100);
+    }
+
+    function closeQuickPaymentModal() {
+      document.getElementById('quickPaymentModalBackdrop').classList.remove('open');
+    }
+
+    function fillQuickPayFull() {
+      const pId = document.getElementById('quickPayProjectId').value;
+      const p = appState.projects.find(i => i.Project_ID === pId);
+      if (!p) return;
+      const pending = Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0));
+      document.getElementById('qpPaymentInput').value = pending;
+    }
+
+    function fillQuickPayHalf() {
+      const pId = document.getElementById('quickPayProjectId').value;
+      const p = appState.projects.find(i => i.Project_ID === pId);
+      if (!p) return;
+      const pending = Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0));
+      document.getElementById('qpPaymentInput').value = Math.round(pending / 2);
+    }
+
+    function submitQuickPayment() {
+      const pId = document.getElementById('quickPayProjectId').value;
+      const payAmount = Number(document.getElementById('qpPaymentInput').value);
+      const channel = document.getElementById('qpPaymentChannel').value;
+      const ref = document.getElementById('qpTransactionRef').value.trim();
+
+      if (isNaN(payAmount) || payAmount <= 0) {
+        showToast('Please enter a valid positive payment amount', 'error');
+        return;
+      }
+
+      const p = appState.projects.find(i => i.Project_ID === pId);
+      if (!p) return;
+
+      const quote = Number(p.Total_Quote) || 0;
+      const currentPaid = Number(p.Amount_Paid) || 0;
+      const newPaid = currentPaid + payAmount;
+      p.Amount_Paid = newPaid;
+      p.Pending_Balance = Math.max(0, quote - newPaid);
+
+      if (newPaid >= quote) {
+        p.Payment_Status = 'Fully Paid';
+      } else {
+        p.Payment_Status = 'Partial Advance';
+      }
+
+      saveProjectsToStorage();
+
+      const refText = ref ? ` (Ref/UTR: ${ref})` : '';
+      const auditDesc = `Cleared balance payment of ${formatINR(payAmount)} via ${channel}${refText}. New cleared: ${formatINR(newPaid)} / ${formatINR(quote)}.`;
+      
+      logAuditTrail(pId, 'QUICK_PAYMENT', auditDesc);
+
+      showToast(`Payment of ${formatINR(payAmount)} recorded!`, 'success');
+      closeQuickPaymentModal();
+      renderAll();
+
+      if (appState.activeDrawerProjectId === pId) {
+        openDetailDrawer(pId);
+      }
+
+      dispatchApiPost('QUICK_PAYMENT', {
+        projectId: pId,
+        paymentAmount: payAmount,
+        paymentChannel: channel + refText,
+        actor: appState.activePartner
+      });
+    }
+
+    /**
+     * DELETE PROJECT
+     */
+    function deleteProject(projectId) {
+      if (appState.isReadOnly) {
+        showToast('Read-Only Mode active. Cannot delete records.', 'error');
+        return;
+      }
+      if (!confirm(`Are you sure you want to permanently delete project ${projectId}? This will be recorded in the audit trail.`)) {
+        return;
+      }
+
+      appState.projects = appState.projects.filter(p => p.Project_ID !== projectId);
+      saveProjectsToStorage();
+
+      logAuditTrail(projectId, 'DELETE_PROJECT', `Project record deleted by ${appState.activePartner}.`);
+      showToast(`Project ${projectId} deleted`, 'info');
+      renderAll();
+
+      if (appState.activeDrawerProjectId === projectId) {
+        closeDetailDrawer();
+      }
+
+      dispatchApiPost('DELETE_PROJECT', { projectId, actor: appState.activePartner });
+    }
+
+    /**
+     * DETAIL VIEW SLIDE-OVER DRAWER
+     */
+    function openDetailDrawer(projectId) {
+      const p = appState.projects.find(item => item.Project_ID === projectId);
+      if (!p) return;
+
+      appState.activeDrawerProjectId = projectId;
+      const quote = Number(p.Total_Quote) || 0;
+      const paid = Number(p.Amount_Paid) || 0;
+      const pending = Math.max(0, quote - paid);
+
+      document.getElementById('drawerProjectId').textContent = p.Project_ID;
+      document.getElementById('drawerProjectTitle').textContent = p.Project_Name;
+      document.getElementById('drawerProjectStatusBadge').textContent = p.Project_Status;
+      document.getElementById('drawerPaymentStatusBadge').textContent = p.Payment_Status;
+      document.getElementById('drawerCategoryBadge').textContent = p.Category;
+
+      document.getElementById('drawerQuoted').textContent = formatINR(quote);
+      document.getElementById('drawerPaid').textContent = formatINR(paid);
+      document.getElementById('drawerPending').textContent = formatINR(pending);
+
+      document.getElementById('drawerClientName').textContent = p.Client_Name || 'N/A';
+      document.getElementById('drawerClientContact').textContent = p.Client_Contact || 'N/A';
+      document.getElementById('drawerDeadline').textContent = p.Delivery_Deadline || 'N/A';
+      document.getElementById('drawerCreated').textContent = p.Creation_Timestamp ? new Date(p.Creation_Timestamp).toLocaleString('en-IN') : 'N/A';
+      document.getElementById('drawerLoggedBy').textContent = p.Logged_By || 'N/A';
+
+      document.getElementById('drawerNotes').textContent = p.Internal_Notes || 'No notes recorded for this assignment.';
+
+      // Render timeline for this project
+      renderProjectTimeline(projectId);
+
+      document.getElementById('drawerBackdrop').classList.add('open');
+      document.getElementById('detailDrawer').classList.add('open');
+    }
+
+    function closeDetailDrawer() {
+      document.getElementById('drawerBackdrop').classList.remove('open');
+      document.getElementById('detailDrawer').classList.remove('open');
+      appState.activeDrawerProjectId = null;
+    }
+
+    function editFromDrawer() {
+      if (appState.activeDrawerProjectId) {
+        openEditProjectModal(appState.activeDrawerProjectId);
+      }
+    }
+
+    function triggerDrawerWhatsApp() {
+      if (appState.activeDrawerProjectId) {
+        sendWhatsAppReceipt(appState.activeDrawerProjectId);
+      }
+    }
+
+    function renderProjectTimeline(projectId) {
+      const wrap = document.getElementById('drawerTimeline');
+      wrap.innerHTML = '';
+
+      const logs = appState.auditTrails.filter(a => a.Project_ID === projectId);
+      if (logs.length === 0) {
+        wrap.innerHTML = '<div style="color: var(--text-dim); font-size: 0.78rem;">No activity logged yet.</div>';
+        return;
+      }
+
+      logs.forEach(log => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.innerHTML = `
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">${new Date(log.Timestamp).toLocaleString('en-IN')}</div>
+          <div class="timeline-content">${escapeHtml(log.Change_Description)}</div>
+        `;
+        wrap.appendChild(item);
+      });
+    }
+
+    /**
+     * AUDIT LOG & TRANSPARENCY TRACKER
+     */
+    function logAuditTrail(projectId, actionType, description) {
+      const newEntry = {
+        Log_ID: 'LOG-' + Date.now().toString(36).toUpperCase(),
+        Project_ID: projectId,
+        Action_Type: actionType,
+        Change_Description: description,
+        Timestamp: new Date().toISOString()
+      };
+      appState.auditTrails.unshift(newEntry);
+      saveAuditsToStorage();
+    }
+
+    function openAuditModal() {
+      const wrap = document.getElementById('fullAuditTimeline');
+      wrap.innerHTML = '';
+
+      if (appState.auditTrails.length === 0) {
+        wrap.innerHTML = '<div style="color: var(--text-dim); font-size: 0.82rem;">No audit records found.</div>';
+      } else {
+        appState.auditTrails.forEach(log => {
+          const item = document.createElement('div');
+          item.className = 'timeline-item';
+          item.innerHTML = `
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">
+              <span>${new Date(log.Timestamp).toLocaleString('en-IN')}</span>
+              <span class="badge badge-primary font-mono" style="margin-left: 0.5rem; font-size: 0.65rem;">${log.Project_ID}</span>
+            </div>
+            <div class="timeline-content">${escapeHtml(log.Change_Description)}</div>
+          `;
+          wrap.appendChild(item);
+        });
+      }
+
+      document.getElementById('auditModalBackdrop').classList.add('open');
+    }
+
+    function closeAuditModal() {
+      document.getElementById('auditModalBackdrop').classList.remove('open');
+    }
+
+    /**
+     * WHATSAPP RECEIPT SHARING
+     */
+    function sendWhatsAppReceipt(projectId) {
+      const p = appState.projects.find(item => item.Project_ID === projectId);
+      let phone = (p.Client_Contact || '').replace(/[^0-9]/g, '');
+      if (phone.length === 10) phone = '91' + phone;
+      const quote = formatINR(p.Total_Quote);
+      const paid = formatINR(p.Amount_Paid);
+      const pending = formatINR(Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0)));
+
+      const receiptMsg = 
+`🧾 *PROJECT CONFIRMATION & PAYMENT RECEIPT*
+----------------------------------------
+*Project ID:* ${p.Project_ID}
+*Project Title:* ${p.Project_Name}
+*Client Name:* ${p.Client_Name}
+*Total Quoted:* ${quote}
+*Amount Paid:* ${paid}
+*Pending Balance:* ${pending}
+*Payment Status:* ${p.Payment_Status}
+*Target Delivery Deadline:* ${p.Delivery_Deadline || 'TBD'}
+----------------------------------------
+Thank you for working with us! For any clarifications or updates, feel free to reply directly to this chat.`;
+
+      const encodedMsg = encodeURIComponent(receiptMsg);
+      const url = `https://wa.me/${phone}?text=${encodedMsg}`;
+      
+      // Also copy receipt to clipboard for convenience
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(receiptMsg).catch(() => {});
+      }
+
+      window.open(url, '_blank');
+      showToast('WhatsApp receipt generated & copied to clipboard!', 'info');
+    }
+
+    /**
+     * ONE-CLICK CSV EXPORT
+     */
+    function exportToCSV() {
+      const filtered = getFilteredProjects();
+      if (filtered.length === 0) {
+        showToast('No project records to export', 'error');
+        return;
+      }
+
+      const headers = [
+        'Project_ID',
+        'Project_Name',
+        'Client_Name',
+        'Client_Contact',
+        'Category',
+        'Total_Quote',
+        'Amount_Paid',
+        'Pending_Balance',
+        'Payment_Status',
+        'Project_Status',
+        'Delivery_Deadline',
+        'Creation_Timestamp',
+        'Logged_By',
+        'Internal_Notes'
+      ];
+
+      const csvRows = [];
+      csvRows.push(headers.join(','));
+
+      filtered.forEach(p => {
+        const quote = Number(p.Total_Quote) || 0;
+        const paid = Number(p.Amount_Paid) || 0;
+        const balance = Math.max(0, quote - paid);
+
+        const row = [
+          csvSafe(p.Project_ID),
+          csvSafe(p.Project_Name),
+          csvSafe(p.Client_Name),
+          csvSafe(p.Client_Contact),
+          csvSafe(p.Category),
+          quote,
+          paid,
+          balance,
+          csvSafe(p.Payment_Status),
+          csvSafe(p.Project_Status),
+          csvSafe(p.Delivery_Deadline),
+          csvSafe(p.Creation_Timestamp),
+          csvSafe(p.Logged_By),
+          csvSafe(p.Internal_Notes)
+        ];
+        csvRows.push(row.join(','));
+      });
+
+      const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      const dateStr = new Date().toISOString().split('T')[0];
+      link.setAttribute("download", `Business_Transparency_Export_${dateStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast(`Exported ${filtered.length} projects to CSV`, 'success');
+    }
+
+    function csvSafe(str) {
+      if (!str) return '""';
+      const clean = String(str).replace(/"/g, '""');
+      return `"${clean}"`;
+    }
+
+    /**
+     * GOOGLE APPS SCRIPT API SYNC ENGINE
+     */
+    async function syncWithGoogleSheet() {
+      if (!appState.apiUrl) return;
+
+      const badge = document.getElementById('syncStatusBadge');
+      if (badge) {
+        badge.className = 'badge badge-amber';
+        badge.textContent = 'Syncing...';
+      }
+
+      try {
+        const resp = await fetch(appState.apiUrl, { method: 'GET' });
+        const result = await resp.json();
+
+        if (result.status === 'success' && result.data) {
+          if (Array.isArray(result.data.projects) && result.data.projects.length > 0) {
+            appState.projects = result.data.projects;
+            saveProjectsToStorage();
+          }
+          if (Array.isArray(result.data.auditTrails) && result.data.auditTrails.length > 0) {
+            appState.auditTrails = result.data.auditTrails;
+            saveAuditsToStorage();
+          }
+
+          if (badge) {
+            badge.className = 'badge badge-emerald';
+            badge.textContent = 'Connected (Google Sheets)';
+          }
+          renderAll();
+          showToast('Synced live with Google Sheets', 'success');
+        }
+      } catch (err) {
+        console.warn('Google Sheet Sync Error:', err);
+        if (badge) {
+          badge.className = 'badge badge-rose';
+          badge.textContent = 'Sync Failed (Using Local)';
+        }
+      }
+    }
+
+    async function testSheetConnection() {
+      const url = document.getElementById('inpApiUrl').value.trim();
+      if (!url) {
+        showToast('Please enter an Apps Script Web App URL first', 'error');
+        return;
+      }
+
+      const badge = document.getElementById('syncStatusBadge');
+      badge.className = 'badge badge-amber';
+      badge.textContent = 'Testing connection...';
+
+      try {
+        const resp = await fetch(url, { method: 'GET' });
+        const result = await resp.json();
+
+        if (result.status === 'success') {
+          badge.className = 'badge badge-emerald';
+          badge.textContent = 'Connected!';
+          showToast('Connection verified successfully!', 'success');
+        } else {
+          badge.className = 'badge badge-rose';
+          badge.textContent = 'Error in response';
+          showToast('API returned error: ' + (result.message || 'Unknown'), 'error');
+        }
+      } catch (err) {
+        badge.className = 'badge badge-rose';
+        badge.textContent = 'Connection Failed';
+        showToast('Failed to connect to Apps Script URL. Check CORS/permissions.', 'error');
+      }
+    }
+
+    async function dispatchApiPost(action, payload) {
+      if (!appState.apiUrl) return;
+      try {
+        await fetch(appState.apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' }, // Avoid CORS preflight in Google Apps Script
+          body: JSON.stringify({ action, ...payload })
+        });
+      } catch (err) {
+        console.warn('Error sending POST to Apps Script:', err);
+      }
+    }
+
+    /**
+     * SETTINGS MODAL
+     */
+    function openSettingsModal() {
+      document.getElementById('settingsModalBackdrop').classList.add('open');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModalBackdrop').classList.remove('open');
+    }
+
+    /**
+     * TOAST NOTIFICATIONS
+     */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+
+      let icon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+      if (type === 'success') {
+        icon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else if (type === 'error') {
+        icon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+      }
+
+      toast.innerHTML = `
+        ${icon}
+        <span>${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
