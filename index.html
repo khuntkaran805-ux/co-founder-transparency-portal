@@ -4,22 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>NEXUS PRIME // Autonomous Co-Founder Command Matrix</title>
+  
+  <!-- PWA Manifest & Meta -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <meta name="theme-color" content="#00f5ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NEXUS PRIME">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-void: #040711;
-      --bg-surface: #080d1e;
-      --bg-card: rgba(12, 19, 39, 0.75);
-      --bg-card-hover: rgba(18, 28, 56, 0.85);
-      --bg-input: #0b1226;
-      --border-subtle: rgba(30, 48, 86, 0.6);
-      --border-medium: rgba(56, 85, 145, 0.7);
+      --bg-void: #030611;
+      --bg-surface: #070c1e;
+      --bg-card: rgba(11, 18, 38, 0.85);
+      --bg-card-hover: rgba(16, 26, 52, 0.95);
+      --bg-input: #091024;
+      --border-subtle: rgba(0, 245, 255, 0.15);
+      --border-medium: rgba(0, 245, 255, 0.3);
       
       --cyan: #00f5ff;
-      --cyan-glow: rgba(0, 245, 255, 0.35);
+      --cyan-glow: rgba(0, 245, 255, 0.4);
       --cyan-light: rgba(0, 245, 255, 0.12);
       
       --violet: #8b5cf6;
@@ -27,18 +36,18 @@
       --violet-light: rgba(139, 92, 246, 0.14);
       
       --emerald: #00ff9d;
-      --emerald-glow: rgba(0, 255, 157, 0.35);
+      --emerald-glow: rgba(0, 255, 157, 0.4);
       --emerald-light: rgba(0, 255, 157, 0.12);
       
       --rose: #ff0055;
-      --rose-glow: rgba(255, 0, 85, 0.35);
+      --rose-glow: rgba(255, 0, 85, 0.4);
       --rose-light: rgba(255, 0, 85, 0.12);
       
       --amber: #ffaa00;
-      --amber-glow: rgba(255, 170, 0, 0.35);
+      --amber-glow: rgba(255, 170, 0, 0.4);
       --amber-light: rgba(255, 170, 0, 0.12);
       
-      --text-main: #f1f5f9;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       
@@ -51,8 +60,8 @@
       --radius-lg: 14px;
       --radius-full: 9999px;
       
-      --shadow-hud: 0 0 20px rgba(0, 245, 255, 0.12), inset 0 0 15px rgba(0, 245, 255, 0.03);
-      --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-hud: 0 0 25px rgba(0, 245, 255, 0.15), inset 0 0 15px rgba(0, 245, 255, 0.03);
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * {
@@ -75,17 +84,13 @@
       line-height: 1.5;
     }
 
-    /* Ambient Sci-Fi Cyber Grid Background */
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: 
-        radial-gradient(circle at 15% 15%, rgba(0, 245, 255, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 12% 15%, rgba(0, 245, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 88% 80%, rgba(139, 92, 246, 0.09) 0%, transparent 45%),
         linear-gradient(rgba(0, 245, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 245, 255, 0.02) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
@@ -93,7 +98,6 @@
       z-index: 0;
     }
 
-    /* Privacy Blur Mode */
     body.privacy-active .privacy-sensitive {
       filter: blur(8px);
       user-select: none;
@@ -103,66 +107,128 @@
       filter: blur(4px);
     }
 
-    /* Scrollbars */
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-void);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-medium);
-      border-radius: var(--radius-full);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--cyan);
-    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-void); }
+    ::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: var(--radius-full); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
     /* ========================================================================= */
     /* KEYFRAME ANIMATIONS */
     /* ========================================================================= */
-    @keyframes hudPulse {
-      0%, 100% { opacity: 0.85; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
-    }
+    @keyframes radarRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes pulseGlow { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.02); } }
+    @keyframes glitchIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(1000%); } }
 
-    @keyframes radarRotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    /* ========================================================================= */
+    /* SCI-FI BOOT FLASH SPLASH SCREEN */
+    /* ========================================================================= */
+    .splash-overlay {
+      position: fixed;
+      inset: 0;
+      background: #02040a;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
-
-    @keyframes radarSweep {
-      0% { opacity: 0.2; transform: rotate(0deg); }
-      50% { opacity: 0.8; }
-      100% { opacity: 0.2; transform: rotate(360deg); }
+    .splash-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
-
-    @keyframes cyberBorderGlow {
-      0%, 100% { border-color: rgba(0, 245, 255, 0.35); box-shadow: 0 0 15px rgba(0, 245, 255, 0.1); }
-      50% { border-color: rgba(139, 92, 246, 0.45); box-shadow: 0 0 20px rgba(139, 92, 246, 0.15); }
+    .splash-reticle {
+      width: 110px;
+      height: 110px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
     }
-
-    @keyframes glitchFadeIn {
-      0% { opacity: 0; transform: translateY(12px) scale(0.98); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+    .splash-outer-ring {
+      position: absolute;
+      inset: 0;
+      border: 2px dashed var(--cyan);
+      border-radius: 50%;
+      animation: radarRotate 10s linear infinite;
+    }
+    .splash-inner-ring {
+      position: absolute;
+      inset: 16px;
+      border: 2px solid var(--violet);
+      border-radius: 50%;
+      animation: radarRotate 6s linear infinite reverse;
+    }
+    .splash-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #fff;
+      text-shadow: 0 0 20px var(--cyan);
+      margin-bottom: 0.35rem;
+    }
+    .splash-sub {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .splash-terminal {
+      background: rgba(8, 14, 32, 0.9);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.15rem;
+      width: 100%;
+      max-width: 380px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--emerald);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      box-shadow: var(--shadow-hud);
+      margin-bottom: 1.5rem;
+    }
+    .splash-progress-track {
+      width: 100%;
+      max-width: 380px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+    .splash-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--emerald));
+      box-shadow: 0 0 10px var(--cyan);
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* ========================================================================= */
-    /* NAVIGATION BAR & HUD TOPBAR */
+    /* TOPBAR HUD NAVIGATION */
     /* ========================================================================= */
     .navbar {
-      background: rgba(8, 13, 30, 0.85);
+      background: rgba(7, 12, 30, 0.88);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
       position: sticky;
       top: 0;
       z-index: 40;
-      padding: 0.65rem 1.25rem;
+      padding: 0.65rem 1.15rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 0.65rem;
       width: 100%;
     }
 
@@ -182,51 +248,45 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(139, 92, 246, 0.2));
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(139, 92, 246, 0.25));
       border: 1px solid var(--cyan);
       border-radius: var(--radius-md);
-      box-shadow: 0 0 14px var(--cyan-glow);
+      box-shadow: 0 0 16px var(--cyan-glow);
     }
-
     .brand-logo-frame::after {
       content: '';
       position: absolute;
-      inset: -2px;
-      border: 1px dashed rgba(0, 245, 255, 0.3);
-      border-radius: calc(var(--radius-md) + 2px);
+      inset: -3px;
+      border: 1px dashed rgba(0, 245, 255, 0.35);
+      border-radius: calc(var(--radius-md) + 3px);
       animation: radarRotate 18s linear infinite;
     }
 
     .brand-title {
       font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 800;
+      font-size: 1.15rem;
+      font-weight: 900;
       letter-spacing: 0.08em;
       color: #fff;
       display: flex;
       flex-direction: column;
       line-height: 1.1;
-      text-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
+      text-shadow: 0 0 12px rgba(0, 245, 255, 0.5);
       white-space: nowrap;
     }
-
-    .brand-title span.glow {
-      color: var(--cyan);
-    }
-
+    .brand-title span.glow { color: var(--cyan); }
     .brand-subtitle {
       font-family: var(--font-mono);
       font-size: 0.62rem;
       color: var(--text-dim);
-      letter-spacing: 0.06em;
-      font-weight: 600;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
@@ -235,13 +295,12 @@
     .partner-switcher {
       display: flex;
       align-items: center;
-      background: rgba(11, 18, 38, 0.9);
+      background: rgba(9, 16, 36, 0.9);
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-md);
       padding: 0.2rem;
       gap: 0.2rem;
     }
-
     .partner-btn {
       display: flex;
       align-items: center;
@@ -258,14 +317,12 @@
       transition: var(--transition);
       white-space: nowrap;
     }
-
     .partner-btn.active {
       background: linear-gradient(135deg, rgba(0, 245, 255, 0.25), rgba(139, 92, 246, 0.3));
       color: var(--cyan);
       border: 1px solid var(--cyan);
       box-shadow: 0 0 12px var(--cyan-glow);
     }
-
     .partner-avatar {
       width: 18px;
       height: 18px;
@@ -273,7 +330,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.6rem;
+      font-size: 0.62rem;
       font-weight: 800;
       background: rgba(0, 245, 255, 0.15);
       color: #fff;
@@ -285,7 +342,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.45rem;
-      padding: 0.45rem 0.85rem;
+      padding: 0.45rem 0.8rem;
       border-radius: var(--radius-md);
       font-size: 0.8rem;
       font-family: var(--font-body);
@@ -296,35 +353,26 @@
       text-decoration: none;
       white-space: nowrap;
       position: relative;
-      overflow: hidden;
     }
-
-    .btn:active {
-      transform: scale(0.97);
-    }
-
-    .btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 
     .btn-primary {
       background: linear-gradient(135deg, #00f5ff, #8b5cf6);
-      color: #040711;
-      font-weight: 700;
+      color: #030611;
+      font-weight: 800;
       font-family: var(--font-display);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       border-color: var(--cyan);
       box-shadow: 0 0 18px rgba(0, 245, 255, 0.4);
     }
     .btn-primary:hover:not(:disabled) {
-      box-shadow: 0 0 26px rgba(0, 245, 255, 0.6);
+      box-shadow: 0 0 28px rgba(0, 245, 255, 0.6);
       transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: rgba(14, 22, 46, 0.9);
+      background: rgba(11, 18, 38, 0.9);
       color: var(--text-main);
       border-color: var(--border-medium);
     }
@@ -344,31 +392,10 @@
       border-color: var(--cyan);
     }
 
-    .btn-emerald {
-      background: var(--emerald-light);
-      color: var(--emerald);
-      border-color: var(--emerald);
-      box-shadow: 0 0 12px var(--emerald-glow);
-    }
-
-    .btn-rose {
-      background: var(--rose-light);
-      color: var(--rose);
-      border-color: var(--rose);
-      box-shadow: 0 0 12px var(--rose-glow);
-    }
-
-    .btn-sm {
-      padding: 0.32rem 0.6rem;
-      font-size: 0.74rem;
-      border-radius: var(--radius-sm);
-    }
-
-    .btn-icon {
-      padding: 0.42rem;
-      width: 34px;
-      height: 34px;
-    }
+    .btn-emerald { background: var(--emerald-light); color: var(--emerald); border-color: var(--emerald); box-shadow: 0 0 12px var(--emerald-glow); }
+    .btn-rose { background: var(--rose-light); color: var(--rose); border-color: var(--rose); box-shadow: 0 0 12px var(--rose-glow); }
+    .btn-sm { padding: 0.32rem 0.58rem; font-size: 0.74rem; border-radius: var(--radius-sm); }
+    .btn-icon { padding: 0.45rem; width: 35px; height: 35px; }
 
     /* Badges */
     .badge {
@@ -384,7 +411,6 @@
       text-transform: capitalize;
       border: 1px solid transparent;
     }
-
     .badge-cyan { background: var(--cyan-light); color: var(--cyan); border-color: rgba(0, 245, 255, 0.3); }
     .badge-emerald { background: var(--emerald-light); color: var(--emerald); border-color: rgba(0, 255, 157, 0.3); }
     .badge-amber { background: var(--amber-light); color: var(--amber); border-color: rgba(255, 170, 0, 0.3); }
@@ -393,62 +419,97 @@
     .badge-gray { background: rgba(148, 163, 184, 0.1); color: var(--text-muted); border-color: rgba(148, 163, 184, 0.2); }
 
     /* ========================================================================= */
-    /* MAIN CONTAINER & GRID SYSTEM */
+    /* MAIN CONTAINER & GRID */
     /* ========================================================================= */
     .container {
       max-width: 1480px;
       margin: 0 auto;
-      padding: 1.25rem;
+      padding: 1.15rem;
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
       position: relative;
       z-index: 1;
       overflow-x: hidden;
     }
 
-    /* Sci-Fi Hero HUD Bar */
+    /* Hero HUD Telemetry Bar */
     .hero-hud {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      background: linear-gradient(90deg, rgba(8, 13, 30, 0.95), rgba(12, 19, 39, 0.8));
+      gap: 0.75rem;
+      background: linear-gradient(90deg, rgba(7, 12, 30, 0.95), rgba(11, 18, 38, 0.85));
       border: 1px solid var(--border-medium);
       border-left: 4px solid var(--cyan);
       border-radius: var(--radius-md);
-      padding: 0.75rem 1.15rem;
+      padding: 0.65rem 1rem;
       box-shadow: var(--shadow-hud);
       flex-wrap: wrap;
     }
-
     .hero-status-group {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.85rem;
       flex-wrap: wrap;
     }
-
     .hud-indicator {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
       font-size: 0.74rem;
       font-family: var(--font-mono);
       color: var(--text-muted);
     }
-
     .pulse-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
       background: var(--emerald);
       box-shadow: 0 0 8px var(--emerald);
-      animation: hudPulse 2s infinite ease-in-out;
+      animation: pulseGlow 2s infinite ease-in-out;
     }
 
-    /* Banners */
+    /* Urgency Quick Chips Bar */
+    .urgency-chips-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding: 0.2rem 0;
+      scrollbar-width: none;
+    }
+    .urgency-chips-bar::-webkit-scrollbar { display: none; }
+    .urgency-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      background: rgba(9, 16, 36, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .urgency-chip:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+    .urgency-chip.active {
+      background: rgba(0, 245, 255, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    /* Mode Banners */
     .system-banner {
       display: flex;
       align-items: center;
@@ -460,7 +521,7 @@
       background: rgba(255, 170, 0, 0.08);
       border: 1px solid rgba(255, 170, 0, 0.35);
       color: #fbbf24;
-      animation: glitchFadeIn 0.3s ease;
+      animation: glitchIn 0.3s ease;
     }
     .system-banner.banner-privacy {
       background: rgba(0, 245, 255, 0.08);
@@ -473,61 +534,55 @@
     /* ========================================================================= */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 0.85rem;
       width: 100%;
     }
-
     .kpi-card {
       background: var(--bg-card);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 1.1rem;
+      padding: 1rem;
       position: relative;
       overflow: hidden;
       transition: var(--transition);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      animation: glitchFadeIn 0.4s ease;
+      animation: glitchIn 0.3s ease;
     }
-
     .kpi-card:hover {
       border-color: var(--border-medium);
       transform: translateY(-2px);
       box-shadow: var(--shadow-hud);
     }
-
     .kpi-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 30px;
+      width: 25px;
       height: 2px;
       background: var(--cyan);
     }
-
     .kpi-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.6rem;
     }
-
     .kpi-title {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-family: var(--font-mono);
       font-weight: 700;
       color: var(--text-muted);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
-
     .kpi-icon-wrap {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
@@ -536,34 +591,29 @@
       border: 1px solid rgba(0, 245, 255, 0.2);
       color: var(--cyan);
     }
-
     .kpi-value {
-      font-size: 1.55rem;
+      font-size: 1.5rem;
       font-weight: 800;
       font-family: var(--font-mono);
       color: #fff;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
       word-break: break-all;
-      letter-spacing: -0.02em;
     }
-
     .kpi-subtext {
       font-size: 0.72rem;
       color: var(--text-dim);
-      font-family: var(--font-body);
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
     }
 
-    /* Gauge Card */
+    /* Radial Gauge Card */
     .gauge-card {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
     }
-
     .gauge-svg-container {
       position: relative;
       width: 78px;
@@ -573,7 +623,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .gauge-radar-reticle {
       position: absolute;
       inset: -6px;
@@ -582,7 +631,6 @@
       animation: radarRotate 14s linear infinite;
       pointer-events: none;
     }
-
     .gauge-text-center {
       position: absolute;
       font-size: 0.85rem;
@@ -592,26 +640,24 @@
     }
 
     /* ========================================================================= */
-    /* ANALYTICS CHARTS SECTION */
+    /* ANALYTICS CHARTS */
     /* ========================================================================= */
     .charts-grid {
       display: grid;
       grid-template-columns: 1.6fr 1fr 1.2fr;
-      gap: 1rem;
+      gap: 0.95rem;
       width: 100%;
     }
-
     .chart-panel {
       background: var(--bg-card);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 1.15rem;
+      padding: 1.1rem;
       display: flex;
       flex-direction: column;
       gap: 0.85rem;
     }
-
     .chart-header {
       display: flex;
       align-items: center;
@@ -621,10 +667,9 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-
     .chart-title {
       font-family: var(--font-display);
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: #fff;
       display: flex;
@@ -632,13 +677,11 @@
       gap: 0.45rem;
       letter-spacing: 0.04em;
     }
-
     .chart-canvas-wrap {
       position: relative;
       width: 100%;
-      height: 210px;
+      height: 205px;
     }
-
     canvas {
       width: 100% !important;
       height: 100% !important;
@@ -646,20 +689,19 @@
     }
 
     /* ========================================================================= */
-    /* TOOLBAR & CONTROLS */
+    /* SEARCH & CONTROLS TOOLBAR */
     /* ========================================================================= */
     .toolbar-panel {
       background: var(--bg-card);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 0.9rem 1.15rem;
+      padding: 0.85rem 1.1rem;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
       width: 100%;
     }
-
     .toolbar-row {
       display: flex;
       align-items: center;
@@ -667,13 +709,11 @@
       gap: 0.75rem;
       flex-wrap: wrap;
     }
-
     .search-input-wrap {
       position: relative;
       flex: 1;
-      min-width: 220px;
+      min-width: 200px;
     }
-
     .search-input-wrap svg {
       position: absolute;
       left: 0.85rem;
@@ -682,46 +722,41 @@
       color: var(--text-dim);
       pointer-events: none;
     }
-
     .input-search {
       width: 100%;
       background: var(--bg-input);
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-md);
-      padding: 0.55rem 0.85rem 0.55rem 2.4rem;
+      padding: 0.52rem 0.8rem 0.52rem 2.3rem;
       color: var(--text-main);
       font-size: 0.82rem;
       font-family: var(--font-mono);
       transition: var(--transition);
     }
-
     .input-search:focus {
       outline: none;
       border-color: var(--cyan);
-      box-shadow: 0 0 12px var(--cyan-glow);
+      box-shadow: 0 0 10px var(--cyan-glow);
     }
-
     .filter-group {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
       flex-wrap: wrap;
     }
-
     .select-control {
       background: var(--bg-input);
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-md);
-      padding: 0.48rem 0.7rem;
+      padding: 0.45rem 0.65rem;
       color: var(--text-main);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-family: var(--font-mono);
       cursor: pointer;
       outline: none;
       transition: var(--transition);
       max-width: 100%;
     }
-
     .select-control:focus {
       border-color: var(--cyan);
       box-shadow: 0 0 8px var(--cyan-glow);
@@ -739,23 +774,20 @@
       box-shadow: var(--shadow-hud);
       width: 100%;
     }
-
     .table-responsive {
       width: 100%;
       overflow-x: auto;
     }
-
     .data-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
       font-size: 0.82rem;
     }
-
     .data-table th {
-      background: rgba(8, 14, 32, 0.95);
+      background: rgba(7, 12, 28, 0.95);
       color: var(--text-muted);
-      padding: 0.8rem 0.95rem;
+      padding: 0.75rem 0.9rem;
       font-weight: 700;
       text-transform: uppercase;
       font-size: 0.68rem;
@@ -765,24 +797,15 @@
       white-space: nowrap;
       user-select: none;
     }
-
-    .data-table th.sortable {
-      cursor: pointer;
-    }
-    .data-table th.sortable:hover {
-      color: var(--cyan);
-    }
-
+    .data-table th.sortable { cursor: pointer; }
+    .data-table th.sortable:hover { color: var(--cyan); }
     .data-table td {
-      padding: 0.85rem 0.95rem;
-      border-bottom: 1px solid rgba(30, 48, 86, 0.35);
+      padding: 0.8rem 0.9rem;
+      border-bottom: 1px solid rgba(0, 245, 255, 0.08);
       vertical-align: middle;
       color: var(--text-main);
     }
-
-    .data-table tr:hover td {
-      background: rgba(0, 245, 255, 0.025);
-    }
+    .data-table tr:hover td { background: rgba(0, 245, 255, 0.03); }
 
     .project-id-cell {
       font-family: var(--font-mono);
@@ -793,25 +816,19 @@
       align-items: center;
       gap: 0.3rem;
     }
-    .project-id-cell:hover {
-      text-shadow: 0 0 8px var(--cyan);
-    }
-
     .project-title-cell {
       font-weight: 600;
       color: #fff;
-      max-width: 220px;
+      max-width: 200px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
     .currency-mono {
       font-family: var(--font-mono);
       font-weight: 700;
       white-space: nowrap;
     }
-
     .actions-cell {
       display: flex;
       align-items: center;
@@ -828,21 +845,19 @@
       gap: 0.85rem;
       width: 100%;
     }
-
     .mission-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 1rem;
+      padding: 0.95rem;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
       position: relative;
       overflow: hidden;
-      animation: glitchFadeIn 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      animation: glitchIn 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
-
     .mission-card::before {
       content: '';
       position: absolute;
@@ -852,22 +867,19 @@
       height: 2px;
       background: linear-gradient(90deg, var(--cyan), var(--violet));
     }
-
     .mission-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
+      gap: 0.45rem;
       flex-wrap: wrap;
     }
-
     .mission-card-title {
       font-size: 0.95rem;
       font-weight: 700;
       color: #fff;
       line-height: 1.3;
     }
-
     .mission-card-client {
       font-size: 0.78rem;
       color: var(--text-muted);
@@ -876,47 +888,30 @@
       justify-content: space-between;
       gap: 0.5rem;
     }
-
     .mission-card-metrics {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.5rem;
-      background: rgba(11, 18, 38, 0.6);
-      border: 1px solid rgba(30, 48, 86, 0.4);
+      gap: 0.45rem;
+      background: rgba(9, 16, 36, 0.7);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 0.65rem;
+      padding: 0.6rem;
     }
-
-    .metric-col {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-    }
-    .metric-col-label {
-      font-size: 0.64rem;
-      font-family: var(--font-mono);
-      color: var(--text-dim);
-      text-transform: uppercase;
-    }
-    .metric-col-val {
-      font-size: 0.88rem;
-      font-family: var(--font-mono);
-      font-weight: 700;
-    }
-
+    .metric-col { display: flex; flex-direction: column; gap: 0.15rem; }
+    .metric-col-label { font-size: 0.62rem; font-family: var(--font-mono); color: var(--text-dim); text-transform: uppercase; }
+    .metric-col-val { font-size: 0.88rem; font-family: var(--font-mono); font-weight: 700; }
     .mission-card-actions {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
+      gap: 0.45rem;
       padding-top: 0.4rem;
       border-top: 1px solid rgba(255, 255, 255, 0.04);
       flex-wrap: wrap;
     }
-
     .status-select-inline {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.74rem;
+      padding: 0.22rem 0.45rem;
+      font-size: 0.72rem;
       font-family: var(--font-mono);
       font-weight: 600;
       border-radius: var(--radius-full);
@@ -925,102 +920,13 @@
       cursor: pointer;
       background: var(--bg-input);
       color: var(--text-main);
-      transition: var(--transition);
-      max-width: 130px;
+      max-width: 125px;
     }
 
     /* ========================================================================= */
-    /* SLIDE-OVER DRAWER (OPERATIVE DOSSIER) */
+    /* MODALS & DRAWERS */
     /* ========================================================================= */
-    .drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      z-index: 50;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-    .drawer-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .drawer-panel {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 500px;
-      max-width: 92vw;
-      height: 100vh;
-      background: var(--bg-surface);
-      border-left: 1px solid var(--border-medium);
-      z-index: 51;
-      transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8);
-    }
-    .drawer-panel.open {
-      transform: translateX(0);
-    }
-
-    .drawer-header {
-      padding: 1.15rem 1.4rem;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(11, 18, 38, 0.6);
-    }
-
-    .drawer-body {
-      padding: 1.25rem 1.4rem;
-      overflow-y: auto;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .drawer-card {
-      background: rgba(11, 18, 38, 0.7);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 0.95rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
-
-    .drawer-section-title {
-      font-size: 0.72rem;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--cyan);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .drawer-footer {
-      padding: 0.95rem 1.4rem;
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.65rem;
-      background: rgba(11, 18, 38, 0.6);
-    }
-
-    /* ========================================================================= */
-    /* MODALS & POPUPS */
-    /* ========================================================================= */
-    .modal-backdrop {
+    .modal-backdrop, .drawer-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.8);
@@ -1035,10 +941,7 @@
       transition: opacity 0.2s ease;
       overflow-y: auto;
     }
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .modal-backdrop.open, .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
 
     .modal-card {
       background: var(--bg-surface);
@@ -1049,25 +952,22 @@
       max-height: 92vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 30px rgba(0, 245, 255, 0.15);
+      box-shadow: 0 0 35px rgba(0, 245, 255, 0.18);
       transform: scale(0.96);
       transition: transform 0.2s ease;
       overflow: hidden;
       margin: auto;
     }
-    .modal-backdrop.open .modal-card {
-      transform: scale(1);
-    }
+    .modal-backdrop.open .modal-card { transform: scale(1); }
 
-    .modal-header {
-      padding: 1.15rem 1.4rem;
+    .modal-header, .drawer-header {
+      padding: 1.1rem 1.35rem;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(11, 18, 38, 0.6);
+      background: rgba(9, 16, 36, 0.65);
     }
-
     .modal-title {
       font-family: var(--font-display);
       font-size: 1.05rem;
@@ -1076,45 +976,68 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      letter-spacing: 0.04em;
     }
-
-    .modal-body {
-      padding: 1.25rem 1.4rem;
+    .modal-body, .drawer-body {
+      padding: 1.2rem 1.35rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 1.15rem;
+      gap: 1.1rem;
     }
-
-    .modal-footer {
-      padding: 0.95rem 1.4rem;
+    .modal-footer, .drawer-footer {
+      padding: 0.9rem 1.35rem;
       border-top: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 0.65rem;
-      background: rgba(11, 18, 38, 0.7);
+      gap: 0.6rem;
+      background: rgba(9, 16, 36, 0.7);
     }
 
-    /* Mission Protocol Form */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.9rem;
-    }
-    .form-full {
-      grid-column: span 2;
-    }
-
-    .form-group {
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 500px;
+      max-width: 92vw;
+      height: 100vh;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-medium);
+      z-index: 61;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      box-shadow: -15px 0 40px rgba(0, 0, 0, 0.85);
+    }
+    .drawer-panel.open { transform: translateX(0); }
+    .drawer-card {
+      background: rgba(9, 16, 36, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .drawer-section-title {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
+    /* Form Grids */
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+    .form-full { grid-column: span 2; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
     .form-label {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-family: var(--font-mono);
       font-weight: 600;
       color: var(--text-muted);
@@ -1122,44 +1045,30 @@
       align-items: center;
       justify-content: space-between;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
     }
-
     .form-control {
       background: var(--bg-input);
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-md);
-      padding: 0.55rem 0.8rem;
+      padding: 0.52rem 0.75rem;
       color: var(--text-main);
       font-size: 0.85rem;
       outline: none;
       transition: var(--transition);
       width: 100%;
     }
-    .form-control:focus {
-      border-color: var(--cyan);
-      box-shadow: 0 0 10px var(--cyan-glow);
-    }
+    .form-control:focus { border-color: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+    textarea.form-control { min-height: 75px; resize: vertical; }
 
-    textarea.form-control {
-      min-height: 75px;
-      resize: vertical;
-    }
-
-    /* Sci-Fi Category Chips Grid */
-    .category-chips-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 0.45rem;
-    }
-
+    /* Category Chips Grid */
+    .category-chips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.45rem; }
     .cat-chip {
       display: flex;
       align-items: center;
       gap: 0.4rem;
       padding: 0.45rem 0.6rem;
       border-radius: var(--radius-md);
-      background: rgba(11, 18, 38, 0.7);
+      background: rgba(9, 16, 36, 0.7);
       border: 1px solid var(--border-subtle);
       color: var(--text-muted);
       font-size: 0.74rem;
@@ -1169,10 +1078,7 @@
       transition: var(--transition);
       user-select: none;
     }
-    .cat-chip:hover {
-      border-color: var(--border-medium);
-      color: #fff;
-    }
+    .cat-chip:hover { border-color: var(--border-medium); color: #fff; }
     .cat-chip.active {
       background: rgba(0, 245, 255, 0.15);
       border-color: var(--cyan);
@@ -1180,30 +1086,19 @@
       box-shadow: 0 0 12px var(--cyan-glow);
     }
 
-    /* Quick Credit Chips */
-    .quick-chips-row {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      margin-top: 0.35rem;
-    }
+    .quick-chips-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem; }
     .quick-chip {
       padding: 0.2rem 0.5rem;
       font-size: 0.7rem;
       font-family: var(--font-mono);
       border-radius: var(--radius-full);
-      background: rgba(30, 48, 86, 0.4);
+      background: rgba(0, 245, 255, 0.08);
       border: 1px solid var(--border-subtle);
       color: var(--text-muted);
       cursor: pointer;
-      transition: var(--transition);
     }
-    .quick-chip:hover {
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
+    .quick-chip:hover { border-color: var(--cyan); color: var(--cyan); }
 
-    /* Holographic Live Balance Preview Box */
     .balance-preview-box {
       background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), rgba(139, 92, 246, 0.05));
       border: 1px dashed var(--cyan);
@@ -1212,19 +1107,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: inset 0 0 15px rgba(0, 245, 255, 0.05);
     }
 
-    /* PIN Unlock Digits */
-    .pin-input-wrap {
-      display: flex;
-      justify-content: center;
-      gap: 0.65rem;
-      margin: 1.25rem 0;
-    }
+    /* PIN Inputs */
+    .pin-input-wrap { display: flex; justify-content: center; gap: 0.65rem; margin: 1.25rem 0; }
     .pin-digit {
-      width: 48px;
-      height: 56px;
+      width: 46px;
+      height: 54px;
       font-size: 1.8rem;
       font-family: var(--font-mono);
       text-align: center;
@@ -1234,34 +1123,12 @@
       color: var(--cyan);
       outline: none;
     }
-    .pin-digit:focus {
-      border-color: var(--cyan);
-      box-shadow: 0 0 12px var(--cyan-glow);
-    }
+    .pin-digit:focus { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
 
     /* Timeline */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      position: relative;
-      padding-left: 1.4rem;
-    }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 5px;
-      top: 5px;
-      bottom: 5px;
-      width: 2px;
-      background: var(--border-subtle);
-    }
-    .timeline-item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
+    .timeline { display: flex; flex-direction: column; gap: 0.75rem; position: relative; padding-left: 1.4rem; }
+    .timeline::before { content: ''; position: absolute; left: 5px; top: 5px; bottom: 5px; width: 2px; background: var(--border-subtle); }
+    .timeline-item { position: relative; display: flex; flex-direction: column; gap: 0.2rem; }
     .timeline-dot {
       position: absolute;
       left: -1.4rem;
@@ -1273,29 +1140,13 @@
       border: 2px solid var(--cyan);
       box-shadow: 0 0 6px var(--cyan);
     }
-    .timeline-time {
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      font-family: var(--font-mono);
-    }
-    .timeline-content {
-      font-size: 0.78rem;
-      color: var(--text-main);
-    }
+    .timeline-time { font-size: 0.68rem; color: var(--text-dim); font-family: var(--font-mono); }
+    .timeline-content { font-size: 0.78rem; color: var(--text-main); }
 
-    /* Toast Notification */
-    .toast-container {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      pointer-events: none;
-    }
+    /* Toast */
+    .toast-container { position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
     .toast {
-      background: rgba(12, 19, 39, 0.95);
+      background: rgba(11, 18, 38, 0.95);
       border: 1px solid var(--cyan);
       color: #fff;
       padding: 0.65rem 1rem;
@@ -1305,94 +1156,38 @@
       align-items: center;
       gap: 0.55rem;
       box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
-      animation: glitchFadeIn 0.3s ease;
+      animation: glitchIn 0.3s ease;
       pointer-events: auto;
       max-width: 340px;
     }
 
-    /* ========================================================================= */
-    /* RESPONSIVE BREAKPOINTS (PHONE & LAPTOP ZERO-SCROLL GUARANTEE) */
-    /* ========================================================================= */
-    @media (max-width: 1200px) {
-      .charts-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
+    /* Responsive Breakpoints */
+    @media (max-width: 1200px) { .charts-grid { grid-template-columns: 1fr; } }
     @media (max-width: 880px) {
-      .table-container {
-        display: none !important;
-      }
-      .mobile-cards-view {
-        display: flex !important;
-      }
-      .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .kpi-card {
-        padding: 0.9rem;
-      }
-      .kpi-value {
-        font-size: 1.35rem;
-      }
-      .gauge-card {
-        grid-column: span 2;
-      }
-      .navbar {
-        padding: 0.55rem 0.85rem;
-      }
-      .brand-title {
-        font-size: 0.95rem;
-      }
-      .brand-subtitle {
-        display: none;
-      }
-      .partner-btn span:not(.partner-avatar) {
-        display: none;
-      }
-      .partner-btn {
-        padding: 0.35rem;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      .form-full {
-        grid-column: span 1;
-      }
+      .table-container { display: none !important; }
+      .mobile-cards-view { display: flex !important; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-card { padding: 0.85rem; }
+      .kpi-value { font-size: 1.35rem; }
+      .gauge-card { grid-column: span 2; }
+      .navbar { padding: 0.55rem 0.85rem; }
+      .brand-title { font-size: 0.95rem; }
+      .brand-subtitle { display: none; }
+      .partner-btn span:not(.partner-avatar) { display: none; }
+      .partner-btn { padding: 0.35rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-full { grid-column: span 1; }
     }
-
     @media (max-width: 480px) {
-      .container {
-        padding: 0.75rem;
-        gap: 0.9rem;
-      }
-      .hero-hud {
-        padding: 0.6rem 0.8rem;
-      }
-      .kpi-grid {
-        grid-template-columns: 1fr;
-      }
-      .gauge-card {
-        grid-column: span 1;
-      }
-      .nav-actions .btn span {
-        display: none;
-      }
-      .nav-actions .btn {
-        padding: 0.45rem;
-        width: 34px;
-        height: 34px;
-      }
-      #btnNewProject span {
-        display: inline !important;
-      }
-      #btnNewProject {
-        width: auto !important;
-        padding: 0.45rem 0.75rem !important;
-      }
+      .container { padding: 0.75rem; gap: 0.85rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .gauge-card { grid-column: span 1; }
+      .nav-actions .btn span { display: none; }
+      .nav-actions .btn { padding: 0.45rem; width: 34px; height: 34px; }
+      #btnNewProject span { display: inline !important; }
+      #btnNewProject { width: auto !important; padding: 0.45rem 0.75rem !important; }
     }
 
-    /* Colors and Utilities */
     .text-cyan { color: var(--cyan) !important; }
     .text-emerald { color: var(--emerald) !important; }
     .text-rose { color: var(--rose) !important; }
@@ -1404,12 +1199,40 @@
 <body>
 
   <!-- ========================================================================= -->
-  <!-- SCI-FI NAVIGATION HUD -->
+  <!-- SCI-FI FLASH BOOT SPLASH SCREEN -->
+  <!-- ========================================================================= -->
+  <div id="splashScreen" class="splash-overlay">
+    <div class="splash-reticle">
+      <div class="splash-outer-ring"></div>
+      <div class="splash-inner-ring"></div>
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+        <polyline points="2 17 12 22 22 17"/>
+        <polyline points="2 12 12 17 22 12"/>
+      </svg>
+    </div>
+    <div class="splash-title">NEXUS PRIME</div>
+    <div class="splash-sub">Autonomous Command Matrix</div>
+    
+    <div class="splash-terminal">
+      <div>&gt; NEXUS QUANTUM OS v4.2 [BOOT]</div>
+      <div id="splashStatus">&gt; CONNECTING TO GOOGLE CLUSTER...</div>
+      <div>&gt; RECEPTOR TELEMETRY: SYNCHRONIZED</div>
+    </div>
+
+    <div class="splash-progress-track">
+      <div id="splashBar" class="splash-progress-bar"></div>
+    </div>
+    <button class="btn btn-sm btn-outline" style="margin-top: 1.5rem; font-size: 0.72rem;" onclick="dismissSplash()">Tap to Skip &gt;</button>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- NAVIGATION BAR HUD -->
   <!-- ========================================================================= -->
   <header class="navbar">
     <a href="#" class="nav-brand">
       <div class="brand-logo-frame">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="var(--cyan)"/>
           <polyline points="2 17 12 22 22 17" stroke="var(--violet)"/>
           <polyline points="2 12 12 17 22 12" stroke="var(--emerald)"/>
@@ -1423,53 +1246,61 @@
 
     <div class="nav-actions">
       <!-- Dual Partner Switcher -->
-      <div class="partner-switcher" title="Active Logged-in Partner Identity">
-        <button id="btnPartnerA" class="partner-btn active" onclick="setPartnerIdentity('Partner A (Operations Lead)')" title="Switch to Partner A (Ops Lead)">
+      <div class="partner-switcher">
+        <button id="btnPartnerA" class="partner-btn active" onclick="setPartnerIdentity('Partner A (Operations Lead)')" title="Switch to Partner A">
           <span class="partner-avatar">PA</span>
           <span>Partner A</span>
         </button>
-        <button id="btnPartnerB" class="partner-btn" onclick="setPartnerIdentity('Partner B (Auditor/Executive)')" title="Switch to Partner B (Auditor)">
+        <button id="btnPartnerB" class="partner-btn" onclick="setPartnerIdentity('Partner B (Auditor/Executive)')" title="Switch to Partner B">
           <span class="partner-avatar">PB</span>
           <span>Partner B</span>
         </button>
       </div>
 
-      <!-- Quick PIN Privacy Shield Toggle -->
-      <button id="btnPrivacyToggle" class="btn btn-secondary btn-icon" onclick="togglePrivacyMode()" title="Toggle PIN Masking for Public Spaces">
-        <svg id="privacyEyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-          <circle cx="12" cy="12" r="3"/>
+      <!-- Clients CRM Trigger -->
+      <button class="btn btn-secondary btn-icon" onclick="openClientsModal()" title="Client Registry & Automated WhatsApp Hub">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
       </button>
 
-      <!-- Read-Only Mode Toggle -->
-      <button id="btnReadOnlyToggle" class="btn btn-secondary btn-icon" onclick="toggleReadOnlyMode()" title="Toggle Read-Only Mode to Prevent Accidental Edits">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      <!-- Profit Split Calculator -->
+      <button class="btn btn-secondary btn-icon" onclick="openProfitSplitModal()" title="Co-Founder Profit Split & Weekly WhatsApp Brief">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
         </svg>
       </button>
 
-      <!-- Audit History -->
-      <button class="btn btn-outline btn-icon" onclick="openAuditModal()" title="View Complete Audit History">
+      <!-- Audio Toggle -->
+      <button id="btnAudioToggle" class="btn btn-secondary btn-icon" onclick="toggleAudio()" title="Sound FX Toggle">
+        <span id="audioIcon">🔊</span>
+      </button>
+
+      <!-- PIN Privacy Shield -->
+      <button id="btnPrivacyToggle" class="btn btn-secondary btn-icon" onclick="togglePrivacyMode()" title="Privacy PIN Masking">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
         </svg>
       </button>
 
-      <!-- Settings & Google Sheets Sync -->
-      <button class="btn btn-outline btn-icon" onclick="openSettingsModal()" title="Settings & Google Sheets API Sync">
+      <!-- Read-Only Toggle -->
+      <button id="btnReadOnlyToggle" class="btn btn-secondary btn-icon" onclick="toggleReadOnlyMode()" title="Read-Only Mode">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </button>
+
+      <!-- Settings / Database Sync -->
+      <button class="btn btn-outline btn-icon" onclick="openSettingsModal()" title="Matrix Settings">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
           <circle cx="12" cy="12" r="3"/>
         </svg>
       </button>
 
-      <!-- New Mission Protocol Button -->
+      <!-- New Mission Button -->
       <button id="btnNewProject" class="btn btn-primary" onclick="openNewProjectModal()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14m-7-7v14"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7v14"/></svg>
         <span>+ Mission</span>
       </button>
     </div>
@@ -1480,14 +1311,14 @@
   <!-- ========================================================================= -->
   <main class="container">
 
-    <!-- Hero Sci-Fi HUD Banner -->
+    <!-- Hero HUD Bar -->
     <div class="hero-hud">
       <div class="hero-status-group">
         <div class="hud-indicator">
           <div class="pulse-dot"></div>
-          <span>MATRIX STATUS: <strong class="text-emerald">ACTIVE // ONLINE</strong></span>
+          <span>CLUSTER: <strong class="text-emerald" id="hudSyncStatus">AUTO-CONNECTED</strong></span>
         </div>
-        <div class="hud-indicator" style="display: flex; align-items: center; gap: 0.35rem;">
+        <div class="hud-indicator">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span>CLEARANCE: <strong id="hudClearancePartner" class="text-cyan">PARTNER A (OPS)</strong></span>
         </div>
@@ -1497,11 +1328,21 @@
       </div>
     </div>
 
+    <!-- Urgency Quick Chips Bar -->
+    <div class="urgency-chips-bar">
+      <span class="urgency-chip active" onclick="applyUrgencyFilter('ALL', this)">ALL MISSIONS</span>
+      <span class="urgency-chip" onclick="applyUrgencyFilter('OVERDUE', this)">🚨 OVERDUE</span>
+      <span class="urgency-chip" onclick="applyUrgencyFilter('DUE_48H', this)">⏳ DUE IN 48H</span>
+      <span class="urgency-chip" onclick="applyUrgencyFilter('PENDING_BALANCE', this)">💰 BALANCE DUE</span>
+      <span class="urgency-chip" onclick="applyUrgencyFilter('IN_PROGRESS', this)">⚡ IN PROGRESS</span>
+      <span class="urgency-chip" onclick="applyUrgencyFilter('COMPLETED', this)">✅ COMPLETED</span>
+    </div>
+
     <!-- Mode Banners -->
     <div id="readOnlyBanner" class="system-banner" style="display: none;">
       <div style="display: flex; align-items: center; gap: 0.5rem;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span><strong>Read-Only Inspection Mode Active.</strong> Modifications & write actions are locked.</span>
+        <span><strong>Read-Only Mode Active.</strong> Write actions are locked.</span>
       </div>
       <button class="btn btn-sm btn-outline" onclick="toggleReadOnlyMode()">Exit</button>
     </div>
@@ -1509,94 +1350,92 @@
     <div id="privacyBanner" class="system-banner banner-privacy" style="display: none;">
       <div style="display: flex; align-items: center; gap: 0.5rem;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61M2 2l20 20"/></svg>
-        <span><strong>PIN Privacy Shield Active.</strong> Sensitive monetary telemetry masked.</span>
+        <span><strong>PIN Privacy Shield Active.</strong> Revenue numbers masked.</span>
       </div>
-      <button class="btn btn-sm btn-outline" onclick="promptUnlockPrivacy()">Enter PIN to Reveal</button>
+      <button class="btn btn-sm btn-outline" onclick="promptUnlockPrivacy()">Enter PIN</button>
     </div>
 
     <!-- ======================================================================= -->
     <!-- 7 KPI TELEMETRY CARDS -->
     <!-- ======================================================================= -->
     <section class="kpi-grid">
-      <!-- Card 1: Gross Quoted -->
+      <!-- Gross Quoted -->
       <div class="kpi-card">
         <div class="kpi-card-header">
           <span class="kpi-title">Gross Lifetime Quoted</span>
           <div class="kpi-icon-wrap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
         </div>
         <div class="kpi-value privacy-sensitive text-cyan" id="kpiGrossRevenue">₹0</div>
-        <div class="kpi-subtext">
-          <span id="kpiTotalProjectsCount">0</span> total missions logged
-        </div>
+        <div class="kpi-subtext"><span id="kpiTotalProjectsCount">0</span> total missions logged</div>
       </div>
 
-      <!-- Card 2: Cleared Income -->
+      <!-- Cleared Income -->
       <div class="kpi-card">
         <div class="kpi-card-header">
-          <span class="kpi-title">Cleared Escrow (Filtered)</span>
+          <span class="kpi-title">Cleared Escrow</span>
           <div class="kpi-icon-wrap" style="color: var(--emerald); border-color: rgba(0, 255, 157, 0.3); background: var(--emerald-light);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
         </div>
         <div class="kpi-value text-emerald privacy-sensitive" id="kpiClearedIncome">₹0</div>
         <div class="kpi-subtext">Across active filter range</div>
       </div>
 
-      <!-- Card 3: Outstanding Receivables -->
+      <!-- Outstanding Receivables -->
       <div class="kpi-card">
         <div class="kpi-card-header">
           <span class="kpi-title">Outstanding Receivables</span>
           <div class="kpi-icon-wrap" style="color: var(--rose); border-color: rgba(255, 0, 85, 0.3); background: var(--rose-light);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
         </div>
         <div class="kpi-value text-rose privacy-sensitive" id="kpiOutstandingDues">₹0</div>
-        <div class="kpi-subtext" id="kpiUnpaidProjectsCount">0 accounts pending clearance</div>
+        <div class="kpi-subtext" id="kpiUnpaidProjectsCount">0 accounts pending</div>
       </div>
 
-      <!-- Card 4: Active Pipeline -->
+      <!-- Active Pipeline -->
       <div class="kpi-card">
         <div class="kpi-card-header">
-          <span class="kpi-title">Active Pipeline Velocity</span>
+          <span class="kpi-title">Active Velocity</span>
           <div class="kpi-icon-wrap" style="color: var(--amber); border-color: rgba(255, 170, 0, 0.3); background: var(--amber-light);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
         </div>
         <div class="kpi-value text-amber" id="kpiActivePipeline">0</div>
         <div class="kpi-subtext">In Progress & Client Revision</div>
       </div>
 
-      <!-- Card 5: Delivered -->
+      <!-- Delivered -->
       <div class="kpi-card">
         <div class="kpi-card-header">
           <span class="kpi-title">Missions Completed</span>
           <div class="kpi-icon-wrap" style="color: var(--violet); border-color: rgba(139, 92, 246, 0.3); background: var(--violet-light);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           </div>
         </div>
         <div class="kpi-value text-violet" id="kpiDeliveredCount">0</div>
         <div class="kpi-subtext">Successfully fulfilled</div>
       </div>
 
-      <!-- Card 6: Average Order Value -->
+      <!-- AOV -->
       <div class="kpi-card">
         <div class="kpi-card-header">
-          <span class="kpi-title">Average Order Value (AOV)</span>
+          <span class="kpi-title">Average Order Value</span>
           <div class="kpi-icon-wrap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
           </div>
         </div>
         <div class="kpi-value privacy-sensitive text-cyan" id="kpiAOV">₹0</div>
-        <div class="kpi-subtext">Average mission yield</div>
+        <div class="kpi-subtext">Quoted / Total Orders</div>
       </div>
 
-      <!-- Card 7: Collection Rate Radial Gauge -->
+      <!-- Gauge Card -->
       <div class="kpi-card gauge-card">
         <div>
           <span class="kpi-title">Collection Rate</span>
-          <div class="kpi-value privacy-sensitive text-emerald" id="kpiCollectionRate" style="margin-top: 0.35rem;">0%</div>
+          <div class="kpi-value privacy-sensitive text-emerald" id="kpiCollectionRate" style="margin-top: 0.3rem;">0%</div>
           <div class="kpi-subtext">Cleared vs Quoted</div>
         </div>
         <div class="gauge-svg-container">
@@ -1615,14 +1454,13 @@
     </section>
 
     <!-- ======================================================================= -->
-    <!-- ANALYTICS CHARTS SECTION -->
+    <!-- CHARTS SECTION -->
     <!-- ======================================================================= -->
     <section class="charts-grid">
-      <!-- 6-Month Cashflow Comparison -->
       <div class="chart-panel">
         <div class="chart-header">
           <div class="chart-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 16v-4m5 4V8m5 8v-6"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 16v-4m5 4V8m5 8v-6"/></svg>
             <span>Cashflow Telemetry (Past 6 Months)</span>
           </div>
           <div style="display: flex; gap: 0.75rem; font-size: 0.7rem; font-family: var(--font-mono);">
@@ -1635,12 +1473,11 @@
         </div>
       </div>
 
-      <!-- Pipeline Distribution Donut -->
       <div class="chart-panel">
         <div class="chart-header">
           <div class="chart-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10h-10z"/></svg>
-            <span>Execution Status Matrix</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10h-10z"/></svg>
+            <span>Status Pipeline</span>
           </div>
         </div>
         <div class="chart-canvas-wrap">
@@ -1648,11 +1485,10 @@
         </div>
       </div>
 
-      <!-- Category Revenue Breakdown -->
       <div class="chart-panel">
         <div class="chart-header">
           <div class="chart-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             <span>Discipline Revenue Yield</span>
           </div>
         </div>
@@ -1663,19 +1499,16 @@
     </section>
 
     <!-- ======================================================================= -->
-    <!-- TOOLBAR & REAL-TIME FILTERS -->
+    <!-- CONTROLS & TOOLBAR -->
     <!-- ======================================================================= -->
     <section class="toolbar-panel">
       <div class="toolbar-row">
-        <!-- Global Search -->
         <div class="search-input-wrap">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="searchInput" class="input-search" placeholder="Search by Mission ID, Assignment, Operative..." oninput="handleSearchChange()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" class="input-search" placeholder="Search by Mission ID, Title, Operative, WhatsApp..." oninput="handleSearchChange()">
         </div>
 
-        <!-- Filters -->
         <div class="filter-group">
-          <!-- Execution Status -->
           <select id="filterExecutionStatus" class="select-control" onchange="renderAll()">
             <option value="ALL">Status: All</option>
             <option value="New Lead">New Lead</option>
@@ -1686,7 +1519,6 @@
             <option value="Cancelled">Cancelled</option>
           </select>
 
-          <!-- Payment Status -->
           <select id="filterPaymentStatus" class="select-control" onchange="renderAll()">
             <option value="ALL">Payment: All</option>
             <option value="Unpaid">Unpaid</option>
@@ -1695,7 +1527,6 @@
             <option value="Refunded">Refunded</option>
           </select>
 
-          <!-- Category -->
           <select id="filterCategory" class="select-control" onchange="renderAll()">
             <option value="ALL">Category: All</option>
             <option value="Engineering">Engineering</option>
@@ -1706,77 +1537,51 @@
             <option value="Other">Other</option>
           </select>
 
-          <!-- Date Range -->
-          <select id="filterDateRange" class="select-control" onchange="handleDateFilterChange()">
-            <option value="ALL_TIME">Timeline: All</option>
-            <option value="TODAY">Today</option>
-            <option value="THIS_WEEK">This Week</option>
-            <option value="THIS_MONTH">This Month</option>
-            <option value="CUSTOM">Custom Range</option>
-          </select>
-
-          <div id="customDateInputs" style="display: none; align-items: center; gap: 0.3rem;">
-            <input type="date" id="filterStartDate" class="select-control" onchange="renderAll()">
-            <span style="color: var(--text-dim); font-size: 0.72rem;">to</span>
-            <input type="date" id="filterEndDate" class="select-control" onchange="renderAll()">
-          </div>
-
-          <!-- Export CSV -->
           <button class="btn btn-secondary btn-sm" onclick="exportToCSV()" title="Export Filtered Missions to CSV">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span>Export CSV</span>
+            <span>CSV</span>
           </button>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================= -->
-    <!-- DESKTOP DATA TABLE (Visible on Desktop / Laptop >= 880px) -->
+    <!-- DESKTOP DATA TABLE (>= 880px) -->
     <!-- ======================================================================= -->
     <section class="table-container">
       <div class="table-responsive">
         <table class="data-table">
           <thead>
             <tr>
-              <th class="sortable" onclick="sortTable('Project_ID')">
-                Mission ID <span id="sort_Project_ID">↕</span>
-              </th>
+              <th class="sortable" onclick="sortTable('Project_ID')">Mission ID <span id="sort_Project_ID">↕</span></th>
               <th>Assignment & Discipline</th>
               <th>Client Operative</th>
-              <th class="sortable" onclick="sortTable('Delivery_Deadline')">
-                Horizon <span id="sort_Delivery_Deadline">↕</span>
-              </th>
-              <th class="sortable" onclick="sortTable('Total_Quote')">
-                Quoted <span id="sort_Total_Quote">↕</span>
-              </th>
+              <th class="sortable" onclick="sortTable('Delivery_Deadline')">Horizon <span id="sort_Delivery_Deadline">↕</span></th>
+              <th class="sortable" onclick="sortTable('Total_Quote')">Quoted <span id="sort_Total_Quote">↕</span></th>
               <th>Cleared</th>
               <th>Receivable</th>
-              <th>Payment Status</th>
+              <th>Payment</th>
               <th>Milestone</th>
               <th style="text-align: right;">Action Dock</th>
             </tr>
           </thead>
-          <tbody id="projectsTableBody">
-            <!-- Dynamically populated -->
-          </tbody>
+          <tbody id="projectsTableBody"></tbody>
         </table>
       </div>
-      <div style="padding: 0.75rem 1.15rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); background: rgba(8, 14, 32, 0.6); font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-dim);">
+      <div style="padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); background: rgba(7, 12, 28, 0.7); font-size: 0.74rem; font-family: var(--font-mono); color: var(--text-dim);">
         <div id="tableRecordCount">Showing 0 of 0 missions</div>
-        <div style="display: flex; gap: 0.45rem; align-items: center;">
-          <span class="text-emerald">SYNC ENGINE ONLINE</span>
+        <div style="display: flex; gap: 0.4rem; align-items: center;">
+          <span class="text-emerald">GOOGLE SHEETS CLUSTER ACTIVE</span>
           <div class="pulse-dot"></div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================= -->
-    <!-- MOBILE HOLOGRAPHIC MISSION CARDS (Visible on Phone <= 880px) -->
+    <!-- MOBILE HOLOGRAPHIC MISSION CARDS (PHONE VIEW <= 880px) -->
     <!-- ZERO HORIZONTAL SCROLL GUARANTEED! -->
     <!-- ======================================================================= -->
-    <section id="mobileCardsContainer" class="mobile-cards-view">
-      <!-- Populated dynamically with mission cards -->
-    </section>
+    <section id="mobileCardsContainer" class="mobile-cards-view"></section>
 
   </main>
 
@@ -1784,7 +1589,7 @@
   <!-- MODALS & DRAWERS -->
   <!-- ========================================================================= -->
 
-  <!-- MISSION PROTOCOL INITIATION (ADD/EDIT PROJECT) MODAL -->
+  <!-- MISSION PROTOCOL INTAKE MODAL -->
   <div id="projectModalBackdrop" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
@@ -1799,7 +1604,6 @@
         <form id="projectForm" onsubmit="handleProjectFormSubmit(event)">
           <input type="hidden" id="formMode" value="CREATE">
 
-          <!-- Section 1: Mission Identification -->
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Mission ID Code <span class="text-rose">*</span></label>
@@ -1816,9 +1620,9 @@
               <input type="text" id="inpProjectName" class="form-control" placeholder="e.g. Distributed Consensus Engine Architecture" required>
             </div>
 
-            <!-- Category Selection with Interactive Chips -->
+            <!-- Category Chips -->
             <div class="form-group form-full">
-              <label class="form-label">Discipline Matrix Classification <span class="text-rose">*</span></label>
+              <label class="form-label">Discipline Matrix <span class="text-rose">*</span></label>
               <input type="hidden" id="inpCategory" value="Engineering" required>
               <div class="category-chips-grid">
                 <div class="cat-chip active" onclick="selectCategoryChip('Engineering', this)">⚡ Engineering</div>
@@ -1839,10 +1643,9 @@
             <div class="form-group">
               <label class="form-label">Secure WhatsApp Comm-Link <span class="text-rose">*</span></label>
               <input type="text" id="inpClientContact" class="form-control font-mono" placeholder="e.g. 9876543210" required>
-              <span style="font-size: 0.68rem; color: var(--text-dim);">Prefix +91 auto-formatted for instant WhatsApp receipts</span>
             </div>
 
-            <!-- Financial Credit Escrow -->
+            <!-- Financial Credits -->
             <div class="form-group">
               <label class="form-label">Total Quoted Credits (₹) <span class="text-rose">*</span></label>
               <input type="number" id="inpTotalQuote" class="form-control font-mono" min="0" step="100" placeholder="0" required oninput="calculateBalanceIndicator()">
@@ -1865,7 +1668,7 @@
             <!-- Live Holographic Balance Gauge -->
             <div class="form-full balance-preview-box">
               <div>
-                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Outstanding Balance Telemetry:</span>
+                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted);">OUTSTANDING BALANCE TELEMETRY:</span>
                 <div id="previewBalanceAmount" class="currency-mono text-rose" style="font-size: 1.3rem;">₹0</div>
               </div>
               <div id="previewBalanceBadge" class="badge badge-rose">Unpaid</div>
@@ -1913,6 +1716,12 @@
               <input type="date" id="inpDeliveryDeadline" class="form-control font-mono" required>
             </div>
 
+            <!-- Cloud Drive / Notion Link -->
+            <div class="form-group form-full">
+              <label class="form-label">Google Drive / Notion Asset Link (Optional)</label>
+              <input type="url" id="inpDriveLink" class="form-control font-mono" placeholder="https://drive.google.com/drive/folders/...">
+            </div>
+
             <!-- Directives & Notes -->
             <div class="form-group form-full">
               <label class="form-label">Mission Directives & Guidelines</label>
@@ -1932,6 +1741,197 @@
     </div>
   </div>
 
+  <!-- CLIENTS CRM MODAL -->
+  <div id="clientsModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Operative Registry // Client Management CRM</span>
+        </div>
+        <button class="btn btn-outline btn-icon btn-sm" onclick="closeClientsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.65rem; margin-bottom: 0.5rem;">
+          <div class="drawer-card" style="padding: 0.65rem; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Total Operatives</div>
+            <div id="crmTotalClients" class="font-mono text-cyan" style="font-size: 1.25rem; font-weight: 800;">0</div>
+          </div>
+          <div class="drawer-card" style="padding: 0.65rem; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Lifetime Quoted</div>
+            <div id="crmLifetimeQuoted" class="font-mono text-emerald" style="font-size: 1.25rem; font-weight: 800;">₹0</div>
+          </div>
+          <div class="drawer-card" style="padding: 0.65rem; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Pending Dues</div>
+            <div id="crmLifetimePending" class="font-mono text-rose" style="font-size: 1.25rem; font-weight: 800;">₹0</div>
+          </div>
+        </div>
+
+        <input type="text" id="crmSearchInput" class="form-control font-mono" placeholder="Filter client by name or phone..." oninput="renderCrmClients()">
+
+        <div id="crmClientList" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 380px; overflow-y: auto;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeClientsModal()">Close Registry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC UPI PAYMENT QR CODE MODAL -->
+  <div id="upiModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 400px; text-align: center;">
+      <div class="modal-header" style="justify-content: center;">
+        <div class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          <span>Dynamic UPI Payment QR</span>
+        </div>
+      </div>
+      <div class="modal-body" style="align-items: center;">
+        <div style="font-size: 0.78rem; color: var(--text-muted);" id="upiProjectDesc">Mission: PRJ-XXXX</div>
+
+        <!-- Scannable QR Container -->
+        <div style="background: #fff; padding: 12px; border-radius: var(--radius-md); box-shadow: 0 0 25px rgba(0, 245, 255, 0.4); margin: 0.75rem 0;">
+          <img id="upiQrImage" src="" alt="UPI QR Code" style="width: 200px; height: 200px; display: block;">
+        </div>
+
+        <div class="currency-mono text-emerald" id="upiAmountText" style="font-size: 1.4rem; font-weight: 800;">₹0</div>
+        <div style="font-size: 0.74rem; font-family: var(--font-mono); color: var(--text-dim);" id="upiVpaText">VPA: business@upi</div>
+
+        <div style="display: flex; gap: 0.45rem; margin-top: 0.5rem; width: 100%;">
+          <button class="btn btn-sm btn-outline" style="flex: 1;" onclick="copyUpiLink()">Copy Link</button>
+          <button class="btn btn-sm btn-emerald" style="flex: 1;" onclick="shareUpiWhatsApp()">WhatsApp QR</button>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn btn-secondary" onclick="closeUpiModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CO-FOUNDER PROFIT SPLIT CALCULATOR -->
+  <div id="splitModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Co-Founder Profit Allocation</span>
+        </div>
+        <button class="btn btn-outline btn-icon btn-sm" onclick="closeProfitSplitModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="drawer-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Total Cleared Funds:</span>
+            <span id="splitGrossCleared" class="currency-mono text-emerald" style="font-size: 1.15rem;">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Reserve Buffer (10%):</span>
+            <span id="splitReserve" class="currency-mono text-cyan">₹0</span>
+          </div>
+          <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">Net Distributable:</span>
+            <span id="splitDistributable" class="currency-mono text-cyan" style="font-size: 1.1rem; font-weight: 800;">₹0</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="drawer-card" style="text-align: center; border-color: rgba(0, 245, 255, 0.4);">
+            <div style="font-size: 0.7rem; color: var(--text-muted);">PARTNER A (OPS)</div>
+            <div id="splitPartnerA" class="currency-mono text-cyan" style="font-size: 1.25rem; font-weight: 800; margin-top: 0.25rem;">₹0</div>
+            <span class="badge badge-cyan" style="margin-top: 0.35rem;">50% Share</span>
+          </div>
+          <div class="drawer-card" style="text-align: center; border-color: rgba(139, 92, 246, 0.4);">
+            <div style="font-size: 0.7rem; color: var(--text-muted);">PARTNER B (AUDITOR)</div>
+            <div id="splitPartnerB" class="currency-mono text-violet" style="font-size: 1.25rem; font-weight: 800; margin-top: 0.25rem;">₹0</div>
+            <span class="badge badge-violet" style="margin-top: 0.35rem;">50% Share</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="copyWeeklyBrief()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+          <span>Copy Co-Founder WhatsApp Brief</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeProfitSplitModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPERATIVE DOSSIER DRAWER -->
+  <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeDetailDrawer()"></div>
+  <aside id="detailDrawer" class="drawer-panel">
+    <div class="drawer-header">
+      <div>
+        <span id="drawerProjectId" class="badge badge-cyan font-mono">PRJ-XXXX-XXX</span>
+        <h3 id="drawerProjectTitle" style="margin-top: 0.35rem; font-size: 1.05rem; font-weight: 700; color: #fff;">Mission Dossier</h3>
+      </div>
+      <button class="btn btn-outline btn-icon btn-sm" onclick="closeDetailDrawer()">✕</button>
+    </div>
+    
+    <div class="drawer-body">
+      <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
+        <span id="drawerProjectStatusBadge" class="badge badge-amber">In Progress</span>
+        <span id="drawerPaymentStatusBadge" class="badge badge-emerald">Fully Paid</span>
+        <span id="drawerCategoryBadge" class="badge badge-violet">Engineering</span>
+      </div>
+
+      <div class="drawer-card">
+        <div class="drawer-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Credit Telemetry</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+          <div>
+            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Quoted</div>
+            <div id="drawerQuoted" class="currency-mono privacy-sensitive text-cyan" style="font-size: 1.05rem;">₹0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Cleared</div>
+            <div id="drawerPaid" class="currency-mono privacy-sensitive text-emerald" style="font-size: 1.05rem;">₹0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Pending</div>
+            <div id="drawerPending" class="currency-mono privacy-sensitive text-rose" style="font-size: 1.05rem;">₹0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-card">
+        <div class="drawer-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Client & Directives</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem;">
+          <div><strong style="color: var(--text-muted);">Client:</strong> <span id="drawerClientName" style="color: #fff;">-</span></div>
+          <div><strong style="color: var(--text-muted);">WhatsApp:</strong> <span id="drawerClientContact" class="font-mono text-cyan">-</span></div>
+          <div><strong style="color: var(--text-muted);">Horizon:</strong> <span id="drawerDeadline" class="font-mono">-</span></div>
+          <div><strong style="color: var(--text-muted);">Drive Link:</strong> <a id="drawerDriveLink" href="#" target="_blank" class="text-cyan" style="text-decoration: underline;">Open Asset Folder</a></div>
+          <div><strong style="color: var(--text-muted);">Logged By:</strong> <span id="drawerLoggedBy">-</span></div>
+        </div>
+      </div>
+
+      <div class="drawer-card">
+        <div class="drawer-section-title">Directives & Memo</div>
+        <div id="drawerNotes" style="font-size: 0.8rem; color: var(--text-muted); white-space: pre-wrap; line-height: 1.5;">No notes.</div>
+      </div>
+
+      <div>
+        <div class="drawer-section-title" style="margin-bottom: 0.75rem;">Tamper-Evident Mission Audit</div>
+        <div id="drawerTimeline" class="timeline"></div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="btn btn-outline btn-sm" onclick="openUpiFromDrawer()">📱 UPI QR</button>
+      <button class="btn btn-outline btn-sm" onclick="triggerDrawerWhatsApp()">💬 WA Receipt</button>
+      <button class="btn btn-secondary btn-sm" onclick="editFromDrawer()">Edit Protocol</button>
+    </div>
+  </aside>
+
   <!-- QUICK ESCROW CLEARANCE MODAL -->
   <div id="quickPaymentModalBackdrop" class="modal-backdrop">
     <div class="modal-card" style="max-width: 440px;">
@@ -1944,11 +1944,9 @@
       </div>
       <div class="modal-body">
         <input type="hidden" id="quickPayProjectId">
-
         <div class="drawer-card">
           <div style="font-weight: 700; font-size: 0.95rem; color: #fff;" id="qpProjectTitle">Mission Title</div>
           <div style="font-size: 0.74rem; color: var(--text-dim);" id="qpClientInfo">Operative: -</div>
-          
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
             <div>
               <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Quoted</div>
@@ -1972,7 +1970,7 @@
 
         <div style="display: flex; gap: 0.45rem;">
           <button type="button" class="btn btn-sm btn-outline" onclick="fillQuickPayFull()">Clear Full Balance</button>
-          <button type="button" class="btn btn-sm btn-outline" onclick="fillQuickPayHalf()">Pay 50% Balance</button>
+          <button type="button" class="btn btn-sm btn-outline" onclick="fillQuickPayHalf()">Pay 50%</button>
         </div>
 
         <div class="form-group">
@@ -1997,156 +1995,6 @@
     </div>
   </div>
 
-  <!-- OPERATIVE DOSSIER SLIDE-OVER DRAWER -->
-  <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeDetailDrawer()"></div>
-  <aside id="detailDrawer" class="drawer-panel">
-    <div class="drawer-header">
-      <div>
-        <span id="drawerProjectId" class="badge badge-cyan font-mono">PRJ-XXXX-XXX</span>
-        <h3 id="drawerProjectTitle" style="margin-top: 0.35rem; font-size: 1.05rem; font-weight: 700; color: #fff;">Mission Dossier</h3>
-      </div>
-      <button class="btn btn-outline btn-icon btn-sm" onclick="closeDetailDrawer()">✕</button>
-    </div>
-    
-    <div class="drawer-body">
-      <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
-        <span id="drawerProjectStatusBadge" class="badge badge-amber">In Progress</span>
-        <span id="drawerPaymentStatusBadge" class="badge badge-emerald">Fully Paid</span>
-        <span id="drawerCategoryBadge" class="badge badge-violet">Engineering</span>
-      </div>
-
-      <!-- Financial Card -->
-      <div class="drawer-card">
-        <div class="drawer-section-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <span>Credit Telemetry</span>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
-          <div>
-            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Quoted</div>
-            <div id="drawerQuoted" class="currency-mono privacy-sensitive text-cyan" style="font-size: 1.05rem;">₹0</div>
-          </div>
-          <div>
-            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Cleared</div>
-            <div id="drawerPaid" class="currency-mono privacy-sensitive text-emerald" style="font-size: 1.05rem;">₹0</div>
-          </div>
-          <div>
-            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Pending</div>
-            <div id="drawerPending" class="currency-mono privacy-sensitive text-rose" style="font-size: 1.05rem;">₹0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Operative Details -->
-      <div class="drawer-card">
-        <div class="drawer-section-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span>Client & Deadlines</span>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem;">
-          <div><strong style="color: var(--text-muted);">Client:</strong> <span id="drawerClientName" style="color: #fff;">-</span></div>
-          <div><strong style="color: var(--text-muted);">Comm-Link:</strong> <span id="drawerClientContact" class="font-mono text-cyan">-</span></div>
-          <div><strong style="color: var(--text-muted);">Target Horizon:</strong> <span id="drawerDeadline" class="font-mono">-</span></div>
-          <div><strong style="color: var(--text-muted);">Intake Logged:</strong> <span id="drawerCreated" class="font-mono">-</span></div>
-          <div><strong style="color: var(--text-muted);">Logged By:</strong> <span id="drawerLoggedBy">-</span></div>
-        </div>
-      </div>
-
-      <!-- Guidelines -->
-      <div class="drawer-card">
-        <div class="drawer-section-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span>Directives & Memo</span>
-        </div>
-        <div id="drawerNotes" style="font-size: 0.8rem; color: var(--text-muted); white-space: pre-wrap; line-height: 1.5;">
-          No directives recorded.
-        </div>
-      </div>
-
-      <!-- Audit History -->
-      <div>
-        <div class="drawer-section-title" style="margin-bottom: 0.75rem;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-          <span>Tamper-Evident Mission Audit</span>
-        </div>
-        <div id="drawerTimeline" class="timeline"></div>
-      </div>
-    </div>
-
-    <div class="drawer-footer">
-      <button class="btn btn-outline" id="drawerBtnWhatsApp" onclick="triggerDrawerWhatsApp()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        <span>Send WhatsApp Receipt</span>
-      </button>
-      <button class="btn btn-secondary" onclick="editFromDrawer()">Edit Protocol</button>
-    </div>
-  </aside>
-
-  <!-- FULL AUDIT LOG EXPLORER -->
-  <div id="auditModalBackdrop" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 720px;">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-          <span>NEXUS PRIME // Audit Registry</span>
-        </div>
-        <button class="btn btn-outline btn-icon btn-sm" onclick="closeAuditModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.5rem;">
-          Permanent, tamper-evident chronological event registry capturing all operational changes and partner attribution.
-        </p>
-        <div id="fullAuditTimeline" class="timeline"></div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeAuditModal()">Close Registry</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PORTAL SETTINGS & DATABASE SYNC -->
-  <div id="settingsModalBackdrop" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 500px;">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span>NEXUS Matrix Settings</span>
-        </div>
-        <button class="btn btn-outline btn-icon btn-sm" onclick="closeSettingsModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Google Apps Script Web App Endpoint URL</label>
-          <input type="url" id="inpApiUrl" class="form-control font-mono" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
-          <span style="font-size: 0.68rem; color: var(--text-dim);">Paste your deployed Web App URL to switch from Local Cache to Google Sheets live.</span>
-        </div>
-
-        <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.4rem;">
-          <button class="btn btn-secondary btn-sm" onclick="testSheetConnection()">Test Connection</button>
-          <span id="syncStatusBadge" class="badge badge-gray">Local Matrix Standalone</span>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 0.8rem 0;">
-
-        <div class="form-group">
-          <label class="form-label">Privacy Shield PIN (4 Digits)</label>
-          <input type="password" id="inpPrivacyPin" class="form-control font-mono" maxlength="4" placeholder="1234">
-          <span style="font-size: 0.68rem; color: var(--text-dim);">Default PIN is 1234. Used to reveal masked revenue.</span>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 0.8rem 0;">
-
-        <button class="btn btn-outline btn-sm" onclick="loadSampleData(true)">
-          Reset to Realistic Sample Agency Dataset
-        </button>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveSettings()">Save Configuration</button>
-      </div>
-    </div>
-  </div>
-
   <!-- PIN UNLOCK MODAL -->
   <div id="pinModalBackdrop" class="modal-backdrop">
     <div class="modal-card" style="max-width: 340px; text-align: center;">
@@ -2157,15 +2005,13 @@
         </div>
       </div>
       <div class="modal-body" style="align-items: center;">
-        <p style="font-size: 0.78rem; color: var(--text-muted);">Enter your 4-digit co-founder PIN to reveal financial telemetry.</p>
-        
+        <p style="font-size: 0.78rem; color: var(--text-muted);">Enter 4-digit PIN to unmask revenue numbers.</p>
         <div class="pin-input-wrap">
           <input type="password" maxlength="1" class="pin-digit" id="pin1" oninput="handlePinKey(1)">
           <input type="password" maxlength="1" class="pin-digit" id="pin2" oninput="handlePinKey(2)">
           <input type="password" maxlength="1" class="pin-digit" id="pin3" oninput="handlePinKey(3)">
           <input type="password" maxlength="1" class="pin-digit" id="pin4" oninput="handlePinKey(4)">
         </div>
-
         <div id="pinErrorMsg" style="color: var(--rose); font-size: 0.76rem; display: none;">Invalid PIN. Default is 1234.</div>
       </div>
       <div class="modal-footer" style="justify-content: center;">
@@ -2175,16 +2021,56 @@
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+          <span>NEXUS Matrix Settings</span>
+        </div>
+        <button class="btn btn-outline btn-icon btn-sm" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Google Apps Script Web App Endpoint</label>
+          <input type="url" id="inpApiUrl" class="form-control font-mono">
+          <span style="font-size: 0.68rem; color: var(--emerald);">Auto-Connected to permanent Google Sheet cluster.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Default UPI ID / VPA for Dynamic QR</label>
+          <input type="text" id="inpDefaultUpi" class="form-control font-mono" placeholder="nexusprime@upi">
+          <span style="font-size: 0.68rem; color: var(--text-dim);">Clients will pay to this UPI handle when scanning generated QR codes.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Privacy Shield PIN (4 Digits)</label>
+          <input type="password" id="inpPrivacyPin" class="form-control font-mono" maxlength="4" placeholder="1234">
+        </div>
+
+        <button class="btn btn-outline btn-sm" onclick="loadSampleData(true)">Reset to Sample Dataset</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- ========================================================================= -->
   <!-- JAVASCRIPT ENGINE -->
   <!-- ========================================================================= -->
   <script>
-    const STORAGE_KEY_PROJECTS = 'nexus_projects_v3';
-    const STORAGE_KEY_AUDITS = 'nexus_audits_v3';
-    const STORAGE_KEY_SETTINGS = 'nexus_settings_v3';
+    // PERMANENT HARDCODED GOOGLE APPS SCRIPT CLUSTER URL
+    const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzOD63m4YMTgHRO_Mqi2qe56e6B0vRYoJBG2KGw3vRry73zbYXNXp0HMdP403-IiH7d/exec';
+    
+    const STORAGE_KEY_PROJECTS = 'nexus_projects_v4';
+    const STORAGE_KEY_AUDITS = 'nexus_audits_v4';
+    const STORAGE_KEY_SETTINGS = 'nexus_settings_v4';
 
     let appState = {
       projects: [],
@@ -2192,112 +2078,105 @@
       activePartner: 'Partner A (Operations Lead)',
       isPrivacyActive: false,
       isReadOnly: false,
+      isAudioMuted: false,
       userPin: '1234',
-      apiUrl: '',
+      defaultUpi: 'nexusprime@upi',
+      apiUrl: DEFAULT_API_URL,
       sortColumn: 'Creation_Timestamp',
       sortDirection: 'desc',
       searchQuery: '',
+      urgencyFilter: 'ALL',
       activeDrawerProjectId: null
     };
 
-    const SAMPLE_SEED_PROJECTS = [
-      {
-        Project_ID: "PRJ-2026-001",
-        Project_Name: "Smart Grid Power Distribution Simulation in MATLAB",
-        Client_Name: "Aarav Patel",
-        Client_Contact: "919820112233",
-        Category: "Engineering",
-        Total_Quote: 45000,
-        Amount_Paid: 30000,
-        Pending_Balance: 15000,
-        Payment_Status: "Partial Advance",
-        Project_Status: "In Progress",
-        Delivery_Deadline: "2026-09-28",
-        Creation_Timestamp: "2026-09-15T10:30:00.000Z",
-        Logged_By: "Partner A (Operations Lead)",
-        Internal_Notes: "Client requires IEEE format paper + MATLAB Simulink files with power loss graphs."
-      },
-      {
-        Project_ID: "PRJ-2026-002",
-        Project_Name: "Cross-Border E-Commerce Supply Chain Optimization Thesis",
-        Client_Name: "Pooja Hegde",
-        Client_Contact: "919876543210",
-        Category: "Management",
-        Total_Quote: 65000,
-        Amount_Paid: 65000,
-        Pending_Balance: 0,
-        Payment_Status: "Fully Paid",
-        Project_Status: "Completed",
-        Delivery_Deadline: "2026-09-20",
-        Creation_Timestamp: "2026-09-02T14:15:00.000Z",
-        Logged_By: "Partner B (Auditor/Executive)",
-        Internal_Notes: "Final draft submitted, plagiarism report < 5% approved, balance settled via Razorpay."
-      },
-      {
-        Project_ID: "PRJ-2026-003",
-        Project_Name: "Full-Stack Hospital Patient Portal (FastAPI & React)",
-        Client_Name: "Vikram Malhotra",
-        Client_Contact: "919711224455",
-        Category: "Software Development",
-        Total_Quote: 120000,
-        Amount_Paid: 50000,
-        Pending_Balance: 70000,
-        Payment_Status: "Partial Advance",
-        Project_Status: "Draft Submitted",
-        Delivery_Deadline: "2026-10-05",
-        Creation_Timestamp: "2026-09-10T11:00:00.000Z",
-        Logged_By: "Partner A (Operations Lead)",
-        Internal_Notes: "GitHub repository shared. Client testing milestone 1 authentication & appointment booking."
-      },
-      {
-        Project_ID: "PRJ-2026-004",
-        Project_Name: "Corporate Sustainability ESG Brand Identity & Pitch Deck",
-        Client_Name: "Neha Sen",
-        Client_Contact: "919933445566",
-        Category: "Graphic Design",
-        Total_Quote: 35000,
-        Amount_Paid: 0,
-        Pending_Balance: 35000,
-        Payment_Status: "Unpaid",
-        Project_Status: "New Lead",
-        Delivery_Deadline: "2026-10-12",
-        Creation_Timestamp: "2026-09-21T09:45:00.000Z",
-        Logged_By: "Partner A (Operations Lead)",
-        Internal_Notes: "Initial scope call completed. Awaiting client advance payment of 50% via UPI."
-      },
-      {
-        Project_ID: "PRJ-2026-005",
-        Project_Name: "Quantum Computing Cryptographic Protocol Benchmark",
-        Client_Name: "Dr. Sandeep Rao",
-        Client_Contact: "919845012345",
-        Category: "Thesis",
-        Total_Quote: 85000,
-        Amount_Paid: 85000,
-        Pending_Balance: 0,
-        Payment_Status: "Fully Paid",
-        Project_Status: "Client Revision",
-        Delivery_Deadline: "2026-09-25",
-        Creation_Timestamp: "2026-08-25T16:20:00.000Z",
-        Logged_By: "Partner B (Auditor/Executive)",
-        Internal_Notes: "Reviewer comments received from journal. Adding 2 more comparative benchmark tables."
+    // Synthesized Web Audio API Sound Effects (Zero External Files)
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-    ];
+      return audioCtx;
+    }
+
+    function playSound(type = 'click') {
+      if (appState.isAudioMuted) return;
+      try {
+        const ctx = getAudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          osc.frequency.exponentialRampToValueAtTime(1400, now + 0.05);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'success') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(587, now);
+          osc.frequency.setValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        }
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      appState.isAudioMuted = !appState.isAudioMuted;
+      document.getElementById('audioIcon').textContent = appState.isAudioMuted ? '🔇' : '🔊';
+      showToast(appState.isAudioMuted ? 'Sound Effects Muted' : 'Sound Effects Active', 'info');
+      saveSettingsToStorage();
+    }
+
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       loadSettings();
       loadData();
       startHudClock();
+      initBootSplash();
       renderAll();
       initChartResizeListener();
     });
+
+    function initBootSplash() {
+      const splash = document.getElementById('splashScreen');
+      const bar = document.getElementById('splashBar');
+      const status = document.getElementById('splashStatus');
+
+      setTimeout(() => { if (bar) bar.style.width = '60%'; }, 100);
+      setTimeout(() => {
+        if (status) status.innerHTML = '&gt; ESCROW TELEMETRY: <span style="color:#00ff9d;">AUTHENTICATED</span>';
+        if (bar) bar.style.width = '100%';
+      }, 700);
+      setTimeout(() => {
+        dismissSplash();
+      }, 1300);
+    }
+
+    function dismissSplash() {
+      const splash = document.getElementById('splashScreen');
+      if (splash) splash.classList.add('hidden');
+    }
 
     function startHudClock() {
       const clockEl = document.getElementById('hudClock');
       setInterval(() => {
         const now = new Date();
-        if (clockEl) {
-          clockEl.textContent = now.toTimeString().split(' ')[0] + ' LOCAL';
-        }
+        if (clockEl) clockEl.textContent = now.toTimeString().split(' ')[0] + ' LOCAL';
       }, 1000);
     }
 
@@ -2306,89 +2185,145 @@
         const stored = localStorage.getItem(STORAGE_KEY_SETTINGS);
         if (stored) {
           const s = JSON.parse(stored);
-          appState.apiUrl = s.apiUrl || '';
+          appState.apiUrl = s.apiUrl || DEFAULT_API_URL;
           appState.userPin = s.userPin || '1234';
+          appState.defaultUpi = s.defaultUpi || 'nexusprime@upi';
+          if (s.isAudioMuted !== undefined) appState.isAudioMuted = s.isAudioMuted;
           if (s.activePartner) appState.activePartner = s.activePartner;
+        } else {
+          appState.apiUrl = DEFAULT_API_URL;
         }
-      } catch (e) {
-        console.error('Failed to load settings:', e);
-      }
+      } catch (e) {}
+
       updatePartnerUI();
       document.getElementById('inpApiUrl').value = appState.apiUrl;
       document.getElementById('inpPrivacyPin').value = appState.userPin;
+      document.getElementById('inpDefaultUpi').value = appState.defaultUpi;
+      document.getElementById('audioIcon').textContent = appState.isAudioMuted ? '🔇' : '🔊';
+    }
+
+    function saveSettingsToStorage() {
+      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
+        apiUrl: appState.apiUrl,
+        userPin: appState.userPin,
+        defaultUpi: appState.defaultUpi,
+        isAudioMuted: appState.isAudioMuted,
+        activePartner: appState.activePartner
+      }));
+    }
+
+    function saveSettings() {
+      appState.apiUrl = document.getElementById('inpApiUrl').value.trim() || DEFAULT_API_URL;
+      const pinVal = document.getElementById('inpPrivacyPin').value.trim();
+      if (pinVal.length === 4) appState.userPin = pinVal;
+      appState.defaultUpi = document.getElementById('inpDefaultUpi').value.trim() || 'nexusprime@upi';
+      saveSettingsToStorage();
+      closeSettingsModal();
+      showToast('Settings Saved', 'success');
+      syncWithGoogleSheet();
     }
 
     function loadData() {
       try {
-        const storedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS) || localStorage.getItem('ctmp_projects_v2');
-        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS) || localStorage.getItem('ctmp_audits_v2');
+        const storedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS) || localStorage.getItem('nexus_projects_v3');
+        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS) || localStorage.getItem('nexus_audits_v3');
 
         if (storedProjects) {
           appState.projects = JSON.parse(storedProjects);
         } else {
-          appState.projects = JSON.parse(JSON.stringify(SAMPLE_SEED_PROJECTS));
+          appState.projects = [
+            {
+              Project_ID: "PRJ-2026-001",
+              Project_Name: "Smart Grid Power Distribution Simulation in MATLAB",
+              Client_Name: "Aarav Patel",
+              Client_Contact: "919820112233",
+              Category: "Engineering",
+              Total_Quote: 45000,
+              Amount_Paid: 30000,
+              Pending_Balance: 15000,
+              Payment_Status: "Partial Advance",
+              Project_Status: "In Progress",
+              Delivery_Deadline: "2026-09-28",
+              Creation_Timestamp: "2026-09-15T10:30:00.000Z",
+              Logged_By: "Partner A (Operations Lead)",
+              Internal_Notes: "IEEE format paper + MATLAB Simulink files."
+            },
+            {
+              Project_ID: "PRJ-2026-002",
+              Project_Name: "Cross-Border E-Commerce Supply Chain Optimization Thesis",
+              Client_Name: "Pooja Hegde",
+              Client_Contact: "919876543210",
+              Category: "Management",
+              Total_Quote: 65000,
+              Amount_Paid: 65000,
+              Pending_Balance: 0,
+              Payment_Status: "Fully Paid",
+              Project_Status: "Completed",
+              Delivery_Deadline: "2026-09-20",
+              Creation_Timestamp: "2026-09-02T14:15:00.000Z",
+              Logged_By: "Partner B (Auditor/Executive)",
+              Internal_Notes: "Final draft submitted, plagiarism approved."
+            }
+          ];
           saveProjectsToStorage();
         }
 
         if (storedAudits) {
           appState.auditTrails = JSON.parse(storedAudits);
         } else {
-          appState.auditTrails = [
-            {
-              Log_ID: "LOG-INIT-01",
-              Project_ID: "PRJ-2026-001",
-              Action_Type: "CREATE_PROJECT",
-              Change_Description: "Protocol initialized with quote ₹45,000 and advance ₹30,000 by Partner A.",
-              Timestamp: "2026-09-15T10:30:00.000Z"
-            }
-          ];
+          appState.auditTrails = [{
+            Log_ID: "LOG-INIT-01",
+            Project_ID: "PRJ-2026-001",
+            Action_Type: "CREATE_PROJECT",
+            Change_Description: "Protocol deployed by Partner A.",
+            Timestamp: new Date().toISOString()
+          }];
           saveAuditsToStorage();
         }
-      } catch (e) {
-        console.error('Error loading data:', e);
-      }
+      } catch (e) {}
 
-      if (appState.apiUrl) {
-        syncWithGoogleSheet();
-      }
+      // AUTO CONNECT TO GOOGLE SHEETS CLUSTER PERMANENTLY
+      syncWithGoogleSheet();
     }
 
     function saveProjectsToStorage() {
       localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(appState.projects));
     }
-
     function saveAuditsToStorage() {
       localStorage.setItem(STORAGE_KEY_AUDITS, JSON.stringify(appState.auditTrails));
     }
 
-    function saveSettings() {
-      appState.apiUrl = document.getElementById('inpApiUrl').value.trim();
-      const pinVal = document.getElementById('inpPrivacyPin').value.trim();
-      if (pinVal.length === 4) appState.userPin = pinVal;
-      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
-        apiUrl: appState.apiUrl,
-        userPin: appState.userPin,
-        activePartner: appState.activePartner
-      }));
-      closeSettingsModal();
-      showToast('Settings successfully configured', 'success');
-      if (appState.apiUrl) syncWithGoogleSheet();
-    }
-
     function loadSampleData(force = false) {
       if (force && !confirm('Reset database back to the standard sample dataset?')) return;
-      appState.projects = JSON.parse(JSON.stringify(SAMPLE_SEED_PROJECTS));
+      appState.projects = [
+        {
+          Project_ID: "PRJ-2026-001",
+          Project_Name: "Smart Grid Power Distribution Simulation in MATLAB",
+          Client_Name: "Aarav Patel",
+          Client_Contact: "919820112233",
+          Category: "Engineering",
+          Total_Quote: 45000,
+          Amount_Paid: 30000,
+          Pending_Balance: 15000,
+          Payment_Status: "Partial Advance",
+          Project_Status: "In Progress",
+          Delivery_Deadline: "2026-09-28",
+          Creation_Timestamp: "2026-09-15T10:30:00.000Z",
+          Logged_By: "Partner A (Operations Lead)",
+          Internal_Notes: "IEEE format paper + MATLAB Simulink files."
+        }
+      ];
       saveProjectsToStorage();
-      logAuditTrail('SYSTEM', 'RESET_DATA', 'Database restored to standard dataset by ' + appState.activePartner);
       renderAll();
       showToast('Sample dataset restored', 'info');
       closeSettingsModal();
     }
 
     function setPartnerIdentity(partnerName) {
+      playSound('click');
       appState.activePartner = partnerName;
       updatePartnerUI();
-      saveSettings();
+      saveSettingsToStorage();
       showToast(`Identity switched to ${partnerName}`, 'info');
     }
 
@@ -2399,7 +2334,7 @@
       if (appState.activePartner.includes('Partner A')) {
         btnA.classList.add('active');
         btnB.classList.remove('active');
-        if (hudPartner) hudPartner.textContent = 'PARTNER A (OPS LEAD)';
+        if (hudPartner) hudPartner.textContent = 'PARTNER A (OPS)';
       } else {
         btnB.classList.add('active');
         btnA.classList.remove('active');
@@ -2408,8 +2343,9 @@
     }
 
     function togglePrivacyMode() {
+      playSound('click');
       if (appState.isPrivacyActive) {
-        promptUnlockPrivacy();
+        openPinModal();
       } else {
         appState.isPrivacyActive = true;
         document.body.classList.add('privacy-active');
@@ -2418,20 +2354,13 @@
       }
     }
 
-    function promptUnlockPrivacy() {
-      openPinModal();
-    }
-
     function openPinModal() {
       document.getElementById('pinModalBackdrop').classList.add('open');
       document.getElementById('pinErrorMsg').style.display = 'none';
       for (let i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
       setTimeout(() => document.getElementById('pin1').focus(), 100);
     }
-
-    function closePinModal() {
-      document.getElementById('pinModalBackdrop').classList.remove('open');
-    }
+    function closePinModal() { document.getElementById('pinModalBackdrop').classList.remove('open'); }
 
     function handlePinKey(idx) {
       const cur = document.getElementById('pin' + idx);
@@ -2450,6 +2379,7 @@
         document.getElementById('pin4').value;
 
       if (entered === appState.userPin) {
+        playSound('success');
         appState.isPrivacyActive = false;
         document.body.classList.remove('privacy-active');
         document.getElementById('privacyBanner').style.display = 'none';
@@ -2463,6 +2393,7 @@
     }
 
     function toggleReadOnlyMode() {
+      playSound('click');
       appState.isReadOnly = !appState.isReadOnly;
       const banner = document.getElementById('readOnlyBanner');
       const btnNew = document.getElementById('btnNewProject');
@@ -2497,15 +2428,10 @@
       const diffTime = target - today;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-      if (diffDays < 0) {
-        return `<span class="badge badge-rose">Overdue (${Math.abs(diffDays)}d)</span>`;
-      } else if (diffDays === 0) {
-        return `<span class="badge badge-amber">Due Today</span>`;
-      } else if (diffDays <= 3) {
-        return `<span class="badge badge-amber">T-${diffDays}d</span>`;
-      } else {
-        return `<span class="badge badge-gray">${dateStr}</span>`;
-      }
+      if (diffDays < 0) return `<span class="badge badge-rose">Overdue (${Math.abs(diffDays)}d)</span>`;
+      if (diffDays === 0) return `<span class="badge badge-amber">Due Today</span>`;
+      if (diffDays <= 3) return `<span class="badge badge-amber">T-${diffDays}d</span>`;
+      return `<span class="badge badge-gray">${dateStr}</span>`;
     }
 
     function getCategoryEmblem(cat) {
@@ -2517,6 +2443,69 @@
         case 'Graphic Design': return '🎨';
         default: return '🛸';
       }
+    }
+
+    function applyUrgencyFilter(filterType, el) {
+      playSound('click');
+      appState.urgencyFilter = filterType;
+      document.querySelectorAll('.urgency-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderAll();
+    }
+
+    function getFilteredProjects() {
+      const statusFilter = document.getElementById('filterExecutionStatus').value;
+      const paymentFilter = document.getElementById('filterPaymentStatus').value;
+      const categoryFilter = document.getElementById('filterCategory').value;
+      const query = appState.searchQuery.toLowerCase().trim();
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      return appState.projects.filter(p => {
+        if (statusFilter !== 'ALL' && p.Project_Status !== statusFilter) return false;
+        if (paymentFilter !== 'ALL' && p.Payment_Status !== paymentFilter) return false;
+        if (categoryFilter !== 'ALL' && p.Category !== categoryFilter) return false;
+
+        // Urgency filter logic
+        if (appState.urgencyFilter !== 'ALL') {
+          const deadline = p.Delivery_Deadline ? new Date(p.Delivery_Deadline) : null;
+          if (deadline) deadline.setHours(0, 0, 0, 0);
+          const diffDays = deadline ? Math.ceil((deadline - today) / (1000 * 60 * 60 * 24)) : 999;
+          const quote = Number(p.Total_Quote) || 0;
+          const paid = Number(p.Amount_Paid) || 0;
+
+          if (appState.urgencyFilter === 'OVERDUE' && (diffDays >= 0 || p.Project_Status === 'Completed')) return false;
+          if (appState.urgencyFilter === 'DUE_48H' && (diffDays < 0 || diffDays > 2 || p.Project_Status === 'Completed')) return false;
+          if (appState.urgencyFilter === 'PENDING_BALANCE' && (quote - paid <= 0)) return false;
+          if (appState.urgencyFilter === 'IN_PROGRESS' && (p.Project_Status !== 'In Progress' && p.Project_Status !== 'Client Revision')) return false;
+          if (appState.urgencyFilter === 'COMPLETED' && p.Project_Status !== 'Completed') return false;
+        }
+
+        if (query) {
+          const matchId = (p.Project_ID || '').toLowerCase().includes(query);
+          const matchTitle = (p.Project_Name || '').toLowerCase().includes(query);
+          const matchClient = (p.Client_Name || '').toLowerCase().includes(query);
+          const matchContact = (p.Client_Contact || '').toLowerCase().includes(query);
+          const matchCat = (p.Category || '').toLowerCase().includes(query);
+          if (!matchId && !matchTitle && !matchClient && !matchContact && !matchCat) return false;
+        }
+
+        return true;
+      }).sort((a, b) => {
+        let valA = a[appState.sortColumn];
+        let valB = b[appState.sortColumn];
+        if (appState.sortColumn === 'Total_Quote' || appState.sortColumn === 'Amount_Paid' || appState.sortColumn === 'Pending_Balance') {
+          valA = Number(valA) || 0;
+          valB = Number(valB) || 0;
+        } else {
+          valA = String(valA || '').toLowerCase();
+          valB = String(valB || '').toLowerCase();
+        }
+        if (valA < valB) return appState.sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return appState.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
     }
 
     function renderKPIs(filteredProjects) {
@@ -2567,88 +2556,14 @@
       }
     }
 
-    function getFilteredProjects() {
-      const statusFilter = document.getElementById('filterExecutionStatus').value;
-      const paymentFilter = document.getElementById('filterPaymentStatus').value;
-      const categoryFilter = document.getElementById('filterCategory').value;
-      const dateRange = document.getElementById('filterDateRange').value;
-      const query = appState.searchQuery.toLowerCase().trim();
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      return appState.projects.filter(p => {
-        if (statusFilter !== 'ALL' && p.Project_Status !== statusFilter) return false;
-        if (paymentFilter !== 'ALL' && p.Payment_Status !== paymentFilter) return false;
-        if (categoryFilter !== 'ALL' && p.Category !== categoryFilter) return false;
-
-        if (query) {
-          const matchId = (p.Project_ID || '').toLowerCase().includes(query);
-          const matchTitle = (p.Project_Name || '').toLowerCase().includes(query);
-          const matchClient = (p.Client_Name || '').toLowerCase().includes(query);
-          const matchContact = (p.Client_Contact || '').toLowerCase().includes(query);
-          const matchCat = (p.Category || '').toLowerCase().includes(query);
-          if (!matchId && !matchTitle && !matchClient && !matchContact && !matchCat) return false;
-        }
-
-        if (p.Creation_Timestamp) {
-          const pDate = new Date(p.Creation_Timestamp);
-          pDate.setHours(0, 0, 0, 0);
-
-          if (dateRange === 'TODAY') {
-            if (pDate.getTime() !== today.getTime()) return false;
-          } else if (dateRange === 'THIS_WEEK') {
-            const startOfWeek = new Date(today);
-            startOfWeek.setDate(today.getDate() - today.getDay());
-            if (pDate < startOfWeek) return false;
-          } else if (dateRange === 'THIS_MONTH') {
-            if (pDate.getMonth() !== today.getMonth() || pDate.getFullYear() !== today.getFullYear()) return false;
-          } else if (dateRange === 'CUSTOM') {
-            const startVal = document.getElementById('filterStartDate').value;
-            const endVal = document.getElementById('filterEndDate').value;
-            if (startVal && pDate < new Date(startVal)) return false;
-            if (endVal && pDate > new Date(endVal + 'T23:59:59')) return false;
-          }
-        }
-
-        return true;
-      }).sort((a, b) => {
-        let valA = a[appState.sortColumn];
-        let valB = b[appState.sortColumn];
-
-        if (appState.sortColumn === 'Total_Quote' || appState.sortColumn === 'Amount_Paid' || appState.sortColumn === 'Pending_Balance') {
-          valA = Number(valA) || 0;
-          valB = Number(valB) || 0;
-        } else {
-          valA = String(valA || '').toLowerCase();
-          valB = String(valB || '').toLowerCase();
-        }
-
-        if (valA < valB) return appState.sortDirection === 'asc' ? -1 : 1;
-        if (valA > valB) return appState.sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
-
     function sortTable(columnName) {
+      playSound('click');
       if (appState.sortColumn === columnName) {
         appState.sortDirection = appState.sortDirection === 'asc' ? 'desc' : 'asc';
       } else {
         appState.sortColumn = columnName;
         appState.sortDirection = 'desc';
       }
-
-      ['Project_ID', 'Delivery_Deadline', 'Total_Quote'].forEach(col => {
-        const el = document.getElementById('sort_' + col);
-        if (el) {
-          if (appState.sortColumn === col) {
-            el.textContent = appState.sortDirection === 'asc' ? '▲' : '▼';
-          } else {
-            el.textContent = '↕';
-          }
-        }
-      });
-
       renderAll();
     }
 
@@ -2657,15 +2572,6 @@
       renderAll();
     }
 
-    function handleDateFilterChange() {
-      const val = document.getElementById('filterDateRange').value;
-      document.getElementById('customDateInputs').style.display = val === 'CUSTOM' ? 'flex' : 'none';
-      renderAll();
-    }
-
-    /* ========================================================================= */
-    /* DUAL RENDER: DESKTOP TABLE & MOBILE CARDS (ZERO HORIZONTAL SCROLL) */
-    /* ========================================================================= */
     function renderAll() {
       const filtered = getFilteredProjects();
       renderKPIs(filtered);
@@ -2680,13 +2586,7 @@
       document.getElementById('tableRecordCount').textContent = `Showing ${filtered.length} of ${appState.projects.length} missions`;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--text-dim); font-family: var(--font-mono);">
-              No mission telemetry records found matching current query.
-            </td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">No missions matching current filters.</td></tr>`;
         return;
       }
 
@@ -2736,17 +2636,17 @@
           </td>
           <td>
             <div class="actions-cell">
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')" title="Quick Escrow Clearance">
+              <button class="btn btn-sm btn-outline btn-icon" onclick="openUpiModalForProject('${p.Project_ID}')" title="Dynamic UPI QR">
+                <span style="font-size: 0.75rem;">QR</span>
+              </button>
+              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')" title="Clear Escrow">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
-              <button class="btn btn-sm btn-outline btn-icon" onclick="sendWhatsAppReceipt('${p.Project_ID}')" title="Send WhatsApp Receipt">
+              <button class="btn btn-sm btn-outline btn-icon" onclick="sendWhatsAppReceipt('${p.Project_ID}')" title="WhatsApp Receipt">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </button>
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')" title="Edit Protocol">
+              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')" title="Edit">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
-              </button>
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="deleteProject('${p.Project_ID}')" title="Purge Record">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               </button>
             </div>
           </td>
@@ -2755,17 +2655,12 @@
       });
     }
 
-    /* MOBILE HOLOGRAPHIC MISSION CARDS (NO HORIZONTAL SCROLL) */
     function renderMobileCards(filtered) {
       const container = document.getElementById('mobileCardsContainer');
       container.innerHTML = '';
 
       if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="mission-card" style="text-align: center; color: var(--text-dim); padding: 2rem;">
-            No mission telemetry records found.
-          </div>
-        `;
+        container.innerHTML = `<div class="mission-card" style="text-align: center; color: var(--text-dim); padding: 2rem;">No mission telemetry records.</div>`;
         return;
       }
 
@@ -2789,25 +2684,20 @@
         card.innerHTML = `
           <div class="mission-card-header">
             <div style="display: flex; align-items: center; gap: 0.4rem;">
-              <span class="project-id-cell font-mono" onclick="openDetailDrawer('${p.Project_ID}')">
-                ${p.Project_ID}
-              </span>
+              <span class="project-id-cell font-mono" onclick="openDetailDrawer('${p.Project_ID}')">${p.Project_ID}</span>
               <span class="badge badge-cyan">${getCategoryEmblem(p.Category)} ${escapeHtml(p.Category || 'Other')}</span>
             </div>
-            <div>
-              ${getRelativeDateBadge(p.Delivery_Deadline)}
-            </div>
+            <div>${getRelativeDateBadge(p.Delivery_Deadline)}</div>
           </div>
 
-          <div class="mission-card-title" onclick="openDetailDrawer('${p.Project_ID}')" style="cursor: pointer;">
-            ${escapeHtml(p.Project_Name)}
-          </div>
+          <div class="mission-card-title" onclick="openDetailDrawer('${p.Project_ID}')">${escapeHtml(p.Project_Name)}</div>
 
           <div class="mission-card-client">
             <span>Operative: <strong style="color: #fff;">${escapeHtml(p.Client_Name)}</strong></span>
-            <button class="btn btn-sm btn-outline" onclick="sendWhatsAppReceipt('${p.Project_ID}')" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">
-              💬 WA Receipt
-            </button>
+            <div style="display: flex; gap: 0.35rem;">
+              <button class="btn btn-sm btn-outline" onclick="openUpiModalForProject('${p.Project_ID}')">📱 QR</button>
+              <button class="btn btn-sm btn-outline" onclick="sendWhatsAppReceipt('${p.Project_ID}')">💬 WA</button>
+            </div>
           </div>
 
           <div class="mission-card-metrics">
@@ -2833,17 +2723,14 @@
               </select>
             </div>
             <div style="display: flex; gap: 0.3rem;">
-              <button class="btn btn-sm btn-emerald btn-icon" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')" title="Quick Payment">
+              <button class="btn btn-sm btn-emerald btn-icon" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
-              <button class="btn btn-sm btn-outline btn-icon" onclick="openDetailDrawer('${p.Project_ID}')" title="Dossier Details">
+              <button class="btn btn-sm btn-outline btn-icon" onclick="openDetailDrawer('${p.Project_ID}')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
               </button>
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')" title="Edit">
+              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
-              </button>
-              <button class="btn btn-sm btn-rose btn-icon" ${isReadOnlyAttr} onclick="deleteProject('${p.Project_ID}')" title="Delete">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               </button>
             </div>
           </div>
@@ -2852,15 +2739,10 @@
       });
     }
 
-    /* ========================================================================= */
     /* PURE CANVAS CHARTS */
-    /* ========================================================================= */
     function initChartResizeListener() {
-      window.addEventListener('resize', () => {
-        renderCharts(getFilteredProjects());
-      });
+      window.addEventListener('resize', () => renderCharts(getFilteredProjects()));
     }
-
     function setupCanvasDPI(canvas) {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
@@ -2870,7 +2752,6 @@
       ctx.scale(dpr, dpr);
       return { ctx, width: rect.width, height: rect.height };
     }
-
     function renderCharts(projects) {
       renderCashflowChart(projects);
       renderStatusDonutChart(projects);
@@ -2913,7 +2794,7 @@
       });
       maxVal = Math.ceil(maxVal / 10000) * 10000;
 
-      const padLeft = 50;
+      const padLeft = 48;
       const padBottom = 26;
       const padTop = 18;
       const padRight = 12;
@@ -2921,8 +2802,6 @@
       const chartH = height - padTop - padBottom;
 
       ctx.clearRect(0, 0, width, height);
-
-      // Grid
       ctx.strokeStyle = 'rgba(0, 245, 255, 0.05)';
       ctx.fillStyle = '#64748b';
       ctx.font = '10px "JetBrains Mono", monospace';
@@ -2944,13 +2823,10 @@
 
       months.forEach((m, idx) => {
         const groupX = padLeft + (idx * groupWidth) + (groupWidth / 2);
-
         const clearedH = Math.max(0, (m.cleared / maxVal) * chartH);
         if (clearedH > 0) {
           const clearedY = padTop + chartH - clearedH;
           ctx.fillStyle = '#00ff9d';
-          ctx.shadowColor = 'rgba(0, 255, 157, 0.4)';
-          ctx.shadowBlur = 8;
           ctx.beginPath();
           roundRect(ctx, groupX - barWidth - 2, clearedY, barWidth, clearedH, 3);
           ctx.fill();
@@ -2960,14 +2836,11 @@
         if (pendingH > 0) {
           const pendingY = padTop + chartH - pendingH;
           ctx.fillStyle = '#ff0055';
-          ctx.shadowColor = 'rgba(255, 0, 85, 0.4)';
-          ctx.shadowBlur = 8;
           ctx.beginPath();
           roundRect(ctx, groupX + 2, pendingY, barWidth, pendingH, 3);
           ctx.fill();
         }
 
-        ctx.shadowBlur = 0;
         ctx.fillStyle = '#94a3b8';
         ctx.textAlign = 'center';
         ctx.font = '10px "JetBrains Mono", monospace';
@@ -2980,37 +2853,13 @@
       if (!canvas) return;
       const { ctx, width, height } = setupCanvasDPI(canvas);
 
-      const counts = {
-        'New Lead': 0,
-        'In Progress': 0,
-        'Draft Submitted': 0,
-        'Client Revision': 0,
-        'Completed': 0,
-        'Cancelled': 0
-      };
-
-      const colors = {
-        'New Lead': '#00f5ff',
-        'In Progress': '#ffaa00',
-        'Draft Submitted': '#8b5cf6',
-        'Client Revision': '#ec4899',
-        'Completed': '#00ff9d',
-        'Cancelled': '#64748b'
-      };
-
-      projects.forEach(p => {
-        if (counts[p.Project_Status] !== undefined) counts[p.Project_Status]++;
-      });
+      const counts = { 'New Lead': 0, 'In Progress': 0, 'Draft Submitted': 0, 'Client Revision': 0, 'Completed': 0, 'Cancelled': 0 };
+      const colors = { 'New Lead': '#00f5ff', 'In Progress': '#ffaa00', 'Draft Submitted': '#8b5cf6', 'Client Revision': '#ec4899', 'Completed': '#00ff9d', 'Cancelled': '#64748b' };
+      projects.forEach(p => { if (counts[p.Project_Status] !== undefined) counts[p.Project_Status]++; });
 
       const total = projects.length;
       ctx.clearRect(0, 0, width, height);
-
-      if (total === 0) {
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'center';
-        ctx.fillText('No data telemetry', width / 2, height / 2);
-        return;
-      }
+      if (total === 0) return;
 
       const centerX = width * 0.36;
       const centerY = height / 2;
@@ -3018,7 +2867,6 @@
       const innerR = outerR * 0.62;
 
       let startAngle = -Math.PI / 2;
-
       Object.keys(counts).forEach(status => {
         const count = counts[status];
         if (count === 0) return;
@@ -3029,14 +2877,11 @@
         ctx.arc(centerX, centerY, innerR, startAngle + sliceAngle, startAngle, true);
         ctx.closePath();
         ctx.fillStyle = colors[status];
-        ctx.shadowColor = colors[status];
-        ctx.shadowBlur = 6;
         ctx.fill();
 
         startAngle += sliceAngle;
       });
 
-      ctx.shadowBlur = 0;
       ctx.fillStyle = '#fff';
       ctx.font = '700 15px "Orbitron", sans-serif';
       ctx.textAlign = 'center';
@@ -3056,7 +2901,6 @@
         ctx.beginPath();
         ctx.arc(legendX, legendY - 4, 4, 0, 2 * Math.PI);
         ctx.fill();
-
         ctx.fillStyle = '#cbd5e1';
         ctx.fillText(`${status} (${counts[status]})`, legendX + 8, legendY);
         legendY += 20;
@@ -3076,13 +2920,11 @@
 
       const categories = Object.keys(catRevenue).sort((a, b) => catRevenue[b] - catRevenue[a]);
       let maxRev = 10000;
-      categories.forEach(c => {
-        if (catRevenue[c] > maxRev) maxRev = catRevenue[c];
-      });
+      categories.forEach(c => { if (catRevenue[c] > maxRev) maxRev = catRevenue[c]; });
 
       ctx.clearRect(0, 0, width, height);
 
-      const padLeft = 100;
+      const padLeft = 95;
       const padRight = 55;
       const barH = 15;
       const gap = 15;
@@ -3106,13 +2948,10 @@
         grad.addColorStop(0, '#00f5ff');
         grad.addColorStop(1, '#8b5cf6');
         ctx.fillStyle = grad;
-        ctx.shadowColor = 'rgba(0, 245, 255, 0.4)';
-        ctx.shadowBlur = 6;
         ctx.beginPath();
         roundRect(ctx, padLeft, startY, Math.max(4, barW), barH, 3);
         ctx.fill();
 
-        ctx.shadowBlur = 0;
         ctx.fillStyle = '#fff';
         ctx.font = '9px "JetBrains Mono", monospace';
         ctx.textAlign = 'left';
@@ -3129,17 +2968,13 @@
       ctx.arcTo(x + width, y, x + width, y + height, radius);
       ctx.arcTo(x + width, y + height, x, y + height, radius);
       ctx.arcTo(x, y + height, x, y, radius);
-      ctx.arcTo(x, y + height, x, y + width, radius);
+      ctx.arcTo(x, y, x + width, y, radius);
     }
 
-    /* ========================================================================= */
-    /* MISSION PROTOCOL INTAKE MODAL */
-    /* ========================================================================= */
+    /* MISSION INTAKE MODAL */
     function openNewProjectModal() {
-      if (appState.isReadOnly) {
-        showToast('Read-Only mode is locked.', 'error');
-        return;
-      }
+      playSound('click');
+      if (appState.isReadOnly) { showToast('Read-Only mode locked', 'error'); return; }
       document.getElementById('formMode').value = 'CREATE';
       document.getElementById('projectModalTitle').textContent = 'Initiate Mission Protocol';
       document.getElementById('btnSaveProjectText').textContent = 'Deploy Mission Protocol';
@@ -3166,8 +3001,8 @@
       document.getElementById('inpPaymentChannel').value = 'UPI';
       document.getElementById('inpPaymentStatus').value = 'Unpaid';
       document.getElementById('inpProjectStatus').value = 'New Lead';
+      document.getElementById('inpDriveLink').value = '';
 
-      // Reset category chips
       document.querySelectorAll('.cat-chip').forEach(c => {
         if (c.textContent.includes('Engineering')) c.classList.add('active');
         else c.classList.remove('active');
@@ -3184,28 +3019,29 @@
     }
 
     function selectCategoryChip(cat, el) {
+      playSound('click');
       document.getElementById('inpCategory').value = cat;
       document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
     }
 
     function addCreditQuote(amt) {
+      playSound('click');
       const cur = Number(document.getElementById('inpTotalQuote').value) || 0;
       document.getElementById('inpTotalQuote').value = cur + amt;
       calculateBalanceIndicator();
     }
 
     function setEscrowPct(pct) {
+      playSound('click');
       const q = Number(document.getElementById('inpTotalQuote').value) || 0;
       document.getElementById('inpAmountPaid').value = Math.round(q * pct);
       calculateBalanceIndicator();
     }
 
     function openEditProjectModal(projectId) {
-      if (appState.isReadOnly) {
-        showToast('Read-Only mode is locked.', 'error');
-        return;
-      }
+      playSound('click');
+      if (appState.isReadOnly) { showToast('Read-Only mode locked', 'error'); return; }
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
@@ -3218,8 +3054,8 @@
       document.getElementById('inpClientName').value = p.Client_Name || '';
       document.getElementById('inpClientContact').value = p.Client_Contact || '';
       document.getElementById('inpCategory').value = p.Category || 'Other';
+      document.getElementById('inpDriveLink').value = p.Drive_Link || '';
 
-      // Set category chips
       document.querySelectorAll('.cat-chip').forEach(c => {
         if (c.textContent.includes(p.Category)) c.classList.add('active');
         else c.classList.remove('active');
@@ -3237,9 +3073,7 @@
       document.getElementById('projectModalBackdrop').classList.add('open');
     }
 
-    function closeProjectModal() {
-      document.getElementById('projectModalBackdrop').classList.remove('open');
-    }
+    function closeProjectModal() { document.getElementById('projectModalBackdrop').classList.remove('open'); }
 
     function calculateBalanceIndicator() {
       const quote = Number(document.getElementById('inpTotalQuote').value) || 0;
@@ -3247,7 +3081,6 @@
       const balance = Math.max(0, quote - advance);
 
       document.getElementById('previewBalanceAmount').textContent = formatINR(balance);
-
       const badge = document.getElementById('previewBalanceBadge');
       const statusSelect = document.getElementById('inpPaymentStatus');
 
@@ -3289,27 +3122,22 @@
         Delivery_Deadline: document.getElementById('inpDeliveryDeadline').value,
         Creation_Timestamp: mode === 'CREATE' ? new Date().toISOString() : (appState.projects.find(p => p.Project_ID === pId)?.Creation_Timestamp || new Date().toISOString()),
         Logged_By: appState.activePartner,
+        Drive_Link: document.getElementById('inpDriveLink').value.trim(),
         Internal_Notes: document.getElementById('inpInternalNotes').value.trim()
       };
 
       if (mode === 'CREATE') {
         appState.projects.unshift(projectData);
-        logAuditTrail(
-          projectData.Project_ID,
-          'CREATE_PROJECT',
-          `Mission "${projectData.Project_Name}" deployed by ${appState.activePartner} with Quoted ${formatINR(quote)} and Advance ${formatINR(paid)}.`
-        );
+        logAuditTrail(projectData.Project_ID, 'CREATE_PROJECT', `Mission "${projectData.Project_Name}" deployed by ${appState.activePartner}.`);
+        playSound('success');
         showToast(`Mission ${projectData.Project_ID} initiated!`, 'success');
         dispatchApiPost('CREATE_PROJECT', { project: projectData, actor: appState.activePartner });
       } else {
         const idx = appState.projects.findIndex(p => p.Project_ID === pId);
         if (idx !== -1) {
           appState.projects[idx] = projectData;
-          logAuditTrail(
-            projectData.Project_ID,
-            'UPDATE_PROJECT',
-            `Mission protocol modified by ${appState.activePartner}. Status: ${projectData.Project_Status}.`
-          );
+          logAuditTrail(projectData.Project_ID, 'UPDATE_PROJECT', `Mission protocol updated by ${appState.activePartner}.`);
+          playSound('success');
           showToast(`Mission ${projectData.Project_ID} updated`, 'success');
           dispatchApiPost('UPDATE_PROJECT', { project: projectData, actor: appState.activePartner });
         }
@@ -3318,16 +3146,12 @@
       saveProjectsToStorage();
       closeProjectModal();
       renderAll();
-
       if (appState.activeDrawerProjectId === pId) openDetailDrawer(pId);
     }
 
     function handleInlineStatusChange(projectId, newStatus) {
-      if (appState.isReadOnly) {
-        showToast('Read-Only mode is active.', 'error');
-        renderAll();
-        return;
-      }
+      playSound('click');
+      if (appState.isReadOnly) { showToast('Read-Only mode is locked.', 'error'); renderAll(); return; }
       const project = appState.projects.find(p => p.Project_ID === projectId);
       if (!project) return;
 
@@ -3342,12 +3166,10 @@
       dispatchApiPost('QUICK_STATUS', { projectId, newStatus, actor: appState.activePartner });
     }
 
-    /* QUICK PAYMENT CLEARANCE */
+    /* QUICK ESCROW CLEARANCE */
     function openQuickPaymentModal(projectId) {
-      if (appState.isReadOnly) {
-        showToast('Read-Only mode is locked.', 'error');
-        return;
-      }
+      playSound('click');
+      if (appState.isReadOnly) { showToast('Read-Only mode is locked.', 'error'); return; }
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
@@ -3367,25 +3189,21 @@
       document.getElementById('quickPaymentModalBackdrop').classList.add('open');
       setTimeout(() => document.getElementById('qpPaymentInput').focus(), 100);
     }
-
-    function closeQuickPaymentModal() {
-      document.getElementById('quickPaymentModalBackdrop').classList.remove('open');
-    }
+    function closeQuickPaymentModal() { document.getElementById('quickPaymentModalBackdrop').classList.remove('open'); }
 
     function fillQuickPayFull() {
+      playSound('click');
       const pId = document.getElementById('quickPayProjectId').value;
       const p = appState.projects.find(i => i.Project_ID === pId);
       if (!p) return;
-      const pending = Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0));
-      document.getElementById('qpPaymentInput').value = pending;
+      document.getElementById('qpPaymentInput').value = Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0));
     }
-
     function fillQuickPayHalf() {
+      playSound('click');
       const pId = document.getElementById('quickPayProjectId').value;
       const p = appState.projects.find(i => i.Project_ID === pId);
       if (!p) return;
-      const pending = Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0));
-      document.getElementById('qpPaymentInput').value = Math.round(pending / 2);
+      document.getElementById('qpPaymentInput').value = Math.round(Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0)) / 2);
     }
 
     function submitQuickPayment() {
@@ -3412,6 +3230,7 @@
       else p.Payment_Status = 'Partial Advance';
 
       saveProjectsToStorage();
+      playSound('success');
 
       const refText = ref ? ` (Ref: ${ref})` : '';
       const auditDesc = `Cleared balance escrow of ${formatINR(payAmount)} via ${channel}${refText} by ${appState.activePartner}.`;
@@ -3422,7 +3241,6 @@
       renderAll();
 
       if (appState.activeDrawerProjectId === pId) openDetailDrawer(pId);
-
       dispatchApiPost('QUICK_PAYMENT', {
         projectId: pId,
         paymentAmount: payAmount,
@@ -3431,26 +3249,9 @@
       });
     }
 
-    function deleteProject(projectId) {
-      if (appState.isReadOnly) {
-        showToast('Read-Only mode is locked.', 'error');
-        return;
-      }
-      if (!confirm(`Purge mission ${projectId}? This action is recorded in the permanent audit trail.`)) return;
-
-      appState.projects = appState.projects.filter(p => p.Project_ID !== projectId);
-      saveProjectsToStorage();
-
-      logAuditTrail(projectId, 'DELETE_PROJECT', `Mission purged by ${appState.activePartner}.`);
-      showToast(`Mission ${projectId} purged`, 'info');
-      renderAll();
-
-      if (appState.activeDrawerProjectId === projectId) closeDetailDrawer();
-      dispatchApiPost('DELETE_PROJECT', { projectId, actor: appState.activePartner });
-    }
-
-    /* OPERATIVE DOSSIER SLIDE-OVER DRAWER */
+    /* OPERATIVE DOSSIER DRAWER */
     function openDetailDrawer(projectId) {
+      playSound('click');
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
@@ -3472,40 +3273,44 @@
       document.getElementById('drawerClientName').textContent = p.Client_Name || 'N/A';
       document.getElementById('drawerClientContact').textContent = p.Client_Contact || 'N/A';
       document.getElementById('drawerDeadline').textContent = p.Delivery_Deadline || 'N/A';
-      document.getElementById('drawerCreated').textContent = p.Creation_Timestamp ? new Date(p.Creation_Timestamp).toLocaleString('en-IN') : 'N/A';
       document.getElementById('drawerLoggedBy').textContent = p.Logged_By || 'N/A';
-      document.getElementById('drawerNotes').textContent = p.Internal_Notes || 'No mission directives recorded.';
+      document.getElementById('drawerNotes').textContent = p.Internal_Notes || 'No notes.';
+
+      const driveEl = document.getElementById('drawerDriveLink');
+      if (p.Drive_Link) {
+        driveEl.style.display = 'inline';
+        driveEl.href = p.Drive_Link;
+      } else {
+        driveEl.style.display = 'none';
+      }
 
       renderProjectTimeline(projectId);
-
       document.getElementById('drawerBackdrop').classList.add('open');
       document.getElementById('detailDrawer').classList.add('open');
     }
-
     function closeDetailDrawer() {
       document.getElementById('drawerBackdrop').classList.remove('open');
       document.getElementById('detailDrawer').classList.remove('open');
       appState.activeDrawerProjectId = null;
     }
-
     function editFromDrawer() {
       if (appState.activeDrawerProjectId) openEditProjectModal(appState.activeDrawerProjectId);
     }
-
     function triggerDrawerWhatsApp() {
       if (appState.activeDrawerProjectId) sendWhatsAppReceipt(appState.activeDrawerProjectId);
+    }
+    function openUpiFromDrawer() {
+      if (appState.activeDrawerProjectId) openUpiModalForProject(appState.activeDrawerProjectId);
     }
 
     function renderProjectTimeline(projectId) {
       const wrap = document.getElementById('drawerTimeline');
       wrap.innerHTML = '';
-
       const logs = appState.auditTrails.filter(a => a.Project_ID === projectId);
       if (logs.length === 0) {
         wrap.innerHTML = '<div style="color: var(--text-dim); font-size: 0.74rem;">No activity telemetry logged.</div>';
         return;
       }
-
       logs.forEach(log => {
         const item = document.createElement('div');
         item.className = 'timeline-item';
@@ -3530,37 +3335,248 @@
       saveAuditsToStorage();
     }
 
-    function openAuditModal() {
-      const wrap = document.getElementById('fullAuditTimeline');
-      wrap.innerHTML = '';
+    /* ========================================================================= */
+    /* DYNAMIC UPI QR GENERATOR */
+    /* ========================================================================= */
+    let currentUpiData = {};
+    function openUpiModalForProject(projectId) {
+      playSound('click');
+      const p = appState.projects.find(i => i.Project_ID === projectId);
+      if (!p) return;
 
-      if (appState.auditTrails.length === 0) {
-        wrap.innerHTML = '<div style="color: var(--text-dim); font-size: 0.8rem;">No registry records found.</div>';
-      } else {
-        appState.auditTrails.forEach(log => {
-          const item = document.createElement('div');
-          item.className = 'timeline-item';
-          item.innerHTML = `
-            <div class="timeline-dot"></div>
-            <div class="timeline-time">
-              <span>${new Date(log.Timestamp).toLocaleString('en-IN')}</span>
-              <span class="badge badge-cyan font-mono" style="margin-left: 0.4rem; font-size: 0.62rem;">${log.Project_ID}</span>
-            </div>
-            <div class="timeline-content">${escapeHtml(log.Change_Description)}</div>
-          `;
-          wrap.appendChild(item);
-        });
+      const quote = Number(p.Total_Quote) || 0;
+      const paid = Number(p.Amount_Paid) || 0;
+      const pending = Math.max(0, quote - paid);
+      const amountToCharge = pending > 0 ? pending : quote;
+
+      const upiId = appState.defaultUpi || 'nexusprime@upi';
+      const clientName = encodeURIComponent(p.Client_Name || 'Client');
+      const upiPayload = `upi://pay?pa=${upiId}&pn=${clientName}&am=${amountToCharge}&cu=INR&tn=${p.Project_ID}`;
+
+      currentUpiData = {
+        projectId: p.Project_ID,
+        clientName: p.Client_Name,
+        phone: p.Client_Contact,
+        amount: amountToCharge,
+        upiPayload: upiPayload
+      };
+
+      document.getElementById('upiProjectDesc').textContent = `Mission: [${p.Project_ID}] ${p.Project_Name}`;
+      document.getElementById('upiAmountText').textContent = formatINR(amountToCharge);
+      document.getElementById('upiVpaText').textContent = `Payee VPA: ${upiId}`;
+
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiPayload)}`;
+      document.getElementById('upiQrImage').src = qrUrl;
+
+      document.getElementById('upiModalBackdrop').classList.add('open');
+    }
+
+    function closeUpiModal() { document.getElementById('upiModalBackdrop').classList.remove('open'); }
+
+    function copyUpiLink() {
+      playSound('click');
+      if (currentUpiData.upiPayload && navigator.clipboard) {
+        navigator.clipboard.writeText(currentUpiData.upiPayload);
+        showToast('UPI Payment Link Copied', 'success');
+      }
+    }
+
+    function shareUpiWhatsApp() {
+      playSound('click');
+      let phone = (currentUpiData.phone || '').replace(/[^0-9]/g, '');
+      if (phone.length === 10) phone = '91' + phone;
+
+      const msg = 
+`⚡ *NEXUS PRIME // SECURE PAYMENT QR LINK*
+----------------------------------------
+*Mission:* ${currentUpiData.projectId}
+*Client:* ${currentUpiData.clientName}
+*Amount Due:* ${formatINR(currentUpiData.amount)}
+*UPI ID:* ${appState.defaultUpi}
+----------------------------------------
+👉 *Direct UPI Pay Link:*
+${currentUpiData.upiPayload}
+
+Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank you!`;
+
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    /* ========================================================================= */
+    /* CLIENTS CRM MODULE */
+    /* ========================================================================= */
+    function openClientsModal() {
+      playSound('click');
+      renderCrmClients();
+      document.getElementById('clientsModalBackdrop').classList.add('open');
+    }
+    function closeClientsModal() { document.getElementById('clientsModalBackdrop').classList.remove('open'); }
+
+    function getUniqueClients() {
+      const clientMap = {};
+      appState.projects.forEach(p => {
+        const contact = p.Client_Contact || 'N/A';
+        if (!clientMap[contact]) {
+          clientMap[contact] = {
+            name: p.Client_Name || 'Unknown',
+            contact: contact,
+            missionsCount: 0,
+            totalQuoted: 0,
+            totalPaid: 0,
+            totalPending: 0,
+            latestProject: p.Project_Name || '',
+            latestProjectId: p.Project_ID || ''
+          };
+        }
+        clientMap[contact].missionsCount++;
+        const q = Number(p.Total_Quote) || 0;
+        const paid = Number(p.Amount_Paid) || 0;
+        clientMap[contact].totalQuoted += q;
+        clientMap[contact].totalPaid += paid;
+        clientMap[contact].totalPending += Math.max(0, q - paid);
+      });
+      return Object.values(clientMap);
+    }
+
+    function renderCrmClients() {
+      const query = (document.getElementById('crmSearchInput').value || '').toLowerCase().trim();
+      const list = document.getElementById('crmClientList');
+      list.innerHTML = '';
+
+      const clients = getUniqueClients();
+
+      let grandQuoted = 0;
+      let grandPending = 0;
+      clients.forEach(c => {
+        grandQuoted += c.totalQuoted;
+        grandPending += c.totalPending;
+      });
+
+      document.getElementById('crmTotalClients').textContent = clients.length;
+      document.getElementById('crmLifetimeQuoted').textContent = formatINR(grandQuoted);
+      document.getElementById('crmLifetimePending').textContent = formatINR(grandPending);
+
+      const filtered = clients.filter(c => {
+        if (!query) return true;
+        return c.name.toLowerCase().includes(query) || c.contact.toLowerCase().includes(query);
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 1.5rem;">No client operatives found.</div>';
+        return;
       }
 
-      document.getElementById('auditModalBackdrop').classList.add('open');
+      filtered.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'drawer-card';
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong style="color: #fff; font-size: 0.95rem;">${escapeHtml(c.name)}</strong>
+              <div style="font-size: 0.72rem; color: var(--cyan); font-family: var(--font-mono);">${escapeHtml(c.contact)}</div>
+            </div>
+            <span class="badge badge-cyan">${c.missionsCount} Missions</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.4rem; background: rgba(0, 245, 255, 0.04); padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.75rem;">
+            <div><span style="color: var(--text-dim);">LTV:</span> <strong class="text-cyan font-mono">${formatINR(c.totalQuoted)}</strong></div>
+            <div><span style="color: var(--text-dim);">Paid:</span> <strong class="text-emerald font-mono">${formatINR(c.totalPaid)}</strong></div>
+            <div><span style="color: var(--text-dim);">Due:</span> <strong class="text-rose font-mono">${formatINR(c.totalPending)}</strong></div>
+          </div>
+
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.2rem;">
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'INTAKE')">🚀 Intake</button>
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'REMINDER', ${c.totalPending})">💰 Due Reminder</button>
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'DRAFT')">⚡ Draft Ready</button>
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'REVIEW')">⭐ 5-Star Review</button>
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'PITCH')">📣 Re-Engage</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
     }
 
-    function closeAuditModal() {
-      document.getElementById('auditModalBackdrop').classList.remove('open');
+    function sendCrmWhatsApp(rawPhone, name, templateType, amount = 0) {
+      playSound('click');
+      let phone = (rawPhone || '').replace(/[^0-9]/g, '');
+      if (phone.length === 10) phone = '91' + phone;
+
+      let msg = '';
+      if (templateType === 'INTAKE') {
+        msg = `Hi ${name}, greetings from NEXUS PRIME! We have successfully registered your project request. Our technical lead has initiated the assignment protocol. We will share your milestone update shortly!`;
+      } else if (templateType === 'REMINDER') {
+        msg = `Hi ${name}, a friendly reminder regarding your project with NEXUS PRIME. The deliverables are ready for completion! Pending balance is ${formatINR(amount)}. Kindly clear escrow via UPI so we can send the final submission files.`;
+      } else if (templateType === 'DRAFT') {
+        msg = `Hi ${name}, your initial draft deliverables are prepared and ready for inspection. Please review and provide your feedback so we can incorporate any adjustments right away.`;
+      } else if (templateType === 'REVIEW') {
+        msg = `Hi ${name}, hope you are delighted with the project deliverables! Could you please drop a quick 5-star rating and review for our team? Your feedback means the world to us!`;
+      } else if (templateType === 'PITCH') {
+        msg = `Hi ${name}, hope your submission went fantastic! If you or any of your classmates need assistance with upcoming semester assignments, thesis papers, or software development, feel free to ping us anytime for priority support.`;
+      }
+
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    /* WHATSAPP CONFIRMATION RECEIPT */
+    /* ========================================================================= */
+    /* CO-FOUNDER PROFIT SPLIT CALCULATOR */
+    /* ========================================================================= */
+    function openProfitSplitModal() {
+      playSound('click');
+      let totalCleared = 0;
+      appState.projects.forEach(p => { totalCleared += (Number(p.Amount_Paid) || 0); });
+
+      const reserve = Math.round(totalCleared * 0.10); // 10% reserve buffer
+      const distributable = totalCleared - reserve;
+      const partnerShare = Math.round(distributable / 2);
+
+      document.getElementById('splitGrossCleared').textContent = formatINR(totalCleared);
+      document.getElementById('splitReserve').textContent = formatINR(reserve);
+      document.getElementById('splitDistributable').textContent = formatINR(distributable);
+      document.getElementById('splitPartnerA').textContent = formatINR(partnerShare);
+      document.getElementById('splitPartnerB').textContent = formatINR(partnerShare);
+
+      document.getElementById('splitModalBackdrop').classList.add('open');
+    }
+    function closeProfitSplitModal() { document.getElementById('splitModalBackdrop').classList.remove('open'); }
+
+    function copyWeeklyBrief() {
+      playSound('click');
+      let totalQuoted = 0;
+      let totalPaid = 0;
+      appState.projects.forEach(p => {
+        totalQuoted += (Number(p.Total_Quote) || 0);
+        totalPaid += (Number(p.Amount_Paid) || 0);
+      });
+      const pending = Math.max(0, totalQuoted - totalPaid);
+      const reserve = Math.round(totalPaid * 0.10);
+      const share = Math.round((totalPaid - reserve) / 2);
+
+      const brief = 
+`⚡ *NEXUS PRIME // CO-FOUNDER TELEMETRY BRIEF*
+----------------------------------------
+📅 *Date:* ${new Date().toISOString().split('T')[0]}
+💼 *Total Missions:* ${appState.projects.length}
+💰 *Gross Quoted:* ${formatINR(totalQuoted)}
+🟢 *Cleared Escrow:* ${formatINR(totalPaid)}
+🔴 *Receivables Pending:* ${formatINR(pending)}
+----------------------------------------
+⚖️ *CO-FOUNDER PROFIT ALLOCATION:*
+• Reserve Buffer (10%): ${formatINR(reserve)}
+• Partner A (Ops Lead): ${formatINR(share)}
+• Partner B (Auditor): ${formatINR(share)}
+----------------------------------------
+*NEXUS PRIME Operations Core*`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(brief);
+        showToast('Weekly Brief Copied to Clipboard!', 'success');
+      }
+    }
+
+    /* WHATSAPP RECEIPT */
     function sendWhatsAppReceipt(projectId) {
+      playSound('click');
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
@@ -3583,44 +3599,31 @@
 *Milestone Status:* ${p.Project_Status}
 *Target Horizon:* ${p.Delivery_Deadline || 'TBD'}
 ----------------------------------------
-Thank you for collaborating with us. For direct inquiries, reply directly to this secure line.`;
+Thank you for collaborating with us. For direct inquiries, reply directly to this line.`;
 
-      const encodedMsg = encodeURIComponent(receiptMsg);
-      const url = `https://wa.me/${phone}?text=${encodedMsg}`;
-
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(receiptMsg).catch(() => {});
-      }
-
-      window.open(url, '_blank');
-      showToast('WhatsApp receipt copied to clipboard & comm-link generated!', 'info');
+      if (navigator.clipboard) navigator.clipboard.writeText(receiptMsg).catch(() => {});
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(receiptMsg)}`, '_blank');
+      showToast('WhatsApp Receipt generated & copied!', 'info');
     }
 
     /* CSV EXPORT */
     function exportToCSV() {
+      playSound('click');
       const filtered = getFilteredProjects();
-      if (filtered.length === 0) {
-        showToast('No mission records to export', 'error');
-        return;
-      }
+      if (filtered.length === 0) { showToast('No mission records to export', 'error'); return; }
 
-      const headers = [
-        'Project_ID', 'Project_Name', 'Client_Name', 'Client_Contact', 'Category',
-        'Total_Quote', 'Amount_Paid', 'Pending_Balance', 'Payment_Status', 'Project_Status',
-        'Delivery_Deadline', 'Creation_Timestamp', 'Logged_By', 'Internal_Notes'
-      ];
-
+      const headers = ['Project_ID', 'Project_Name', 'Client_Name', 'Client_Contact', 'Category', 'Total_Quote', 'Amount_Paid', 'Pending_Balance', 'Payment_Status', 'Project_Status', 'Delivery_Deadline', 'Creation_Timestamp', 'Logged_By', 'Drive_Link', 'Internal_Notes'];
       const csvRows = [headers.join(',')];
+
       filtered.forEach(p => {
         const quote = Number(p.Total_Quote) || 0;
         const paid = Number(p.Amount_Paid) || 0;
         const balance = Math.max(0, quote - paid);
-
         const row = [
           csvSafe(p.Project_ID), csvSafe(p.Project_Name), csvSafe(p.Client_Name),
           csvSafe(p.Client_Contact), csvSafe(p.Category), quote, paid, balance,
           csvSafe(p.Payment_Status), csvSafe(p.Project_Status), csvSafe(p.Delivery_Deadline),
-          csvSafe(p.Creation_Timestamp), csvSafe(p.Logged_By), csvSafe(p.Internal_Notes)
+          csvSafe(p.Creation_Timestamp), csvSafe(p.Logged_By), csvSafe(p.Drive_Link), csvSafe(p.Internal_Notes)
         ];
         csvRows.push(row.join(','));
       });
@@ -3633,7 +3636,6 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
       showToast(`Exported ${filtered.length} missions to CSV`, 'success');
     }
 
@@ -3642,17 +3644,13 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
       return `"${String(str).replace(/"/g, '""')}"`;
     }
 
-    /* GOOGLE APPS SCRIPT SYNC */
+    /* PERMANENT GOOGLE APPS SCRIPT CLUSTER SYNC */
     async function syncWithGoogleSheet() {
-      if (!appState.apiUrl) return;
-      const badge = document.getElementById('syncStatusBadge');
-      if (badge) {
-        badge.className = 'badge badge-amber';
-        badge.textContent = 'Syncing...';
-      }
+      const url = appState.apiUrl || DEFAULT_API_URL;
+      const hudStatus = document.getElementById('hudSyncStatus');
 
       try {
-        const resp = await fetch(appState.apiUrl, { method: 'GET' });
+        const resp = await fetch(url, { method: 'GET' });
         const result = await resp.json();
         if (result.status === 'success' && result.data) {
           if (Array.isArray(result.data.projects) && result.data.projects.length > 0) {
@@ -3663,94 +3661,51 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
             appState.auditTrails = result.data.auditTrails;
             saveAuditsToStorage();
           }
-          if (badge) {
-            badge.className = 'badge badge-emerald';
-            badge.textContent = 'Connected (Google Sheets)';
-          }
+          if (hudStatus) hudStatus.textContent = 'CONNECTED (SHEETS)';
           renderAll();
-          showToast('Live telemetry synchronized', 'success');
         }
       } catch (err) {
-        console.warn('Sync error:', err);
-        if (badge) {
-          badge.className = 'badge badge-rose';
-          badge.textContent = 'Sync Failed (Local Cache)';
-        }
-      }
-    }
-
-    async function testSheetConnection() {
-      const url = document.getElementById('inpApiUrl').value.trim();
-      if (!url) {
-        showToast('Please enter an Apps Script Web App URL first', 'error');
-        return;
-      }
-
-      const badge = document.getElementById('syncStatusBadge');
-      badge.className = 'badge badge-amber';
-      badge.textContent = 'Testing connection...';
-
-      try {
-        const resp = await fetch(url, { method: 'GET' });
-        const result = await resp.json();
-        if (result.status === 'success') {
-          badge.className = 'badge badge-emerald';
-          badge.textContent = 'Connected!';
-          showToast('Connection verified successfully!', 'success');
-        } else {
-          badge.className = 'badge badge-rose';
-          badge.textContent = 'API Error';
-          showToast('API returned error: ' + (result.message || 'Unknown'), 'error');
-        }
-      } catch (err) {
-        badge.className = 'badge badge-rose';
-        badge.textContent = 'Connection Failed';
-        showToast('Failed to connect to Apps Script URL. Check CORS/permissions.', 'error');
+        console.warn('Google Sheet Cluster Sync:', err);
+        if (hudStatus) hudStatus.textContent = 'STANDALONE CACHE';
       }
     }
 
     async function dispatchApiPost(action, payload) {
-      if (!appState.apiUrl) return;
+      const url = appState.apiUrl || DEFAULT_API_URL;
       try {
-        await fetch(appState.apiUrl, {
+        await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain' },
           body: JSON.stringify({ action, ...payload })
         });
       } catch (err) {
-        console.warn('Error sending POST to Apps Script:', err);
+        console.warn('Error sending POST to Google cluster:', err);
       }
     }
 
-    function openSettingsModal() {
-      document.getElementById('settingsModalBackdrop').classList.add('open');
-    }
-    function closeSettingsModal() {
-      document.getElementById('settingsModalBackdrop').classList.remove('open');
-    }
+    function openSettingsModal() { playSound('click'); document.getElementById('settingsModalBackdrop').classList.add('open'); }
+    function closeSettingsModal() { document.getElementById('settingsModalBackdrop').classList.remove('open'); }
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = 'toast';
-
       let strokeColor = 'var(--cyan)';
       if (type === 'success') strokeColor = 'var(--emerald)';
       else if (type === 'error') strokeColor = 'var(--rose)';
 
       toast.style.borderColor = strokeColor;
       toast.innerHTML = `
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
         <span>${escapeHtml(message)}</span>
       `;
-
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateY(8px)';
+        toast.style.transform = 'translateY(6px)';
         toast.style.transition = 'all 0.25s ease';
         setTimeout(() => toast.remove(), 250);
-      }, 3200);
+      }, 3000);
     }
 
     function escapeHtml(str) {

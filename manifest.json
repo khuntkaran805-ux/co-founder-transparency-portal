@@ -1,0 +1,18 @@
+{
+  "name": "NEXUS PRIME // Co-Founder Command Matrix",
+  "short_name": "NEXUS PRIME",
+  "description": "Autonomous Co-Founder Mission & Financial Telemetry Matrix",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#040711",
+  "theme_color": "#00f5ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
