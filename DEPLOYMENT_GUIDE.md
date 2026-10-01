@@ -117,19 +117,53 @@ Set the headers in row 1 (`A1:E1`):
 
 ---
 
-## Step 5: Host for Free on GitHub Pages (100% Perpetual ₹0 Cost)
+## Step 5: How to View the Site Right Now
 
-1. Create a new GitHub repository named `co-founder-transparency-portal`.
-2. Push `index.html`, `Code.gs`, `DEPLOYMENT_GUIDE.md`, and `README.md` to the repository.
-3. In GitHub, go to **Settings** > **Pages**.
-4. Under **Build and deployment**:
-   - **Source**: `Deploy from a branch`
-   - **Branch**: `main` (or `master`), folder: `/ (root)`
-5. Click **Save**.
-6. Within 1-2 minutes, your live site will be available at:
+### Option A: Open Locally on Your Machine (Instant — Zero Setup)
+You don't even need to upload to the internet to use the website right now:
+1. Double-click **`start.bat`** (or double-click **`index.html`**).
+2. The portal will open immediately in your web browser with all features, KPI metrics, charts, and sample data active!
+
+---
+
+### Option B: 30-Second Instant Free Cloud Hosting (No Git Needed)
+If you want an instant live `https://` link to share with your co-founder right away without setting up Git:
+1. Go to **[app.netlify.com/drop](https://app.netlify.com/drop)** (100% free, no credit card required).
+2. Drag and drop the folder `co-founder-transparency-portal` directly into the browser window.
+3. Netlify will instantly provide a live HTTPS URL (e.g. `https://cheerful-portal-12345.netlify.app`) in under 10 seconds!
+
+---
+
+### Option C: Host on GitHub Pages (Free Perpetual Hosting)
+> [!IMPORTANT]
+> The URL `https://<your-username>.github.io/co-founder-transparency-portal/` is a **placeholder template**. It only works after you create a GitHub repository under your personal GitHub account and push the code files.
+
+To set up GitHub Pages step-by-step:
+
+1. Log in to [GitHub](https://github.com) and create a **New Repository**:
+   - Repository name: `co-founder-transparency-portal`
+   - Make it **Public** (required for free GitHub Pages).
+   - Leave "Add README" unchecked.
+2. In your terminal/PowerShell, run these commands inside the project folder:
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit of Co-Founder Transparency Portal"
+   git branch -M main
+   git remote add origin https://github.com/YOUR_ACTUAL_GITHUB_USERNAME/co-founder-transparency-portal.git
+   git push -u origin main
    ```
-   https://<your-username>.github.io/co-founder-transparency-portal/
+3. Once pushed, go to your repository on GitHub:
+   - Click **Settings** (tab at the top) > **Pages** (in the left sidebar).
+   - Under **Build and deployment**:
+     - **Source**: `Deploy from a branch`
+     - **Branch**: `main`, folder: `/ (root)`
+   - Click **Save**.
+4. GitHub will build the site in about 60-90 seconds. Your actual URL will be:
    ```
+   https://YOUR_ACTUAL_GITHUB_USERNAME.github.io/co-founder-transparency-portal/
+   ```
+   *(Replace `YOUR_ACTUAL_GITHUB_USERNAME` with your real GitHub handle!)*
 
 ---
 
