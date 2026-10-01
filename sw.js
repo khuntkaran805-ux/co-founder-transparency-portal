@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nexus-prime-cache-v1';
+const CACHE_NAME = 'nexus-prime-cache-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,12 +7,12 @@ const ASSETS_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -21,26 +21,42 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
+            console.log('[SW] Purging outdated cache:', key);
             return caches.delete(key);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
+// NETWORK-FIRST STRATEGY:
+// Always fetch fresh HTML & assets from network first.
+// Only fall back to cache if offline.
 self.addEventListener('fetch', (event) => {
-  // Pass-through Google Apps Script API calls dynamically
+  // Always bypass cache for Google Apps Script API calls or non-GET
   if (event.request.url.includes('script.google.com') || event.request.method !== 'GET') {
     return;
   }
 
+  // Network-First for navigation & app assets
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request).catch(() => {
-        return caches.match('./index.html');
-      });
-    })
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Cache the fresh copy
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Fallback to cache if network fails (offline)
+        return caches.match(event.request).then((cached) => {
+          return cached || caches.match('./index.html');
+        });
+      })
   );
 });
