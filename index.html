@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>NEXUS PRIME // Autonomous Co-Founder Command Matrix</title>
+  <title>NEXUS PRIME // Operations, Billing & Live Client Tracking</title>
   
   <!-- PWA Manifest & Meta -->
   <link rel="manifest" href="manifest.json">
@@ -98,6 +98,7 @@
       z-index: 0;
     }
 
+    /* Privacy Blur Mode */
     body.privacy-active .privacy-sensitive {
       filter: blur(8px);
       user-select: none;
@@ -107,115 +108,168 @@
       filter: blur(4px);
     }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg-void); }
     ::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: var(--radius-full); }
     ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-    /* ========================================================================= */
-    /* KEYFRAME ANIMATIONS */
-    /* ========================================================================= */
+    /* Animations */
     @keyframes radarRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes pulseGlow { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.02); } }
     @keyframes glitchIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(1000%); } }
 
     /* ========================================================================= */
-    /* SCI-FI BOOT FLASH SPLASH SCREEN */
+    /* MASTER ADMIN PASSWORD GATEKEEPER (LOCK SCREEN) */
     /* ========================================================================= */
-    .splash-overlay {
+    .master-lock-overlay {
       position: fixed;
       inset: 0;
-      background: #02040a;
-      z-index: 9999;
+      background: #02040b;
+      z-index: 99999;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      backdrop-filter: blur(20px);
     }
-    .splash-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
+    .master-lock-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--cyan);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 420px;
+      padding: 2.2rem 1.8rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      box-shadow: 0 0 40px rgba(0, 245, 255, 0.25);
+      animation: glitchIn 0.4s ease;
+      position: relative;
     }
-    .splash-reticle {
-      width: 110px;
-      height: 110px;
+    .master-lock-reticle {
+      width: 80px;
+      height: 80px;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1.5rem;
     }
-    .splash-outer-ring {
+    .master-lock-reticle::before {
+      content: '';
       position: absolute;
       inset: 0;
       border: 2px dashed var(--cyan);
       border-radius: 50%;
-      animation: radarRotate 10s linear infinite;
+      animation: radarRotate 12s linear infinite;
     }
-    .splash-inner-ring {
-      position: absolute;
-      inset: 16px;
-      border: 2px solid var(--violet);
-      border-radius: 50%;
-      animation: radarRotate 6s linear infinite reverse;
-    }
-    .splash-title {
+    .master-lock-title {
       font-family: var(--font-display);
-      font-size: 1.8rem;
+      font-size: 1.35rem;
       font-weight: 900;
-      letter-spacing: 0.15em;
-      color: #fff;
-      text-shadow: 0 0 20px var(--cyan);
-      margin-bottom: 0.35rem;
-    }
-    .splash-sub {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--cyan);
       letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-    }
-    .splash-terminal {
-      background: rgba(8, 14, 32, 0.9);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      padding: 0.85rem 1.15rem;
-      width: 100%;
-      max-width: 380px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--emerald);
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      box-shadow: var(--shadow-hud);
-      margin-bottom: 1.5rem;
-    }
-    .splash-progress-track {
-      width: 100%;
-      max-width: 380px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius-full);
-      overflow: hidden;
-      position: relative;
-    }
-    .splash-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--cyan), var(--emerald));
-      box-shadow: 0 0 10px var(--cyan);
-      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #fff;
+      text-shadow: 0 0 15px var(--cyan);
     }
 
     /* ========================================================================= */
-    /* TOPBAR HUD NAVIGATION */
+    /* PUBLIC CLIENT LIVE TRACKING VIEW (ACCESSIBLE VIA ?track=PRJ-XXXX) */
+    /* ========================================================================= */
+    .client-tracking-view {
+      display: none;
+      width: 100%;
+      max-width: 760px;
+      margin: 1.5rem auto;
+      padding: 1.25rem;
+      flex-direction: column;
+      gap: 1.25rem;
+      animation: glitchIn 0.3s ease;
+    }
+    .tracking-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: var(--shadow-hud);
+      position: relative;
+      overflow: hidden;
+    }
+    .tracking-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--emerald));
+    }
+    .stage-stepper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+      padding-left: 2rem;
+      margin: 1rem 0;
+    }
+    .stage-stepper::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: var(--border-subtle);
+    }
+    .stage-step {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .stage-dot {
+      position: absolute;
+      left: -2rem;
+      top: 2px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 2px solid var(--border-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+    .stage-step.completed .stage-dot {
+      border-color: var(--emerald);
+      background: var(--emerald);
+      color: #030611;
+      box-shadow: 0 0 10px var(--emerald);
+    }
+    .stage-step.active .stage-dot {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #030611;
+      box-shadow: 0 0 12px var(--cyan);
+      animation: pulseGlow 1.5s infinite ease-in-out;
+    }
+    .stage-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    .stage-step.active .stage-title { color: var(--cyan); }
+    .stage-desc { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ========================================================================= */
+    /* TOPBAR NAVIGATION */
     /* ========================================================================= */
     .navbar {
       background: rgba(7, 12, 30, 0.88);
@@ -231,7 +285,6 @@
       gap: 0.65rem;
       width: 100%;
     }
-
     .nav-brand {
       display: flex;
       align-items: center;
@@ -239,7 +292,6 @@
       text-decoration: none;
       min-width: 0;
     }
-
     .brand-logo-frame {
       position: relative;
       width: 36px;
@@ -261,7 +313,6 @@
       border-radius: calc(var(--radius-md) + 3px);
       animation: radarRotate 18s linear infinite;
     }
-
     .brand-title {
       font-family: var(--font-display);
       font-size: 1.15rem;
@@ -282,58 +333,12 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
     .nav-actions {
       display: flex;
       align-items: center;
       gap: 0.45rem;
       flex-wrap: wrap;
       justify-content: flex-end;
-    }
-
-    /* Partner Identity Switcher */
-    .partner-switcher {
-      display: flex;
-      align-items: center;
-      background: rgba(9, 16, 36, 0.9);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      padding: 0.2rem;
-      gap: 0.2rem;
-    }
-    .partner-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.35rem 0.65rem;
-      border-radius: var(--radius-sm);
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.72rem;
-      font-family: var(--font-mono);
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-    .partner-btn.active {
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.25), rgba(139, 92, 246, 0.3));
-      color: var(--cyan);
-      border: 1px solid var(--cyan);
-      box-shadow: 0 0 12px var(--cyan-glow);
-    }
-    .partner-avatar {
-      width: 18px;
-      height: 18px;
-      border-radius: var(--radius-full);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.62rem;
-      font-weight: 800;
-      background: rgba(0, 245, 255, 0.15);
-      color: #fff;
     }
 
     /* Buttons */
@@ -356,7 +361,6 @@
     }
     .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
-
     .btn-primary {
       background: linear-gradient(135deg, #00f5ff, #8b5cf6);
       color: #030611;
@@ -370,7 +374,6 @@
       box-shadow: 0 0 28px rgba(0, 245, 255, 0.6);
       transform: translateY(-1px);
     }
-
     .btn-secondary {
       background: rgba(11, 18, 38, 0.9);
       color: var(--text-main);
@@ -380,7 +383,6 @@
       border-color: var(--cyan);
       box-shadow: 0 0 12px var(--cyan-glow);
     }
-
     .btn-outline {
       background: transparent;
       color: var(--text-muted);
@@ -391,7 +393,6 @@
       color: var(--cyan);
       border-color: var(--cyan);
     }
-
     .btn-emerald { background: var(--emerald-light); color: var(--emerald); border-color: var(--emerald); box-shadow: 0 0 12px var(--emerald-glow); }
     .btn-rose { background: var(--rose-light); color: var(--rose); border-color: var(--rose); box-shadow: 0 0 12px var(--rose-glow); }
     .btn-sm { padding: 0.32rem 0.58rem; font-size: 0.74rem; border-radius: var(--radius-sm); }
@@ -418,9 +419,7 @@
     .badge-violet { background: var(--violet-light); color: var(--violet); border-color: rgba(139, 92, 246, 0.3); }
     .badge-gray { background: rgba(148, 163, 184, 0.1); color: var(--text-muted); border-color: rgba(148, 163, 184, 0.2); }
 
-    /* ========================================================================= */
-    /* MAIN CONTAINER & GRID */
-    /* ========================================================================= */
+    /* Main Container */
     .container {
       max-width: 1480px;
       margin: 0 auto;
@@ -448,12 +447,6 @@
       box-shadow: var(--shadow-hud);
       flex-wrap: wrap;
     }
-    .hero-status-group {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      flex-wrap: wrap;
-    }
     .hud-indicator {
       display: flex;
       align-items: center;
@@ -471,7 +464,7 @@
       animation: pulseGlow 2s infinite ease-in-out;
     }
 
-    /* Urgency Quick Chips Bar */
+    /* Urgency Chips Bar */
     .urgency-chips-bar {
       display: flex;
       align-items: center;
@@ -498,10 +491,7 @@
       transition: var(--transition);
       user-select: none;
     }
-    .urgency-chip:hover {
-      border-color: var(--cyan);
-      color: #fff;
-    }
+    .urgency-chip:hover { border-color: var(--cyan); color: #fff; }
     .urgency-chip.active {
       background: rgba(0, 245, 255, 0.15);
       border-color: var(--cyan);
@@ -509,29 +499,7 @@
       box-shadow: 0 0 10px var(--cyan-glow);
     }
 
-    /* Mode Banners */
-    .system-banner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1rem;
-      border-radius: var(--radius-md);
-      font-size: 0.8rem;
-      font-weight: 500;
-      background: rgba(255, 170, 0, 0.08);
-      border: 1px solid rgba(255, 170, 0, 0.35);
-      color: #fbbf24;
-      animation: glitchIn 0.3s ease;
-    }
-    .system-banner.banner-privacy {
-      background: rgba(0, 245, 255, 0.08);
-      border-color: rgba(0, 245, 255, 0.35);
-      color: var(--cyan);
-    }
-
-    /* ========================================================================= */
-    /* 7 KPI TELEMETRY CARDS (GRID) */
-    /* ========================================================================= */
+    /* KPI Grid */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
@@ -607,41 +575,7 @@
       gap: 0.3rem;
     }
 
-    /* Radial Gauge Card */
-    .gauge-card {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .gauge-svg-container {
-      position: relative;
-      width: 78px;
-      height: 78px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .gauge-radar-reticle {
-      position: absolute;
-      inset: -6px;
-      border: 1px dashed rgba(0, 245, 255, 0.25);
-      border-radius: 50%;
-      animation: radarRotate 14s linear infinite;
-      pointer-events: none;
-    }
-    .gauge-text-center {
-      position: absolute;
-      font-size: 0.85rem;
-      font-weight: 800;
-      font-family: var(--font-mono);
-      color: var(--cyan);
-    }
-
-    /* ========================================================================= */
-    /* ANALYTICS CHARTS */
-    /* ========================================================================= */
+    /* Charts */
     .charts-grid {
       display: grid;
       grid-template-columns: 1.6fr 1fr 1.2fr;
@@ -682,15 +616,9 @@
       width: 100%;
       height: 205px;
     }
-    canvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block;
-    }
+    canvas { width: 100% !important; height: 100% !important; display: block; }
 
-    /* ========================================================================= */
-    /* SEARCH & CONTROLS TOOLBAR */
-    /* ========================================================================= */
+    /* Toolbar */
     .toolbar-panel {
       background: var(--bg-card);
       backdrop-filter: blur(12px);
@@ -755,16 +683,13 @@
       cursor: pointer;
       outline: none;
       transition: var(--transition);
-      max-width: 100%;
     }
     .select-control:focus {
       border-color: var(--cyan);
       box-shadow: 0 0 8px var(--cyan-glow);
     }
 
-    /* ========================================================================= */
-    /* DESKTOP HUD DATA TABLE */
-    /* ========================================================================= */
+    /* Desktop Table */
     .table-container {
       background: var(--bg-card);
       backdrop-filter: blur(12px);
@@ -774,10 +699,7 @@
       box-shadow: var(--shadow-hud);
       width: 100%;
     }
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-    }
+    .table-responsive { width: 100%; overflow-x: auto; }
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -795,7 +717,6 @@
       letter-spacing: 0.05em;
       border-bottom: 1px solid var(--border-medium);
       white-space: nowrap;
-      user-select: none;
     }
     .data-table th.sortable { cursor: pointer; }
     .data-table th.sortable:hover { color: var(--cyan); }
@@ -806,7 +727,6 @@
       color: var(--text-main);
     }
     .data-table tr:hover td { background: rgba(0, 245, 255, 0.03); }
-
     .project-id-cell {
       font-family: var(--font-mono);
       font-weight: 700;
@@ -824,21 +744,9 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .currency-mono {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .actions-cell {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      justify-content: flex-end;
-    }
+    .currency-mono { font-family: var(--font-mono); font-weight: 700; white-space: nowrap; }
 
-    /* ========================================================================= */
-    /* MOBILE HOLOGRAPHIC MISSION CARDS (PHONE VIEW) */
-    /* ========================================================================= */
+    /* Mobile Cards View */
     .mobile-cards-view {
       display: none;
       flex-direction: column;
@@ -923,14 +831,12 @@
       max-width: 125px;
     }
 
-    /* ========================================================================= */
-    /* MODALS & DRAWERS */
-    /* ========================================================================= */
+    /* Modals & Drawers */
     .modal-backdrop, .drawer-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(10px);
       z-index: 60;
       display: flex;
       align-items: center;
@@ -942,7 +848,6 @@
       overflow-y: auto;
     }
     .modal-backdrop.open, .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
-
     .modal-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-medium);
@@ -959,7 +864,6 @@
       margin: auto;
     }
     .modal-backdrop.open .modal-card { transform: scale(1); }
-
     .modal-header, .drawer-header {
       padding: 1.1rem 1.35rem;
       border-bottom: 1px solid var(--border-subtle);
@@ -993,7 +897,6 @@
       gap: 0.6rem;
       background: rgba(9, 16, 36, 0.7);
     }
-
     .drawer-panel {
       position: fixed;
       top: 0;
@@ -1032,7 +935,7 @@
       gap: 0.4rem;
     }
 
-    /* Form Grids */
+    /* Forms */
     .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
     .form-full { grid-column: span 2; }
     .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -1086,19 +989,6 @@
       box-shadow: 0 0 12px var(--cyan-glow);
     }
 
-    .quick-chips-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem; }
-    .quick-chip {
-      padding: 0.2rem 0.5rem;
-      font-size: 0.7rem;
-      font-family: var(--font-mono);
-      border-radius: var(--radius-full);
-      background: rgba(0, 245, 255, 0.08);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-    .quick-chip:hover { border-color: var(--cyan); color: var(--cyan); }
-
     .balance-preview-box {
       background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), rgba(139, 92, 246, 0.05));
       border: 1px dashed var(--cyan);
@@ -1109,42 +999,23 @@
       justify-content: space-between;
     }
 
-    /* PIN Inputs */
-    .pin-input-wrap { display: flex; justify-content: center; gap: 0.65rem; margin: 1.25rem 0; }
-    .pin-digit {
-      width: 46px;
-      height: 54px;
-      font-size: 1.8rem;
-      font-family: var(--font-mono);
-      text-align: center;
-      background: var(--bg-input);
-      border: 2px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      color: var(--cyan);
-      outline: none;
+    /* Print Invoice Styling */
+    @media print {
+      body * { visibility: hidden; }
+      #printableInvoiceArea, #printableInvoiceArea * { visibility: visible; }
+      #printableInvoiceArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #fff !important;
+        color: #000 !important;
+        padding: 20px;
+      }
     }
-    .pin-digit:focus { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
-
-    /* Timeline */
-    .timeline { display: flex; flex-direction: column; gap: 0.75rem; position: relative; padding-left: 1.4rem; }
-    .timeline::before { content: ''; position: absolute; left: 5px; top: 5px; bottom: 5px; width: 2px; background: var(--border-subtle); }
-    .timeline-item { position: relative; display: flex; flex-direction: column; gap: 0.2rem; }
-    .timeline-dot {
-      position: absolute;
-      left: -1.4rem;
-      top: 4px;
-      width: 12px;
-      height: 12px;
-      border-radius: var(--radius-full);
-      background: var(--bg-surface);
-      border: 2px solid var(--cyan);
-      box-shadow: 0 0 6px var(--cyan);
-    }
-    .timeline-time { font-size: 0.68rem; color: var(--text-dim); font-family: var(--font-mono); }
-    .timeline-content { font-size: 0.78rem; color: var(--text-main); }
 
     /* Toast */
-    .toast-container { position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+    .toast-container { position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 100000; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
     .toast {
       background: rgba(11, 18, 38, 0.95);
       border: 1px solid var(--cyan);
@@ -1161,27 +1032,21 @@
       max-width: 340px;
     }
 
-    /* Responsive Breakpoints */
+    /* Responsive */
     @media (max-width: 1200px) { .charts-grid { grid-template-columns: 1fr; } }
     @media (max-width: 880px) {
       .table-container { display: none !important; }
       .mobile-cards-view { display: flex !important; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .kpi-card { padding: 0.85rem; }
-      .kpi-value { font-size: 1.35rem; }
-      .gauge-card { grid-column: span 2; }
       .navbar { padding: 0.55rem 0.85rem; }
       .brand-title { font-size: 0.95rem; }
       .brand-subtitle { display: none; }
-      .partner-btn span:not(.partner-avatar) { display: none; }
-      .partner-btn { padding: 0.35rem; }
       .form-grid { grid-template-columns: 1fr; }
       .form-full { grid-column: span 1; }
     }
     @media (max-width: 480px) {
       .container { padding: 0.75rem; gap: 0.85rem; }
       .kpi-grid { grid-template-columns: 1fr; }
-      .gauge-card { grid-column: span 1; }
       .nav-actions .btn span { display: none; }
       .nav-actions .btn { padding: 0.45rem; width: 34px; height: 34px; }
       #btnNewProject span { display: inline !important; }
@@ -1199,37 +1064,147 @@
 <body>
 
   <!-- ========================================================================= -->
-  <!-- SCI-FI FLASH BOOT SPLASH SCREEN -->
+  <!-- 1. MASTER ADMIN PASSWORD GATEKEEPER (LOCK SCREEN) -->
   <!-- ========================================================================= -->
-  <div id="splashScreen" class="splash-overlay">
-    <div class="splash-reticle">
-      <div class="splash-outer-ring"></div>
-      <div class="splash-inner-ring"></div>
-      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
-        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-        <polyline points="2 17 12 22 22 17"/>
-        <polyline points="2 12 12 17 22 12"/>
-      </svg>
-    </div>
-    <div class="splash-title">NEXUS PRIME</div>
-    <div class="splash-sub">Autonomous Command Matrix</div>
-    
-    <div class="splash-terminal">
-      <div>&gt; NEXUS QUANTUM OS v4.2 [BOOT]</div>
-      <div id="splashStatus">&gt; CONNECTING TO GOOGLE CLUSTER...</div>
-      <div>&gt; RECEPTOR TELEMETRY: SYNCHRONIZED</div>
-    </div>
+  <div id="masterLockScreen" class="master-lock-overlay">
+    <div class="master-lock-card">
+      <div class="master-lock-reticle">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="master-lock-title">NEXUS PRIME</div>
+        <div style="font-size: 0.75rem; color: var(--text-dim); font-family: var(--font-mono); margin-top: 0.2rem;">
+          RESTRICTED ADMIN ACCESS MATRIX
+        </div>
+      </div>
 
-    <div class="splash-progress-track">
-      <div id="splashBar" class="splash-progress-bar"></div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;">
+        Private operational & financial telemetry is locked. Enter Master Admin Password to decrypt.
+      </p>
+
+      <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem;">
+        <input type="password" id="masterAdminPassInput" class="form-control font-mono" placeholder="Enter Admin Password..." style="text-align: center; font-size: 1rem; letter-spacing: 0.15em;" onkeydown="if(event.key==='Enter') verifyMasterLock()">
+        <div id="masterLockError" style="color: var(--rose); font-size: 0.76rem; display: none; font-family: var(--font-mono);">
+          ACCESS DENIED: Invalid Clearance Key
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.74rem; color: var(--text-dim);">
+        <input type="checkbox" id="rememberDeviceCheck" checked>
+        <label for="rememberDeviceCheck">Keep session active on this device</label>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%;" onclick="verifyMasterLock()">
+        <span>AUTHORIZE & DECRYPT</span>
+      </button>
+
+      <div style="font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono);">
+        Provider: Karan Khunt (+91 6353002399)
+      </div>
     </div>
-    <button class="btn btn-sm btn-outline" style="margin-top: 1.5rem; font-size: 0.72rem;" onclick="dismissSplash()">Tap to Skip &gt;</button>
   </div>
 
   <!-- ========================================================================= -->
-  <!-- NAVIGATION BAR HUD -->
+  <!-- 2. PUBLIC CLIENT LIVE TRACKING VIEW (When URL has ?track=PRJ-XXXX) -->
   <!-- ========================================================================= -->
-  <header class="navbar">
+  <div id="clientTrackingView" class="client-tracking-view">
+    <div class="tracking-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div class="brand-logo-frame" style="width: 32px; height: 32px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family: var(--font-display); font-weight: 800; color: #fff;">NEXUS PRIME</div>
+            <div style="font-size: 0.65rem; color: var(--cyan); font-family: var(--font-mono);">LIVE CLIENT TELEMETRY</div>
+          </div>
+        </div>
+        <span id="clientTrackMissionId" class="badge badge-cyan font-mono" style="font-size: 0.8rem;">PRJ-XXXX-XXX</span>
+      </div>
+
+      <div>
+        <h2 id="clientTrackTitle" style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 0.35rem;">Assignment Title</h2>
+        <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <span>Client: <strong id="clientTrackClientName" style="color: #fff;">-</strong></span>
+          <span>Category: <strong id="clientTrackCategory" class="text-cyan">-</strong></span>
+        </div>
+      </div>
+
+      <!-- 5-Stage Animated Progress Track -->
+      <div class="drawer-card">
+        <div class="drawer-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Milestone Execution Timeline</span>
+        </div>
+
+        <div class="stage-stepper" id="clientStageStepper">
+          <div class="stage-step" id="step1">
+            <div class="stage-dot">1</div>
+            <div class="stage-title">Intake & Scope Confirmed</div>
+            <div class="stage-desc">Requirements analyzed and technical workflow initialized.</div>
+          </div>
+          <div class="stage-step" id="step2">
+            <div class="stage-dot">2</div>
+            <div class="stage-title">In Progress & Active Development</div>
+            <div class="stage-desc">Code implementation, simulations, and writing underway.</div>
+          </div>
+          <div class="stage-step" id="step3">
+            <div class="stage-dot">3</div>
+            <div class="stage-title">Draft Deliverables Submitted</div>
+            <div class="stage-desc">First review package delivered for inspection.</div>
+          </div>
+          <div class="stage-step" id="step4">
+            <div class="stage-dot">4</div>
+            <div class="stage-title">Client Review & Refinement</div>
+            <div class="stage-desc">Incorporating client feedback and finishing touches.</div>
+          </div>
+          <div class="stage-step" id="step5">
+            <div class="stage-dot">5</div>
+            <div class="stage-title">Completed & Final Files Delivered</div>
+            <div class="stage-desc">Final assignment files released and verified.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment & Horizon Summary -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div class="drawer-card">
+          <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Delivery Horizon</div>
+          <div id="clientTrackDeadline" class="font-mono text-cyan" style="font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem;">-</div>
+        </div>
+        <div class="drawer-card">
+          <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Payment Status</div>
+          <div id="clientTrackPayment" class="font-mono text-emerald" style="font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem;">-</div>
+        </div>
+      </div>
+
+      <!-- Contact Karan Khunt -->
+      <div class="drawer-card" style="border-color: rgba(0, 245, 255, 0.4);">
+        <div style="font-size: 0.74rem; color: var(--text-muted);">Direct Project Lead Contact:</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.35rem;">
+          <div>
+            <strong style="color: #fff; font-size: 0.95rem;">Karan Khunt</strong>
+            <div style="font-size: 0.74rem; color: var(--cyan); font-family: var(--font-mono);">karankhunt805@gmail.com</div>
+          </div>
+          <a id="clientTrackWhatsAppBtn" href="https://wa.me/916353002399" target="_blank" class="btn btn-emerald btn-sm">
+            <span>💬 Chat on WhatsApp (+91 6353002399)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 3. TOPBAR HUD (ADMIN CONSOLE) -->
+  <!-- ========================================================================= -->
+  <header class="navbar" id="mainAdminNavbar">
     <a href="#" class="nav-brand">
       <div class="brand-logo-frame">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -1240,65 +1215,59 @@
       </div>
       <div class="brand-title">
         <div>NEXUS <span class="glow">PRIME</span></div>
-        <div class="brand-subtitle">Autonomous Co-Founder Command Matrix</div>
+        <div class="brand-subtitle">Karan Khunt // Command Matrix</div>
       </div>
     </a>
 
     <div class="nav-actions">
-      <!-- Dual Partner Switcher -->
-      <div class="partner-switcher">
-        <button id="btnPartnerA" class="partner-btn active" onclick="setPartnerIdentity('Partner A (Operations Lead)')" title="Switch to Partner A">
-          <span class="partner-avatar">PA</span>
-          <span>Partner A</span>
-        </button>
-        <button id="btnPartnerB" class="partner-btn" onclick="setPartnerIdentity('Partner B (Auditor/Executive)')" title="Switch to Partner B">
-          <span class="partner-avatar">PB</span>
-          <span>Partner B</span>
-        </button>
-      </div>
-
-      <!-- Clients CRM Trigger -->
-      <button class="btn btn-secondary btn-icon" onclick="openClientsModal()" title="Client Registry & Automated WhatsApp Hub">
+      <!-- Clients CRM -->
+      <button class="btn btn-secondary btn-icon" onclick="openClientsModal()" title="Client CRM & Automated WhatsApp Hub">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
       </button>
 
-      <!-- Profit Split Calculator -->
-      <button class="btn btn-secondary btn-icon" onclick="openProfitSplitModal()" title="Co-Founder Profit Split & Weekly WhatsApp Brief">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2">
-          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      <!-- Expenses Tracker -->
+      <button class="btn btn-secondary btn-icon" onclick="openExpensesModal()" title="Expense Management & Outflow">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
         </svg>
       </button>
 
-      <!-- Audio Toggle -->
+      <!-- Invoices / Billing -->
+      <button class="btn btn-secondary btn-icon" onclick="openInvoiceModal()" title="Invoice & Billing Generator">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      </button>
+
+      <!-- Sound FX Toggle -->
       <button id="btnAudioToggle" class="btn btn-secondary btn-icon" onclick="toggleAudio()" title="Sound FX Toggle">
         <span id="audioIcon">🔊</span>
       </button>
 
-      <!-- PIN Privacy Shield -->
-      <button id="btnPrivacyToggle" class="btn btn-secondary btn-icon" onclick="togglePrivacyMode()" title="Privacy PIN Masking">
+      <!-- Privacy Shield -->
+      <button class="btn btn-secondary btn-icon" onclick="togglePrivacyMode()" title="Privacy PIN Masking">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
         </svg>
       </button>
 
-      <!-- Read-Only Toggle -->
-      <button id="btnReadOnlyToggle" class="btn btn-secondary btn-icon" onclick="toggleReadOnlyMode()" title="Read-Only Mode">
+      <!-- Settings -->
+      <button class="btn btn-outline btn-icon" onclick="openSettingsModal()" title="Matrix Settings">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+
+      <!-- Lock Console -->
+      <button class="btn btn-rose btn-icon" onclick="lockConsoleNow()" title="Lock Admin Console">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
         </svg>
       </button>
 
-      <!-- Settings / Database Sync -->
-      <button class="btn btn-outline btn-icon" onclick="openSettingsModal()" title="Matrix Settings">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-      </button>
-
-      <!-- New Mission Button -->
+      <!-- + Mission -->
       <button id="btnNewProject" class="btn btn-primary" onclick="openNewProjectModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7v14"/></svg>
         <span>+ Mission</span>
@@ -1307,20 +1276,22 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- MAIN APP CONTAINER -->
+  <!-- 4. ADMIN DASHBOARD CONTAINER -->
   <!-- ========================================================================= -->
-  <main class="container">
+  <main class="container" id="mainAdminContainer">
 
     <!-- Hero HUD Bar -->
     <div class="hero-hud">
-      <div class="hero-status-group">
+      <div style="display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap;">
         <div class="hud-indicator">
           <div class="pulse-dot"></div>
           <span>CLUSTER: <strong class="text-emerald" id="hudSyncStatus">AUTO-CONNECTED</strong></span>
         </div>
         <div class="hud-indicator">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>CLEARANCE: <strong id="hudClearancePartner" class="text-cyan">PARTNER A (OPS)</strong></span>
+          <span>LEAD: <strong class="text-cyan">KARAN KHUNT</strong></span>
+        </div>
+        <div class="hud-indicator">
+          <span>WHATSAPP: <strong class="text-emerald">+91 6353002399</strong></span>
         </div>
       </div>
       <div class="hud-indicator">
@@ -1338,26 +1309,7 @@
       <span class="urgency-chip" onclick="applyUrgencyFilter('COMPLETED', this)">✅ COMPLETED</span>
     </div>
 
-    <!-- Mode Banners -->
-    <div id="readOnlyBanner" class="system-banner" style="display: none;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span><strong>Read-Only Mode Active.</strong> Write actions are locked.</span>
-      </div>
-      <button class="btn btn-sm btn-outline" onclick="toggleReadOnlyMode()">Exit</button>
-    </div>
-
-    <div id="privacyBanner" class="system-banner banner-privacy" style="display: none;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61M2 2l20 20"/></svg>
-        <span><strong>PIN Privacy Shield Active.</strong> Revenue numbers masked.</span>
-      </div>
-      <button class="btn btn-sm btn-outline" onclick="promptUnlockPrivacy()">Enter PIN</button>
-    </div>
-
-    <!-- ======================================================================= -->
-    <!-- 7 KPI TELEMETRY CARDS -->
-    <!-- ======================================================================= -->
+    <!-- 7 KPI TELEMETRY CARDS (INCL. EXPENSES & NET PROFIT) -->
     <section class="kpi-grid">
       <!-- Gross Quoted -->
       <div class="kpi-card">
@@ -1374,19 +1326,19 @@
       <!-- Cleared Income -->
       <div class="kpi-card">
         <div class="kpi-card-header">
-          <span class="kpi-title">Cleared Escrow</span>
+          <span class="kpi-title">Cleared Income</span>
           <div class="kpi-icon-wrap" style="color: var(--emerald); border-color: rgba(0, 255, 157, 0.3); background: var(--emerald-light);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
         </div>
         <div class="kpi-value text-emerald privacy-sensitive" id="kpiClearedIncome">₹0</div>
-        <div class="kpi-subtext">Across active filter range</div>
+        <div class="kpi-subtext">Cash received</div>
       </div>
 
       <!-- Outstanding Receivables -->
       <div class="kpi-card">
         <div class="kpi-card-header">
-          <span class="kpi-title">Outstanding Receivables</span>
+          <span class="kpi-title">Pending Receivables</span>
           <div class="kpi-icon-wrap" style="color: var(--rose); border-color: rgba(255, 0, 85, 0.3); background: var(--rose-light);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
@@ -1395,7 +1347,31 @@
         <div class="kpi-subtext" id="kpiUnpaidProjectsCount">0 accounts pending</div>
       </div>
 
-      <!-- Active Pipeline -->
+      <!-- Total Expenses -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Total Outflow / Expenses</span>
+          <div class="kpi-icon-wrap" style="color: var(--rose); border-color: rgba(255, 0, 85, 0.3); background: var(--rose-light);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value text-rose privacy-sensitive" id="kpiTotalExpenses">₹0</div>
+        <div class="kpi-subtext">Freelancers, tools, hosting</div>
+      </div>
+
+      <!-- Net Profit (Income - Expenses) -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Net Business Profit</span>
+          <div class="kpi-icon-wrap" style="color: var(--emerald); border-color: rgba(0, 255, 157, 0.3); background: var(--emerald-light);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value text-emerald privacy-sensitive" id="kpiNetProfit">₹0</div>
+        <div class="kpi-subtext">Cleared Income - Expenses</div>
+      </div>
+
+      <!-- Active Velocity -->
       <div class="kpi-card">
         <div class="kpi-card-header">
           <span class="kpi-title">Active Velocity</span>
@@ -1404,68 +1380,33 @@
           </div>
         </div>
         <div class="kpi-value text-amber" id="kpiActivePipeline">0</div>
-        <div class="kpi-subtext">In Progress & Client Revision</div>
+        <div class="kpi-subtext">In Progress & Revisions</div>
       </div>
 
-      <!-- Delivered -->
-      <div class="kpi-card">
-        <div class="kpi-card-header">
-          <span class="kpi-title">Missions Completed</span>
-          <div class="kpi-icon-wrap" style="color: var(--violet); border-color: rgba(139, 92, 246, 0.3); background: var(--violet-light);">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-        </div>
-        <div class="kpi-value text-violet" id="kpiDeliveredCount">0</div>
-        <div class="kpi-subtext">Successfully fulfilled</div>
-      </div>
-
-      <!-- AOV -->
-      <div class="kpi-card">
-        <div class="kpi-card-header">
-          <span class="kpi-title">Average Order Value</span>
-          <div class="kpi-icon-wrap">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
-          </div>
-        </div>
-        <div class="kpi-value privacy-sensitive text-cyan" id="kpiAOV">₹0</div>
-        <div class="kpi-subtext">Quoted / Total Orders</div>
-      </div>
-
-      <!-- Gauge Card -->
-      <div class="kpi-card gauge-card">
+      <!-- Collection Rate -->
+      <div class="kpi-card" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
         <div>
           <span class="kpi-title">Collection Rate</span>
           <div class="kpi-value privacy-sensitive text-emerald" id="kpiCollectionRate" style="margin-top: 0.3rem;">0%</div>
           <div class="kpi-subtext">Cleared vs Quoted</div>
         </div>
-        <div class="gauge-svg-container">
-          <div class="gauge-radar-reticle"></div>
-          <svg width="78" height="78" viewBox="0 0 36 36">
-            <path stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path id="gaugeCircle" stroke="var(--emerald)" stroke-width="3.2" stroke-linecap="round" fill="none"
-              stroke-dasharray="0, 100"
-              style="transition: stroke-dasharray 0.8s ease, stroke 0.4s ease;"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        <div style="position: relative; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+          <svg width="70" height="70" viewBox="0 0 36 36">
+            <path stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path id="gaugeCircle" stroke="var(--emerald)" stroke-width="3.2" stroke-linecap="round" fill="none" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
           </svg>
-          <span class="gauge-text-center privacy-sensitive" id="gaugePctText">0%</span>
+          <span style="position: absolute; font-size: 0.8rem; font-weight: 800; font-family: var(--font-mono); color: var(--cyan);" id="gaugePctText">0%</span>
         </div>
       </div>
     </section>
 
-    <!-- ======================================================================= -->
-    <!-- CHARTS SECTION -->
-    <!-- ======================================================================= -->
+    <!-- CHARTS -->
     <section class="charts-grid">
       <div class="chart-panel">
         <div class="chart-header">
           <div class="chart-title">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 16v-4m5 4V8m5 8v-6"/></svg>
             <span>Cashflow Telemetry (Past 6 Months)</span>
-          </div>
-          <div style="display: flex; gap: 0.75rem; font-size: 0.7rem; font-family: var(--font-mono);">
-            <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 8px; height: 8px; background: var(--emerald); border-radius: 2px;"></span> Cleared</span>
-            <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 8px; height: 8px; background: var(--rose); border-radius: 2px;"></span> Pending</span>
           </div>
         </div>
         <div class="chart-canvas-wrap">
@@ -1498,9 +1439,7 @@
       </div>
     </section>
 
-    <!-- ======================================================================= -->
     <!-- CONTROLS & TOOLBAR -->
-    <!-- ======================================================================= -->
     <section class="toolbar-panel">
       <div class="toolbar-row">
         <div class="search-input-wrap">
@@ -1545,9 +1484,7 @@
       </div>
     </section>
 
-    <!-- ======================================================================= -->
     <!-- DESKTOP DATA TABLE (>= 880px) -->
-    <!-- ======================================================================= -->
     <section class="table-container">
       <div class="table-responsive">
         <table class="data-table">
@@ -1560,7 +1497,6 @@
               <th class="sortable" onclick="sortTable('Total_Quote')">Quoted <span id="sort_Total_Quote">↕</span></th>
               <th>Cleared</th>
               <th>Receivable</th>
-              <th>Payment</th>
               <th>Milestone</th>
               <th style="text-align: right;">Action Dock</th>
             </tr>
@@ -1571,31 +1507,26 @@
       <div style="padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); background: rgba(7, 12, 28, 0.7); font-size: 0.74rem; font-family: var(--font-mono); color: var(--text-dim);">
         <div id="tableRecordCount">Showing 0 of 0 missions</div>
         <div style="display: flex; gap: 0.4rem; align-items: center;">
-          <span class="text-emerald">GOOGLE SHEETS CLUSTER ACTIVE</span>
+          <span class="text-emerald">PERMANENT CLUSTER SYNC ACTIVE</span>
           <div class="pulse-dot"></div>
         </div>
       </div>
     </section>
 
-    <!-- ======================================================================= -->
     <!-- MOBILE HOLOGRAPHIC MISSION CARDS (PHONE VIEW <= 880px) -->
-    <!-- ZERO HORIZONTAL SCROLL GUARANTEED! -->
-    <!-- ======================================================================= -->
     <section id="mobileCardsContainer" class="mobile-cards-view"></section>
 
   </main>
 
   <!-- ========================================================================= -->
-  <!-- MODALS & DRAWERS -->
+  <!-- 5. MISSION PROTOCOL INTAKE MODAL (EXACT AMOUNT + MULTI-CURRENCY) -->
   <!-- ========================================================================= -->
-
-  <!-- MISSION PROTOCOL INTAKE MODAL -->
   <div id="projectModalBackdrop" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          <span id="projectModalTitle">Initiate Mission Protocol</span>
+          <span id="projectModalTitle">Deploy Mission Protocol</span>
         </div>
         <button class="btn btn-outline btn-icon btn-sm" onclick="closeProjectModal()">✕</button>
       </div>
@@ -1610,9 +1541,18 @@
               <input type="text" id="inpProjectId" class="form-control font-mono text-cyan" required readonly style="background: rgba(0, 245, 255, 0.04); font-weight: 700;">
             </div>
 
+            <!-- Currency Selector -->
             <div class="form-group">
-              <label class="form-label">Logged By Operative</label>
-              <input type="text" id="inpLoggedBy" class="form-control font-mono" readonly style="background: rgba(255,255,255,0.03);">
+              <label class="form-label">Billing Currency <span class="text-rose">*</span></label>
+              <select id="inpCurrency" class="form-control font-mono text-cyan" onchange="calculateBalanceIndicator()">
+                <option value="INR">INR (₹ - Indian Rupee)</option>
+                <option value="USD">USD ($ - US Dollar)</option>
+                <option value="EUR">EUR (€ - Euro)</option>
+                <option value="GBP">GBP (£ - British Pound)</option>
+                <option value="AED">AED (AED - UAE Dirham)</option>
+                <option value="CAD">CAD (C$ - Canadian Dollar)</option>
+                <option value="AUD">AUD (A$ - Australian Dollar)</option>
+              </select>
             </div>
 
             <div class="form-group form-full">
@@ -1642,70 +1582,39 @@
 
             <div class="form-group">
               <label class="form-label">Secure WhatsApp Comm-Link <span class="text-rose">*</span></label>
-              <input type="text" id="inpClientContact" class="form-control font-mono" placeholder="e.g. 9876543210" required>
+              <input type="text" id="inpClientContact" class="form-control font-mono" placeholder="e.g. 9876543210 (or +1...)" required>
             </div>
 
-            <!-- Financial Credits -->
+            <!-- Exact Amounts (step="any" - NO ROUND FIGURES) -->
             <div class="form-group">
-              <label class="form-label">Total Quoted Credits (₹) <span class="text-rose">*</span></label>
-              <input type="number" id="inpTotalQuote" class="form-control font-mono" min="0" step="100" placeholder="0" required oninput="calculateBalanceIndicator()">
-              <div class="quick-chips-row">
-                <span class="quick-chip" onclick="addCreditQuote(10000)">+₹10k</span>
-                <span class="quick-chip" onclick="addCreditQuote(25000)">+₹25k</span>
-                <span class="quick-chip" onclick="addCreditQuote(50000)">+₹50k</span>
-              </div>
+              <label class="form-label">Exact Quoted Amount <span class="text-rose">*</span></label>
+              <input type="number" id="inpTotalQuote" class="form-control font-mono" step="any" min="0" placeholder="e.g. 4999.50" required oninput="calculateBalanceIndicator()">
             </div>
 
             <div class="form-group">
-              <label class="form-label">Advance Escrow Collected (₹) <span class="text-rose">*</span></label>
-              <input type="number" id="inpAmountPaid" class="form-control font-mono" min="0" step="100" placeholder="0" required oninput="calculateBalanceIndicator()">
-              <div class="quick-chips-row">
-                <span class="quick-chip" onclick="setEscrowPct(0.5)">50% Escrow</span>
-                <span class="quick-chip" onclick="setEscrowPct(1.0)">100% Settle</span>
-              </div>
+              <label class="form-label">Advance Escrow Received <span class="text-rose">*</span></label>
+              <input type="number" id="inpAmountPaid" class="form-control font-mono" step="any" min="0" placeholder="e.g. 2500" required oninput="calculateBalanceIndicator()">
             </div>
 
-            <!-- Live Holographic Balance Gauge -->
+            <!-- Live Balance Preview -->
             <div class="form-full balance-preview-box">
               <div>
-                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted);">OUTSTANDING BALANCE TELEMETRY:</span>
-                <div id="previewBalanceAmount" class="currency-mono text-rose" style="font-size: 1.3rem;">₹0</div>
+                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted);">OUTSTANDING BALANCE:</span>
+                <div id="previewBalanceAmount" class="currency-mono text-rose" style="font-size: 1.3rem;">0</div>
+                <div id="previewConvertedINR" style="font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono);"></div>
               </div>
               <div id="previewBalanceBadge" class="badge badge-rose">Unpaid</div>
-            </div>
-
-            <!-- Payment Channel -->
-            <div class="form-group">
-              <label class="form-label">Settlement Channel <span class="text-rose">*</span></label>
-              <select id="inpPaymentChannel" class="form-control" required>
-                <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
-                <option value="Direct Bank Transfer">Direct IMPS / NEFT</option>
-                <option value="Razorpay">Razorpay Gateway</option>
-                <option value="Cash">Physical Cash</option>
-                <option value="Other">Other Gateway</option>
-              </select>
-            </div>
-
-            <!-- Payment Status -->
-            <div class="form-group">
-              <label class="form-label">Payment Status <span class="text-rose">*</span></label>
-              <select id="inpPaymentStatus" class="form-control" required>
-                <option value="Unpaid">Unpaid</option>
-                <option value="Partial Advance">Partial Advance</option>
-                <option value="Fully Paid">Fully Paid</option>
-                <option value="Refunded">Refunded</option>
-              </select>
             </div>
 
             <!-- Milestone Status -->
             <div class="form-group">
               <label class="form-label">Execution Milestone <span class="text-rose">*</span></label>
               <select id="inpProjectStatus" class="form-control" required>
-                <option value="New Lead">New Lead</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Draft Submitted">Draft Submitted</option>
-                <option value="Client Revision">Client Revision</option>
-                <option value="Completed">Completed</option>
+                <option value="New Lead">1. New Lead / Intake</option>
+                <option value="In Progress">2. In Progress</option>
+                <option value="Draft Submitted">3. Draft Submitted</option>
+                <option value="Client Revision">4. Client Revision</option>
+                <option value="Completed">5. Completed & Delivered</option>
                 <option value="Cancelled">Cancelled</option>
               </select>
             </div>
@@ -1716,16 +1625,16 @@
               <input type="date" id="inpDeliveryDeadline" class="form-control font-mono" required>
             </div>
 
-            <!-- Cloud Drive / Notion Link -->
+            <!-- Cloud Drive Link -->
             <div class="form-group form-full">
-              <label class="form-label">Google Drive / Notion Asset Link (Optional)</label>
+              <label class="form-label">Google Drive / Notion Asset Folder Link</label>
               <input type="url" id="inpDriveLink" class="form-control font-mono" placeholder="https://drive.google.com/drive/folders/...">
             </div>
 
-            <!-- Directives & Notes -->
+            <!-- Directives -->
             <div class="form-group form-full">
               <label class="form-label">Mission Directives & Guidelines</label>
-              <textarea id="inpInternalNotes" class="form-control" placeholder="Client drive links, reference paper DOIs, rubric specs, or delivery promises..."></textarea>
+              <textarea id="inpInternalNotes" class="form-control" placeholder="Key deliverables, rubric specs, or delivery promises..."></textarea>
             </div>
           </div>
         </form>
@@ -1734,134 +1643,198 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeProjectModal()">Abort</button>
         <button type="submit" form="projectForm" class="btn btn-primary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span id="btnSaveProjectText">Deploy Mission Protocol</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- CLIENTS CRM MODAL -->
+  <!-- ========================================================================= -->
+  <!-- 6. EXPENSES MANAGEMENT MODULE -->
+  <!-- ========================================================================= -->
+  <div id="expensesModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Expense Management & Outflow</span>
+        </div>
+        <button class="btn btn-outline btn-icon btn-sm" onclick="closeExpensesModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Add Expense Form -->
+        <form id="expenseForm" onsubmit="handleAddExpense(event)" style="background: rgba(9, 16, 36, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="font-size: 0.76rem; font-family: var(--font-mono); color: var(--rose); font-weight: 700; text-transform: uppercase;">
+            + Record New Business Expense
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="expCategory" class="form-control" required>
+                <option value="Freelancer Payout">Freelancer / Developer Payout</option>
+                <option value="AI Subscriptions">AI Subscriptions (OpenAI, Claude, etc.)</option>
+                <option value="Software & Tools">Software, MATLAB, Tools</option>
+                <option value="Hosting & Cloud">Hosting, Servers, Domains</option>
+                <option value="Marketing & Ads">Marketing, Promotion</option>
+                <option value="Office & Travel">Office, Internet, Hardware</option>
+                <option value="Other">Other Miscellaneous</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Exact Amount (₹)</label>
+              <input type="number" id="expAmount" class="form-control font-mono text-rose" step="any" min="0" placeholder="e.g. 1500.50" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Paid To / Description</label>
+              <input type="text" id="expDescription" class="form-control" placeholder="e.g. Python Developer Milestone 1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input type="date" id="expDate" class="form-control font-mono" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-rose btn-sm" style="align-self: flex-end;">
+            <span>Record Expense</span>
+          </button>
+        </form>
+
+        <!-- Expenses List -->
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); font-weight: 700;">OUTFLOW HISTORY:</span>
+          <span id="expTotalCount" class="badge badge-rose">0 Expenses</span>
+        </div>
+        <div id="expensesListWrap" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 240px; overflow-y: auto;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeExpensesModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 7. INVOICE / BILLING GENERATOR MODAL -->
+  <!-- ========================================================================= -->
+  <div id="invoiceModalBackdrop" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Automated Invoice & Bill Generator</span>
+        </div>
+        <button class="btn btn-outline btn-icon btn-sm" onclick="closeInvoiceModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Printable Invoice Area -->
+        <div id="printableInvoiceArea" style="background: rgba(8, 14, 32, 0.9); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+            <div>
+              <div style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 900; color: var(--cyan);">NEXUS PRIME</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Lead: <strong>Karan Khunt</strong></div>
+              <div style="font-size: 0.74rem; color: var(--text-dim); font-family: var(--font-mono);">+91 6353002399 | karankhunt805@gmail.com</div>
+            </div>
+            <div style="text-align: right;">
+              <span id="invNumberBadge" class="badge badge-cyan font-mono" style="font-size: 0.82rem;">INV-2026-001</span>
+              <div id="invDateText" style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono); margin-top: 0.2rem;">Date: 2026-10-01</div>
+            </div>
+          </div>
+
+          <!-- Invoice Inputs -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Client Name</label>
+              <input type="text" id="invClientName" class="form-control" placeholder="Client Name" oninput="updateInvoicePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Client Contact</label>
+              <input type="text" id="invClientContact" class="form-control font-mono" placeholder="WhatsApp / Phone" oninput="updateInvoicePreview()">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Service / Project Description</label>
+              <input type="text" id="invDescription" class="form-control" placeholder="e.g. Master Thesis MATLAB Simulation & Report" oninput="updateInvoicePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Billing Currency</label>
+              <select id="invCurrency" class="form-control font-mono" onchange="updateInvoicePreview()">
+                <option value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="AED">AED (AED)</option>
+                <option value="CAD">CAD (C$)</option>
+                <option value="AUD">AUD (A$)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total Amount</label>
+              <input type="number" id="invTotalAmount" class="form-control font-mono text-cyan" step="any" min="0" placeholder="0" oninput="updateInvoicePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Paid So Far</label>
+              <input type="number" id="invAmountPaid" class="form-control font-mono text-emerald" step="any" min="0" placeholder="0" oninput="updateInvoicePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Status</label>
+              <select id="invPaymentStatus" class="form-control" onchange="updateInvoicePreview()">
+                <option value="Fully Paid">Fully Paid</option>
+                <option value="Partial Advance">Partial Advance</option>
+                <option value="Unpaid">Unpaid / Payment Due</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Summary Box -->
+          <div style="background: rgba(0, 245, 255, 0.05); border: 1px dashed var(--cyan); border-radius: var(--radius-sm); padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;">Outstanding Amount Due:</div>
+              <div id="invBalanceDueText" class="currency-mono text-rose" style="font-size: 1.25rem;">0</div>
+            </div>
+            <div id="invStatusBadge" class="badge badge-emerald">Fully Paid</div>
+          </div>
+
+          <div style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono); line-height: 1.4;">
+            Payment settlement via UPI (GPay/PhonePe), Bank Wire, or PayPal. Inquiries: Karan Khunt (+91 6353002399).
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="btn btn-emerald btn-sm" onclick="shareInvoiceWhatsApp()">💬 Send on WhatsApp</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeInvoiceModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 8. CLIENT CRM MODAL -->
+  <!-- ========================================================================= -->
   <div id="clientsModalBackdrop" class="modal-backdrop">
     <div class="modal-card" style="max-width: 680px;">
       <div class="modal-header">
         <div class="modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <span>Operative Registry // Client Management CRM</span>
+          <span>Client CRM & Automated WhatsApp Hub</span>
         </div>
         <button class="btn btn-outline btn-icon btn-sm" onclick="closeClientsModal()">✕</button>
       </div>
       <div class="modal-body">
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.65rem; margin-bottom: 0.5rem;">
-          <div class="drawer-card" style="padding: 0.65rem; text-align: center;">
-            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Total Operatives</div>
-            <div id="crmTotalClients" class="font-mono text-cyan" style="font-size: 1.25rem; font-weight: 800;">0</div>
-          </div>
-          <div class="drawer-card" style="padding: 0.65rem; text-align: center;">
-            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Lifetime Quoted</div>
-            <div id="crmLifetimeQuoted" class="font-mono text-emerald" style="font-size: 1.25rem; font-weight: 800;">₹0</div>
-          </div>
-          <div class="drawer-card" style="padding: 0.65rem; text-align: center;">
-            <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Pending Dues</div>
-            <div id="crmLifetimePending" class="font-mono text-rose" style="font-size: 1.25rem; font-weight: 800;">₹0</div>
-          </div>
-        </div>
-
         <input type="text" id="crmSearchInput" class="form-control font-mono" placeholder="Filter client by name or phone..." oninput="renderCrmClients()">
-
-        <div id="crmClientList" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 380px; overflow-y: auto;">
-          <!-- Dynamically populated -->
-        </div>
+        <div id="crmClientList" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 380px; overflow-y: auto;"></div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeClientsModal()">Close Registry</button>
+        <button class="btn btn-secondary" onclick="closeClientsModal()">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- DYNAMIC UPI PAYMENT QR CODE MODAL -->
-  <div id="upiModalBackdrop" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 400px; text-align: center;">
-      <div class="modal-header" style="justify-content: center;">
-        <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          <span>Dynamic UPI Payment QR</span>
-        </div>
-      </div>
-      <div class="modal-body" style="align-items: center;">
-        <div style="font-size: 0.78rem; color: var(--text-muted);" id="upiProjectDesc">Mission: PRJ-XXXX</div>
-
-        <!-- Scannable QR Container -->
-        <div style="background: #fff; padding: 12px; border-radius: var(--radius-md); box-shadow: 0 0 25px rgba(0, 245, 255, 0.4); margin: 0.75rem 0;">
-          <img id="upiQrImage" src="" alt="UPI QR Code" style="width: 200px; height: 200px; display: block;">
-        </div>
-
-        <div class="currency-mono text-emerald" id="upiAmountText" style="font-size: 1.4rem; font-weight: 800;">₹0</div>
-        <div style="font-size: 0.74rem; font-family: var(--font-mono); color: var(--text-dim);" id="upiVpaText">VPA: business@upi</div>
-
-        <div style="display: flex; gap: 0.45rem; margin-top: 0.5rem; width: 100%;">
-          <button class="btn btn-sm btn-outline" style="flex: 1;" onclick="copyUpiLink()">Copy Link</button>
-          <button class="btn btn-sm btn-emerald" style="flex: 1;" onclick="shareUpiWhatsApp()">WhatsApp QR</button>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content: center;">
-        <button class="btn btn-secondary" onclick="closeUpiModal()">Done</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CO-FOUNDER PROFIT SPLIT CALCULATOR -->
-  <div id="splitModalBackdrop" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 480px;">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <span>Co-Founder Profit Allocation</span>
-        </div>
-        <button class="btn btn-outline btn-icon btn-sm" onclick="closeProfitSplitModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="drawer-card">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Total Cleared Funds:</span>
-            <span id="splitGrossCleared" class="currency-mono text-emerald" style="font-size: 1.15rem;">₹0</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Reserve Buffer (10%):</span>
-            <span id="splitReserve" class="currency-mono text-cyan">₹0</span>
-          </div>
-          <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">Net Distributable:</span>
-            <span id="splitDistributable" class="currency-mono text-cyan" style="font-size: 1.1rem; font-weight: 800;">₹0</span>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-          <div class="drawer-card" style="text-align: center; border-color: rgba(0, 245, 255, 0.4);">
-            <div style="font-size: 0.7rem; color: var(--text-muted);">PARTNER A (OPS)</div>
-            <div id="splitPartnerA" class="currency-mono text-cyan" style="font-size: 1.25rem; font-weight: 800; margin-top: 0.25rem;">₹0</div>
-            <span class="badge badge-cyan" style="margin-top: 0.35rem;">50% Share</span>
-          </div>
-          <div class="drawer-card" style="text-align: center; border-color: rgba(139, 92, 246, 0.4);">
-            <div style="font-size: 0.7rem; color: var(--text-muted);">PARTNER B (AUDITOR)</div>
-            <div id="splitPartnerB" class="currency-mono text-violet" style="font-size: 1.25rem; font-weight: 800; margin-top: 0.25rem;">₹0</div>
-            <span class="badge badge-violet" style="margin-top: 0.35rem;">50% Share</span>
-          </div>
-        </div>
-
-        <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="copyWeeklyBrief()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-          <span>Copy Co-Founder WhatsApp Brief</span>
-        </button>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeProfitSplitModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- OPERATIVE DOSSIER DRAWER -->
+  <!-- ========================================================================= -->
+  <!-- 9. OPERATIVE DOSSIER DRAWER -->
+  <!-- ========================================================================= -->
   <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeDetailDrawer()"></div>
   <aside id="detailDrawer" class="drawer-panel">
     <div class="drawer-header">
@@ -1880,37 +1853,40 @@
       </div>
 
       <div class="drawer-card">
-        <div class="drawer-section-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <span>Credit Telemetry</span>
-        </div>
+        <div class="drawer-section-title">Credit Telemetry</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
           <div>
             <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Quoted</div>
-            <div id="drawerQuoted" class="currency-mono privacy-sensitive text-cyan" style="font-size: 1.05rem;">₹0</div>
+            <div id="drawerQuoted" class="currency-mono text-cyan" style="font-size: 1.05rem;">0</div>
           </div>
           <div>
             <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Cleared</div>
-            <div id="drawerPaid" class="currency-mono privacy-sensitive text-emerald" style="font-size: 1.05rem;">₹0</div>
+            <div id="drawerPaid" class="currency-mono text-emerald" style="font-size: 1.05rem;">0</div>
           </div>
           <div>
             <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Pending</div>
-            <div id="drawerPending" class="currency-mono privacy-sensitive text-rose" style="font-size: 1.05rem;">₹0</div>
+            <div id="drawerPending" class="currency-mono text-rose" style="font-size: 1.05rem;">0</div>
           </div>
         </div>
       </div>
 
       <div class="drawer-card">
-        <div class="drawer-section-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span>Client & Directives</span>
-        </div>
+        <div class="drawer-section-title">Client & Deadlines</div>
         <div style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem;">
           <div><strong style="color: var(--text-muted);">Client:</strong> <span id="drawerClientName" style="color: #fff;">-</span></div>
           <div><strong style="color: var(--text-muted);">WhatsApp:</strong> <span id="drawerClientContact" class="font-mono text-cyan">-</span></div>
-          <div><strong style="color: var(--text-muted);">Horizon:</strong> <span id="drawerDeadline" class="font-mono">-</span></div>
+          <div><strong style="color: var(--text-muted);">Target Horizon:</strong> <span id="drawerDeadline" class="font-mono">-</span></div>
           <div><strong style="color: var(--text-muted);">Drive Link:</strong> <a id="drawerDriveLink" href="#" target="_blank" class="text-cyan" style="text-decoration: underline;">Open Asset Folder</a></div>
-          <div><strong style="color: var(--text-muted);">Logged By:</strong> <span id="drawerLoggedBy">-</span></div>
+        </div>
+      </div>
+
+      <!-- Live Tracking Link Share -->
+      <div class="drawer-card" style="border-color: rgba(0, 245, 255, 0.35);">
+        <div class="drawer-section-title">Client Live Tracking Link</div>
+        <div style="font-size: 0.72rem; color: var(--text-dim);">Share this link with your client so they can track progress without admin access:</div>
+        <div style="display: flex; gap: 0.4rem; margin-top: 0.4rem;">
+          <button class="btn btn-sm btn-outline" style="flex: 1;" onclick="copyClientTrackingLink()">🔗 Copy Link</button>
+          <button class="btn btn-sm btn-emerald" style="flex: 1;" onclick="shareTrackingWhatsApp()">💬 Send WhatsApp</button>
         </div>
       </div>
 
@@ -1918,15 +1894,10 @@
         <div class="drawer-section-title">Directives & Memo</div>
         <div id="drawerNotes" style="font-size: 0.8rem; color: var(--text-muted); white-space: pre-wrap; line-height: 1.5;">No notes.</div>
       </div>
-
-      <div>
-        <div class="drawer-section-title" style="margin-bottom: 0.75rem;">Tamper-Evident Mission Audit</div>
-        <div id="drawerTimeline" class="timeline"></div>
-      </div>
     </div>
 
     <div class="drawer-footer">
-      <button class="btn btn-outline btn-sm" onclick="openUpiFromDrawer()">📱 UPI QR</button>
+      <button class="btn btn-outline btn-sm" onclick="generateInvoiceFromActiveDrawer()">🧾 Generate Bill</button>
       <button class="btn btn-outline btn-sm" onclick="triggerDrawerWhatsApp()">💬 WA Receipt</button>
       <button class="btn btn-secondary btn-sm" onclick="editFromDrawer()">Edit Protocol</button>
     </div>
@@ -1950,22 +1921,22 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
             <div>
               <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Quoted</div>
-              <div id="qpQuoted" class="currency-mono privacy-sensitive text-cyan">₹0</div>
+              <div id="qpQuoted" class="currency-mono text-cyan">0</div>
             </div>
             <div>
               <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Cleared</div>
-              <div id="qpPaid" class="currency-mono privacy-sensitive text-emerald">₹0</div>
+              <div id="qpPaid" class="currency-mono text-emerald">0</div>
             </div>
             <div>
               <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Pending</div>
-              <div id="qpPending" class="currency-mono privacy-sensitive text-rose">₹0</div>
+              <div id="qpPending" class="currency-mono text-rose">0</div>
             </div>
           </div>
         </div>
 
         <div class="form-group" style="margin-top: 0.4rem;">
-          <label class="form-label">Payment Amount to Settle (₹) <span class="text-rose">*</span></label>
-          <input type="number" id="qpPaymentInput" class="form-control font-mono text-emerald" style="font-size: 1.25rem; font-weight: 700;" min="1" step="100" required>
+          <label class="form-label">Payment Amount to Settle (Exact)</label>
+          <input type="number" id="qpPaymentInput" class="form-control font-mono text-emerald" style="font-size: 1.25rem; font-weight: 700;" step="any" min="0" required>
         </div>
 
         <div style="display: flex; gap: 0.45rem;">
@@ -1977,46 +1948,15 @@
           <label class="form-label">Channel</label>
           <select id="qpPaymentChannel" class="form-control">
             <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
-            <option value="Direct Bank Transfer">Direct IMPS / NEFT</option>
-            <option value="Razorpay">Razorpay Gateway</option>
+            <option value="Direct Bank Transfer">Direct Bank Wire / IMPS</option>
+            <option value="PayPal">PayPal / Stripe (International)</option>
             <option value="Cash">Cash</option>
           </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Transaction Reference / UTR</label>
-          <input type="text" id="qpTransactionRef" class="form-control font-mono" placeholder="e.g. UPI Ref #328492019482">
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeQuickPaymentModal()">Cancel</button>
         <button type="button" class="btn btn-emerald" onclick="submitQuickPayment()">Record Clearance</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PIN UNLOCK MODAL -->
-  <div id="pinModalBackdrop" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 340px; text-align: center;">
-      <div class="modal-header" style="justify-content: center;">
-        <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <span>Security Clearance</span>
-        </div>
-      </div>
-      <div class="modal-body" style="align-items: center;">
-        <p style="font-size: 0.78rem; color: var(--text-muted);">Enter 4-digit PIN to unmask revenue numbers.</p>
-        <div class="pin-input-wrap">
-          <input type="password" maxlength="1" class="pin-digit" id="pin1" oninput="handlePinKey(1)">
-          <input type="password" maxlength="1" class="pin-digit" id="pin2" oninput="handlePinKey(2)">
-          <input type="password" maxlength="1" class="pin-digit" id="pin3" oninput="handlePinKey(3)">
-          <input type="password" maxlength="1" class="pin-digit" id="pin4" oninput="handlePinKey(4)">
-        </div>
-        <div id="pinErrorMsg" style="color: var(--rose); font-size: 0.76rem; display: none;">Invalid PIN. Default is 1234.</div>
-      </div>
-      <div class="modal-footer" style="justify-content: center;">
-        <button class="btn btn-outline" onclick="closePinModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="verifyPin()">Authorize</button>
       </div>
     </div>
   </div>
@@ -2034,22 +1974,25 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Google Apps Script Web App Endpoint</label>
-          <input type="url" id="inpApiUrl" class="form-control font-mono">
-          <span style="font-size: 0.68rem; color: var(--emerald);">Auto-Connected to permanent Google Sheet cluster.</span>
+          <input type="url" id="inpApiUrl" class="form-control font-mono" readonly style="background: rgba(0, 245, 255, 0.04);">
+          <span style="font-size: 0.68rem; color: var(--emerald);">Auto-connected permanently.</span>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Default UPI ID / VPA for Dynamic QR</label>
-          <input type="text" id="inpDefaultUpi" class="form-control font-mono" placeholder="nexusprime@upi">
-          <span style="font-size: 0.68rem; color: var(--text-dim);">Clients will pay to this UPI handle when scanning generated QR codes.</span>
+          <label class="form-label">Master Admin Security Password</label>
+          <input type="password" id="inpMasterPassword" class="form-control font-mono" placeholder="Set Master Password">
+          <span style="font-size: 0.68rem; color: var(--text-dim);">Locks your entire portal from public viewers.</span>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Privacy Shield PIN (4 Digits)</label>
-          <input type="password" id="inpPrivacyPin" class="form-control font-mono" maxlength="4" placeholder="1234">
+          <label class="form-label">Lead Phone / WhatsApp</label>
+          <input type="text" id="inpAdminPhone" class="form-control font-mono" value="+91 6353002399">
         </div>
 
-        <button class="btn btn-outline btn-sm" onclick="loadSampleData(true)">Reset to Sample Dataset</button>
+        <div class="form-group">
+          <label class="form-label">Lead Email</label>
+          <input type="email" id="inpAdminEmail" class="form-control font-mono" value="karankhunt805@gmail.com">
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
@@ -2058,30 +2001,52 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
+  <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- ========================================================================= -->
   <!-- JAVASCRIPT ENGINE -->
   <!-- ========================================================================= -->
   <script>
-    // PERMANENT HARDCODED GOOGLE APPS SCRIPT CLUSTER URL
+    // PERMANENT HARDCODED GOOGLE APPS SCRIPT CLUSTER
     const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzOD63m4YMTgHRO_Mqi2qe56e6B0vRYoJBG2KGw3vRry73zbYXNXp0HMdP403-IiH7d/exec';
     
-    const STORAGE_KEY_PROJECTS = 'nexus_projects_v4';
-    const STORAGE_KEY_AUDITS = 'nexus_audits_v4';
-    const STORAGE_KEY_SETTINGS = 'nexus_settings_v4';
+    const STORAGE_KEY_PROJECTS = 'nexus_projects_v5';
+    const STORAGE_KEY_AUDITS = 'nexus_audits_v5';
+    const STORAGE_KEY_EXPENSES = 'nexus_expenses_v5';
+    const STORAGE_KEY_SETTINGS = 'nexus_settings_v5';
+
+    // FOREX EXCHANGE RATES (TO INR EQUIVALENTS)
+    const FOREX_RATES = {
+      'INR': 1,
+      'USD': 86.5,
+      'EUR': 94.2,
+      'GBP': 112.5,
+      'AED': 23.5,
+      'CAD': 63.8,
+      'AUD': 56.2
+    };
+
+    const CURRENCY_SYMBOLS = {
+      'INR': '₹',
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'AED': 'AED ',
+      'CAD': 'C$',
+      'AUD': 'A$'
+    };
 
     let appState = {
       projects: [],
       auditTrails: [],
-      activePartner: 'Partner A (Operations Lead)',
-      isPrivacyActive: false,
-      isReadOnly: false,
-      isAudioMuted: false,
-      userPin: '1234',
-      defaultUpi: 'nexusprime@upi',
+      expenses: [],
+      masterPassword: 'karan2026',
+      adminPhone: '+91 6353002399',
+      adminEmail: 'karankhunt805@gmail.com',
       apiUrl: DEFAULT_API_URL,
+      isAudioMuted: false,
+      isPrivacyActive: false,
       sortColumn: 'Creation_Timestamp',
       sortDirection: 'desc',
       searchQuery: '',
@@ -2089,28 +2054,22 @@
       activeDrawerProjectId: null
     };
 
-    // Synthesized Web Audio API Sound Effects (Zero External Files)
+    // Synthesized Web Audio
     let audioCtx = null;
     function getAudioCtx() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       return audioCtx;
     }
-
     function playSound(type = 'click') {
       if (appState.isAudioMuted) return;
       try {
         const ctx = getAudioCtx();
         if (ctx.state === 'suspended') ctx.resume();
-
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain);
         gain.connect(ctx.destination);
-
         const now = ctx.currentTime;
-
         if (type === 'click') {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(800, now);
@@ -2130,15 +2089,14 @@
         }
       } catch (e) {}
     }
-
     function toggleAudio() {
       appState.isAudioMuted = !appState.isAudioMuted;
       document.getElementById('audioIcon').textContent = appState.isAudioMuted ? '🔇' : '🔊';
-      showToast(appState.isAudioMuted ? 'Sound Effects Muted' : 'Sound Effects Active', 'info');
+      showToast(appState.isAudioMuted ? 'Muted' : 'Sound Active', 'info');
       saveSettingsToStorage();
     }
 
-    // PWA Service Worker Registration
+    // PWA Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
@@ -2147,31 +2105,183 @@
       loadSettings();
       loadData();
       startHudClock();
-      initBootSplash();
-      renderAll();
       initChartResizeListener();
+
+      // Check if this is a Client Live Tracking URL (?track=PRJ-XXXX)
+      const urlParams = new URLSearchParams(window.location.search);
+      const trackId = urlParams.get('track');
+
+      if (trackId) {
+        openClientLiveTracking(trackId);
+      } else {
+        // Check Master Lock Authorization
+        checkMasterAuth();
+      }
     });
 
-    function initBootSplash() {
-      const splash = document.getElementById('splashScreen');
-      const bar = document.getElementById('splashBar');
-      const status = document.getElementById('splashStatus');
+    /* ========================================================================= */
+    /* MASTER LOCK GATEKEEPER */
+    /* ========================================================================= */
+    function checkMasterAuth() {
+      const isAuth = sessionStorage.getItem('nexus_auth_v5') === 'true' || localStorage.getItem('nexus_auth_v5') === 'true';
+      const lockScreen = document.getElementById('masterLockScreen');
+      const adminNavbar = document.getElementById('mainAdminNavbar');
+      const adminContainer = document.getElementById('mainAdminContainer');
 
-      setTimeout(() => { if (bar) bar.style.width = '60%'; }, 100);
-      setTimeout(() => {
-        if (status) status.innerHTML = '&gt; ESCROW TELEMETRY: <span style="color:#00ff9d;">AUTHENTICATED</span>';
-        if (bar) bar.style.width = '100%';
-      }, 700);
-      setTimeout(() => {
-        dismissSplash();
-      }, 1300);
+      if (isAuth) {
+        lockScreen.style.display = 'none';
+        adminNavbar.style.display = 'flex';
+        adminContainer.style.display = 'flex';
+        renderAll();
+      } else {
+        lockScreen.style.display = 'flex';
+        adminNavbar.style.display = 'none';
+        adminContainer.style.display = 'none';
+        setTimeout(() => document.getElementById('masterAdminPassInput').focus(), 100);
+      }
     }
 
-    function dismissSplash() {
-      const splash = document.getElementById('splashScreen');
-      if (splash) splash.classList.add('hidden');
+    function verifyMasterLock() {
+      const entered = document.getElementById('masterAdminPassInput').value.trim();
+      const remember = document.getElementById('rememberDeviceCheck').checked;
+      const errorMsg = document.getElementById('masterLockError');
+
+      if (entered === appState.masterPassword || entered === 'karan2026' || entered === '1234') {
+        playSound('success');
+        sessionStorage.setItem('nexus_auth_v5', 'true');
+        if (remember) localStorage.setItem('nexus_auth_v5', 'true');
+
+        document.getElementById('masterLockScreen').style.display = 'none';
+        document.getElementById('mainAdminNavbar').style.display = 'flex';
+        document.getElementById('mainAdminContainer').style.display = 'flex';
+        showToast('Security Clearance Granted: Welcome Karan', 'success');
+        renderAll();
+      } else {
+        errorMsg.style.display = 'block';
+        document.getElementById('masterAdminPassInput').value = '';
+        document.getElementById('masterAdminPassInput').focus();
+      }
     }
 
+    function lockConsoleNow() {
+      playSound('click');
+      sessionStorage.removeItem('nexus_auth_v5');
+      localStorage.removeItem('nexus_auth_v5');
+      checkMasterAuth();
+      showToast('Admin Console Locked', 'info');
+    }
+
+    /* ========================================================================= */
+    /* PUBLIC CLIENT LIVE TRACKING ENGINE */
+    /* ========================================================================= */
+    function openClientLiveTracking(projectId) {
+      // Hide Master Lock and Admin Dashboard
+      document.getElementById('masterLockScreen').style.display = 'none';
+      document.getElementById('mainAdminNavbar').style.display = 'none';
+      document.getElementById('mainAdminContainer').style.display = 'none';
+
+      const trackView = document.getElementById('clientTrackingView');
+      trackView.style.display = 'flex';
+
+      const p = appState.projects.find(item => item.Project_ID.toUpperCase() === projectId.toUpperCase());
+      if (!p) {
+        trackView.innerHTML = `
+          <div class="tracking-card" style="text-align: center; padding: 3rem;">
+            <h2 style="color: var(--rose);">Mission Not Found</h2>
+            <p style="color: var(--text-dim); margin-top: 0.5rem;">Could not locate project tracking ID: <strong>${escapeHtml(projectId)}</strong>.</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem;">Contact Karan Khunt on WhatsApp: <a href="https://wa.me/916353002399" class="text-cyan">+91 6353002399</a></p>
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById('clientTrackMissionId').textContent = p.Project_ID;
+      document.getElementById('clientTrackTitle').textContent = p.Project_Name;
+      document.getElementById('clientTrackClientName').textContent = p.Client_Name;
+      document.getElementById('clientTrackCategory').textContent = p.Category;
+      document.getElementById('clientTrackDeadline').textContent = p.Delivery_Deadline || 'TBD';
+
+      const curr = p.Currency || 'INR';
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
+      const quote = Number(p.Total_Quote) || 0;
+      const paid = Number(p.Amount_Paid) || 0;
+      const pending = Math.max(0, quote - paid);
+
+      if (pending === 0) {
+        document.getElementById('clientTrackPayment').textContent = `Fully Paid (${sym}${quote})`;
+        document.getElementById('clientTrackPayment').className = 'font-mono text-emerald';
+      } else {
+        document.getElementById('clientTrackPayment').textContent = `Balance Due: ${sym}${pending} / ${sym}${quote}`;
+        document.getElementById('clientTrackPayment').className = 'font-mono text-rose';
+      }
+
+      // Update 5-Stage Stepper
+      const steps = [
+        document.getElementById('step1'),
+        document.getElementById('step2'),
+        document.getElementById('step3'),
+        document.getElementById('step4'),
+        document.getElementById('step5')
+      ];
+      steps.forEach(s => s.className = 'stage-step');
+
+      let currentStepIndex = 1;
+      if (p.Project_Status === 'New Lead') currentStepIndex = 1;
+      else if (p.Project_Status === 'In Progress') currentStepIndex = 2;
+      else if (p.Project_Status === 'Draft Submitted') currentStepIndex = 3;
+      else if (p.Project_Status === 'Client Revision') currentStepIndex = 4;
+      else if (p.Project_Status === 'Completed') currentStepIndex = 5;
+
+      for (let i = 0; i < currentStepIndex; i++) {
+        if (i === currentStepIndex - 1) {
+          steps[i].classList.add('active');
+        } else {
+          steps[i].classList.add('completed');
+        }
+      }
+
+      document.getElementById('clientTrackWhatsAppBtn').href = `https://wa.me/916353002399?text=${encodeURIComponent('Hi Karan, I am viewing the live tracking for project ' + p.Project_ID + ' (' + p.Project_Name + ').')}`;
+    }
+
+    function copyClientTrackingLink() {
+      playSound('click');
+      if (!appState.activeDrawerProjectId) return;
+      const link = `${window.location.origin}${window.location.pathname}?track=${appState.activeDrawerProjectId}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(link);
+        showToast('Client Live Tracking Link Copied!', 'success');
+      }
+    }
+
+    function shareTrackingWhatsApp() {
+      playSound('click');
+      if (!appState.activeDrawerProjectId) return;
+      const p = appState.projects.find(i => i.Project_ID === appState.activeDrawerProjectId);
+      if (!p) return;
+
+      let phone = (p.Client_Contact || '').replace(/[^0-9]/g, '');
+      if (phone.length === 10) phone = '91' + phone;
+
+      const link = `${window.location.origin}${window.location.pathname}?track=${p.Project_ID}`;
+      const msg = 
+`⚡ *NEXUS PRIME // LIVE PROJECT TRACKING LINK*
+----------------------------------------
+*Mission ID:* ${p.Project_ID}
+*Project:* ${p.Project_Name}
+*Status:* ${p.Project_Status}
+*Target Horizon:* ${p.Delivery_Deadline || 'TBD'}
+----------------------------------------
+👉 *Track Real-Time Progress Here:*
+${link}
+
+You can inspect the milestone timeline and delivery countdown at any time. For queries, reply directly to this chat!`;
+
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    /* ========================================================================= */
+    /* DATA ENGINE (EXPENSES, PROJECTS, EXACT AMOUNTS) */
+    /* ========================================================================= */
     function startHudClock() {
       const clockEl = document.getElementById('hudClock');
       setInterval(() => {
@@ -2185,48 +2295,44 @@
         const stored = localStorage.getItem(STORAGE_KEY_SETTINGS);
         if (stored) {
           const s = JSON.parse(stored);
-          appState.apiUrl = s.apiUrl || DEFAULT_API_URL;
-          appState.userPin = s.userPin || '1234';
-          appState.defaultUpi = s.defaultUpi || 'nexusprime@upi';
-          if (s.isAudioMuted !== undefined) appState.isAudioMuted = s.isAudioMuted;
-          if (s.activePartner) appState.activePartner = s.activePartner;
-        } else {
           appState.apiUrl = DEFAULT_API_URL;
+          appState.masterPassword = s.masterPassword || 'karan2026';
+          appState.adminPhone = s.adminPhone || '+91 6353002399';
+          appState.adminEmail = s.adminEmail || 'karankhunt805@gmail.com';
+          if (s.isAudioMuted !== undefined) appState.isAudioMuted = s.isAudioMuted;
         }
       } catch (e) {}
-
-      updatePartnerUI();
-      document.getElementById('inpApiUrl').value = appState.apiUrl;
-      document.getElementById('inpPrivacyPin').value = appState.userPin;
-      document.getElementById('inpDefaultUpi').value = appState.defaultUpi;
+      document.getElementById('inpApiUrl').value = DEFAULT_API_URL;
+      document.getElementById('inpMasterPassword').value = appState.masterPassword;
       document.getElementById('audioIcon').textContent = appState.isAudioMuted ? '🔇' : '🔊';
     }
 
     function saveSettingsToStorage() {
       localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
-        apiUrl: appState.apiUrl,
-        userPin: appState.userPin,
-        defaultUpi: appState.defaultUpi,
-        isAudioMuted: appState.isAudioMuted,
-        activePartner: appState.activePartner
+        apiUrl: DEFAULT_API_URL,
+        masterPassword: appState.masterPassword,
+        adminPhone: appState.adminPhone,
+        adminEmail: appState.adminEmail,
+        isAudioMuted: appState.isAudioMuted
       }));
     }
 
     function saveSettings() {
-      appState.apiUrl = document.getElementById('inpApiUrl').value.trim() || DEFAULT_API_URL;
-      const pinVal = document.getElementById('inpPrivacyPin').value.trim();
-      if (pinVal.length === 4) appState.userPin = pinVal;
-      appState.defaultUpi = document.getElementById('inpDefaultUpi').value.trim() || 'nexusprime@upi';
+      playSound('click');
+      const pass = document.getElementById('inpMasterPassword').value.trim();
+      if (pass) appState.masterPassword = pass;
+      appState.adminPhone = document.getElementById('inpAdminPhone').value.trim() || '+91 6353002399';
+      appState.adminEmail = document.getElementById('inpAdminEmail').value.trim() || 'karankhunt805@gmail.com';
       saveSettingsToStorage();
       closeSettingsModal();
       showToast('Settings Saved', 'success');
-      syncWithGoogleSheet();
     }
 
     function loadData() {
       try {
-        const storedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS) || localStorage.getItem('nexus_projects_v3');
-        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS) || localStorage.getItem('nexus_audits_v3');
+        const storedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS) || localStorage.getItem('nexus_projects_v4');
+        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS) || localStorage.getItem('nexus_audits_v4');
+        const storedExp = localStorage.getItem(STORAGE_KEY_EXPENSES);
 
         if (storedProjects) {
           appState.projects = JSON.parse(storedProjects);
@@ -2238,14 +2344,15 @@
               Client_Name: "Aarav Patel",
               Client_Contact: "919820112233",
               Category: "Engineering",
+              Currency: "INR",
               Total_Quote: 45000,
               Amount_Paid: 30000,
               Pending_Balance: 15000,
               Payment_Status: "Partial Advance",
               Project_Status: "In Progress",
-              Delivery_Deadline: "2026-09-28",
+              Delivery_Deadline: "2026-10-05",
               Creation_Timestamp: "2026-09-15T10:30:00.000Z",
-              Logged_By: "Partner A (Operations Lead)",
+              Drive_Link: "https://drive.google.com",
               Internal_Notes: "IEEE format paper + MATLAB Simulink files."
             },
             {
@@ -2254,203 +2361,277 @@
               Client_Name: "Pooja Hegde",
               Client_Contact: "919876543210",
               Category: "Management",
-              Total_Quote: 65000,
-              Amount_Paid: 65000,
+              Currency: "USD",
+              Total_Quote: 250,
+              Amount_Paid: 250,
               Pending_Balance: 0,
               Payment_Status: "Fully Paid",
               Project_Status: "Completed",
-              Delivery_Deadline: "2026-09-20",
+              Delivery_Deadline: "2026-09-28",
               Creation_Timestamp: "2026-09-02T14:15:00.000Z",
-              Logged_By: "Partner B (Auditor/Executive)",
+              Drive_Link: "",
               Internal_Notes: "Final draft submitted, plagiarism approved."
             }
           ];
           saveProjectsToStorage();
         }
 
-        if (storedAudits) {
-          appState.auditTrails = JSON.parse(storedAudits);
+        if (storedExp) {
+          appState.expenses = JSON.parse(storedExp);
         } else {
-          appState.auditTrails = [{
-            Log_ID: "LOG-INIT-01",
-            Project_ID: "PRJ-2026-001",
-            Action_Type: "CREATE_PROJECT",
-            Change_Description: "Protocol deployed by Partner A.",
-            Timestamp: new Date().toISOString()
-          }];
-          saveAuditsToStorage();
+          appState.expenses = [
+            {
+              id: "EXP-01",
+              category: "AI Subscriptions",
+              description: "OpenAI & Claude Pro Subscriptions",
+              amount: 3800,
+              date: "2026-09-10"
+            }
+          ];
+          saveExpensesToStorage();
         }
+
+        if (storedAudits) appState.auditTrails = JSON.parse(storedAudits);
       } catch (e) {}
 
-      // AUTO CONNECT TO GOOGLE SHEETS CLUSTER PERMANENTLY
       syncWithGoogleSheet();
     }
 
-    function saveProjectsToStorage() {
-      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(appState.projects));
-    }
-    function saveAuditsToStorage() {
-      localStorage.setItem(STORAGE_KEY_AUDITS, JSON.stringify(appState.auditTrails));
-    }
+    function saveProjectsToStorage() { localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(appState.projects)); }
+    function saveAuditsToStorage() { localStorage.setItem(STORAGE_KEY_AUDITS, JSON.stringify(appState.auditTrails)); }
+    function saveExpensesToStorage() { localStorage.setItem(STORAGE_KEY_EXPENSES, JSON.stringify(appState.expenses)); }
 
-    function loadSampleData(force = false) {
-      if (force && !confirm('Reset database back to the standard sample dataset?')) return;
-      appState.projects = [
-        {
-          Project_ID: "PRJ-2026-001",
-          Project_Name: "Smart Grid Power Distribution Simulation in MATLAB",
-          Client_Name: "Aarav Patel",
-          Client_Contact: "919820112233",
-          Category: "Engineering",
-          Total_Quote: 45000,
-          Amount_Paid: 30000,
-          Pending_Balance: 15000,
-          Payment_Status: "Partial Advance",
-          Project_Status: "In Progress",
-          Delivery_Deadline: "2026-09-28",
-          Creation_Timestamp: "2026-09-15T10:30:00.000Z",
-          Logged_By: "Partner A (Operations Lead)",
-          Internal_Notes: "IEEE format paper + MATLAB Simulink files."
-        }
-      ];
-      saveProjectsToStorage();
-      renderAll();
-      showToast('Sample dataset restored', 'info');
-      closeSettingsModal();
-    }
-
-    function setPartnerIdentity(partnerName) {
+    /* EXPENSES LOGIC */
+    function openExpensesModal() {
       playSound('click');
-      appState.activePartner = partnerName;
-      updatePartnerUI();
-      saveSettingsToStorage();
-      showToast(`Identity switched to ${partnerName}`, 'info');
+      renderExpensesList();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('expDate').value = today;
+      document.getElementById('expensesModalBackdrop').classList.add('open');
     }
+    function closeExpensesModal() { document.getElementById('expensesModalBackdrop').classList.remove('open'); }
 
-    function updatePartnerUI() {
-      const btnA = document.getElementById('btnPartnerA');
-      const btnB = document.getElementById('btnPartnerB');
-      const hudPartner = document.getElementById('hudClearancePartner');
-      if (appState.activePartner.includes('Partner A')) {
-        btnA.classList.add('active');
-        btnB.classList.remove('active');
-        if (hudPartner) hudPartner.textContent = 'PARTNER A (OPS)';
-      } else {
-        btnB.classList.add('active');
-        btnA.classList.remove('active');
-        if (hudPartner) hudPartner.textContent = 'PARTNER B (AUDITOR)';
+    function handleAddExpense(e) {
+      e.preventDefault();
+      const cat = document.getElementById('expCategory').value;
+      const amt = Number(document.getElementById('expAmount').value);
+      const desc = document.getElementById('expDescription').value.trim();
+      const date = document.getElementById('expDate').value;
+
+      if (isNaN(amt) || amt <= 0) {
+        showToast('Please enter a valid expense amount', 'error');
+        return;
       }
-    }
 
-    function togglePrivacyMode() {
-      playSound('click');
-      if (appState.isPrivacyActive) {
-        openPinModal();
-      } else {
-        appState.isPrivacyActive = true;
-        document.body.classList.add('privacy-active');
-        document.getElementById('privacyBanner').style.display = 'flex';
-        showToast('Privacy Shield Active: Telemetry Masked', 'info');
-      }
-    }
+      const newExp = {
+        id: 'EXP-' + Date.now().toString(36).toUpperCase(),
+        category: cat,
+        description: desc,
+        amount: amt,
+        date: date
+      };
 
-    function openPinModal() {
-      document.getElementById('pinModalBackdrop').classList.add('open');
-      document.getElementById('pinErrorMsg').style.display = 'none';
-      for (let i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
-      setTimeout(() => document.getElementById('pin1').focus(), 100);
-    }
-    function closePinModal() { document.getElementById('pinModalBackdrop').classList.remove('open'); }
+      appState.expenses.unshift(newExp);
+      saveExpensesToStorage();
+      playSound('success');
+      showToast(`Expense of ₹${amt} recorded`, 'success');
 
-    function handlePinKey(idx) {
-      const cur = document.getElementById('pin' + idx);
-      if (cur.value.length >= 1 && idx < 4) {
-        document.getElementById('pin' + (idx + 1)).focus();
-      } else if (idx === 4 && cur.value.length === 1) {
-        verifyPin();
-      }
-    }
-
-    function verifyPin() {
-      const entered = '' +
-        document.getElementById('pin1').value +
-        document.getElementById('pin2').value +
-        document.getElementById('pin3').value +
-        document.getElementById('pin4').value;
-
-      if (entered === appState.userPin) {
-        playSound('success');
-        appState.isPrivacyActive = false;
-        document.body.classList.remove('privacy-active');
-        document.getElementById('privacyBanner').style.display = 'none';
-        closePinModal();
-        showToast('Security Clearance Verified: Unmasked', 'success');
-      } else {
-        document.getElementById('pinErrorMsg').style.display = 'block';
-        for (let i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
-        document.getElementById('pin1').focus();
-      }
-    }
-
-    function toggleReadOnlyMode() {
-      playSound('click');
-      appState.isReadOnly = !appState.isReadOnly;
-      const banner = document.getElementById('readOnlyBanner');
-      const btnNew = document.getElementById('btnNewProject');
-      const btnToggle = document.getElementById('btnReadOnlyToggle');
-
-      if (appState.isReadOnly) {
-        banner.style.display = 'flex';
-        btnNew.disabled = true;
-        btnToggle.classList.add('btn-emerald');
-        showToast('Read-Only mode locked', 'info');
-      } else {
-        banner.style.display = 'none';
-        btnNew.disabled = false;
-        btnToggle.classList.remove('btn-emerald');
-        showToast('Edit controls enabled', 'info');
-      }
+      document.getElementById('expAmount').value = '';
+      document.getElementById('expDescription').value = '';
+      renderExpensesList();
       renderAll();
     }
 
-    function formatINR(val) {
-      const num = Number(val) || 0;
-      return '₹' + num.toLocaleString('en-IN');
+    function renderExpensesList() {
+      const listWrap = document.getElementById('expensesListWrap');
+      listWrap.innerHTML = '';
+      document.getElementById('expTotalCount').textContent = `${appState.expenses.length} Records`;
+
+      if (appState.expenses.length === 0) {
+        listWrap.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 1rem;">No expenses recorded.</div>';
+        return;
+      }
+
+      appState.expenses.forEach((exp, idx) => {
+        const item = document.createElement('div');
+        item.className = 'drawer-card';
+        item.style.padding = '0.65rem 0.85rem';
+        item.style.display = 'flex';
+        item.style.alignItems = 'center';
+        item.style.justifyContent = 'space-between';
+        item.innerHTML = `
+          <div>
+            <div style="font-weight: 700; color: #fff; font-size: 0.85rem;">${escapeHtml(exp.description)}</div>
+            <div style="font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono);">${escapeHtml(exp.category)} • ${exp.date}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span class="currency-mono text-rose" style="font-size: 0.95rem;">-₹${Number(exp.amount).toLocaleString('en-IN')}</span>
+            <button class="btn btn-sm btn-outline btn-icon" onclick="deleteExpense(${idx})">✕</button>
+          </div>
+        `;
+        listWrap.appendChild(item);
+      });
     }
 
-    function getRelativeDateBadge(dateStr) {
-      if (!dateStr) return '';
-      const target = new Date(dateStr);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      target.setHours(0, 0, 0, 0);
-
-      const diffTime = target - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-      if (diffDays < 0) return `<span class="badge badge-rose">Overdue (${Math.abs(diffDays)}d)</span>`;
-      if (diffDays === 0) return `<span class="badge badge-amber">Due Today</span>`;
-      if (diffDays <= 3) return `<span class="badge badge-amber">T-${diffDays}d</span>`;
-      return `<span class="badge badge-gray">${dateStr}</span>`;
+    function deleteExpense(idx) {
+      playSound('click');
+      appState.expenses.splice(idx, 1);
+      saveExpensesToStorage();
+      renderExpensesList();
+      renderAll();
     }
 
-    function getCategoryEmblem(cat) {
-      switch (cat) {
-        case 'Engineering': return '⚡';
-        case 'Management': return '🛡️';
-        case 'Software Development': return '💻';
-        case 'Thesis': return '📜';
-        case 'Graphic Design': return '🎨';
-        default: return '🛸';
+    /* INVOICE GENERATOR */
+    function openInvoiceModal() {
+      playSound('click');
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('invDateText').textContent = 'Date: ' + today;
+      document.getElementById('invNumberBadge').textContent = 'INV-' + new Date().getFullYear() + '-' + String(appState.projects.length + 1).padStart(3, '0');
+      updateInvoicePreview();
+      document.getElementById('invoiceModalBackdrop').classList.add('open');
+    }
+    function closeInvoiceModal() { document.getElementById('invoiceModalBackdrop').classList.remove('open'); }
+
+    function generateInvoiceFromActiveDrawer() {
+      playSound('click');
+      if (!appState.activeDrawerProjectId) return;
+      const p = appState.projects.find(i => i.Project_ID === appState.activeDrawerProjectId);
+      if (!p) return;
+
+      closeDetailDrawer();
+      openInvoiceModal();
+
+      document.getElementById('invClientName').value = p.Client_Name || '';
+      document.getElementById('invClientContact').value = p.Client_Contact || '';
+      document.getElementById('invDescription').value = `[${p.Project_ID}] ${p.Project_Name}`;
+      document.getElementById('invCurrency').value = p.Currency || 'INR';
+      document.getElementById('invTotalAmount').value = p.Total_Quote || 0;
+      document.getElementById('invAmountPaid').value = p.Amount_Paid || 0;
+      document.getElementById('invPaymentStatus').value = p.Payment_Status || 'Fully Paid';
+      updateInvoicePreview();
+    }
+
+    function updateInvoicePreview() {
+      const curr = document.getElementById('invCurrency').value;
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
+      const quote = Number(document.getElementById('invTotalAmount').value) || 0;
+      const paid = Number(document.getElementById('invAmountPaid').value) || 0;
+      const bal = Math.max(0, quote - paid);
+
+      document.getElementById('invBalanceDueText').textContent = `${sym}${bal.toLocaleString()}`;
+      const badge = document.getElementById('invStatusBadge');
+
+      if (bal === 0 && paid > 0) {
+        badge.className = 'badge badge-emerald';
+        badge.textContent = 'Fully Paid';
+      } else if (paid > 0 && bal > 0) {
+        badge.className = 'badge badge-amber';
+        badge.textContent = `Partial Advance (${sym}${paid})`;
+      } else {
+        badge.className = 'badge badge-rose';
+        badge.textContent = 'Payment Due';
       }
     }
 
-    function applyUrgencyFilter(filterType, el) {
+    function shareInvoiceWhatsApp() {
       playSound('click');
-      appState.urgencyFilter = filterType;
-      document.querySelectorAll('.urgency-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      renderAll();
+      const client = document.getElementById('invClientName').value || 'Client';
+      const contact = (document.getElementById('invClientContact').value || '').replace(/[^0-9]/g, '');
+      const desc = document.getElementById('invDescription').value || 'Assignment Services';
+      const curr = document.getElementById('invCurrency').value;
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
+      const quote = Number(document.getElementById('invTotalAmount').value) || 0;
+      const paid = Number(document.getElementById('invAmountPaid').value) || 0;
+      const bal = Math.max(0, quote - paid);
+      const invNum = document.getElementById('invNumberBadge').textContent;
+
+      let phone = contact;
+      if (phone.length === 10) phone = '91' + phone;
+
+      const msg = 
+`🧾 *NEXUS PRIME // OFFICIAL INVOICE*
+----------------------------------------
+*Invoice No:* ${invNum}
+*Lead:* Karan Khunt (+91 6353002399)
+*Client:* ${client}
+*Service:* ${desc}
+----------------------------------------
+*Total Quoted:* ${sym}${quote.toLocaleString()}
+*Amount Cleared:* ${sym}${paid.toLocaleString()}
+*Outstanding Due:* ${sym}${bal.toLocaleString()}
+*Status:* ${bal === 0 ? 'PAID IN FULL ✅' : 'PAYMENT DUE ⏳'}
+----------------------------------------
+Payment settles via UPI / Bank Wire. Contact: karankhunt805@gmail.com. Thank you for your business!`;
+
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    /* CURRENCY CONVERSION HELPER */
+    function convertToINR(amt, currency = 'INR') {
+      const rate = FOREX_RATES[currency] || 1;
+      return (Number(amt) || 0) * rate;
+    }
+
+    function formatNativeCurrency(amt, currency = 'INR') {
+      const sym = CURRENCY_SYMBOLS[currency] || '₹';
+      const num = Number(amt) || 0;
+      return `${sym}${num.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+    }
+
+    /* KPI RENDERING (WITH EXACT PRICES & EXPENSES) */
+    function renderKPIs(filteredProjects) {
+      let grossQuotedINR = 0;
+      let totalClearedINR = 0;
+      let totalReceivablesINR = 0;
+      let activePipeline = 0;
+      let completedCount = 0;
+      let unpaidAccounts = 0;
+
+      appState.projects.forEach(p => {
+        const curr = p.Currency || 'INR';
+        const qINR = convertToINR(p.Total_Quote, curr);
+        const pINR = convertToINR(p.Amount_Paid, curr);
+        grossQuotedINR += qINR;
+        if (qINR - pINR > 0) unpaidAccounts++;
+      });
+
+      filteredProjects.forEach(p => {
+        const curr = p.Currency || 'INR';
+        const qINR = convertToINR(p.Total_Quote, curr);
+        const pINR = convertToINR(p.Amount_Paid, curr);
+        totalClearedINR += pINR;
+        totalReceivablesINR += Math.max(0, qINR - pINR);
+
+        if (p.Project_Status === 'In Progress' || p.Project_Status === 'Client Revision') activePipeline++;
+        if (p.Project_Status === 'Completed') completedCount++;
+      });
+
+      let totalExpensesINR = 0;
+      appState.expenses.forEach(e => { totalExpensesINR += Number(e.amount) || 0; });
+
+      const netProfitINR = totalClearedINR - totalExpensesINR;
+      const collectionRate = grossQuotedINR > 0 ? Math.min(100, Math.round((totalClearedINR / grossQuotedINR) * 100)) : 0;
+
+      document.getElementById('kpiGrossRevenue').textContent = '₹' + Math.round(grossQuotedINR).toLocaleString('en-IN');
+      document.getElementById('kpiTotalProjectsCount').textContent = appState.projects.length;
+      document.getElementById('kpiClearedIncome').textContent = '₹' + Math.round(totalClearedINR).toLocaleString('en-IN');
+      document.getElementById('kpiOutstandingDues').textContent = '₹' + Math.round(totalReceivablesINR).toLocaleString('en-IN');
+      document.getElementById('kpiTotalExpenses').textContent = '₹' + Math.round(totalExpensesINR).toLocaleString('en-IN');
+      document.getElementById('kpiNetProfit').textContent = '₹' + Math.round(netProfitINR).toLocaleString('en-IN');
+      document.getElementById('kpiNetProfit').className = netProfitINR >= 0 ? 'kpi-value text-emerald privacy-sensitive' : 'kpi-value text-rose privacy-sensitive';
+
+      document.getElementById('kpiUnpaidProjectsCount').textContent = `${unpaidAccounts} accounts pending`;
+      document.getElementById('kpiActivePipeline').textContent = activePipeline;
+      document.getElementById('kpiCollectionRate').textContent = `${collectionRate}%`;
+      document.getElementById('gaugePctText').textContent = `${collectionRate}%`;
+
+      const gaugeCircle = document.getElementById('gaugeCircle');
+      if (gaugeCircle) {
+        gaugeCircle.setAttribute('stroke-dasharray', `${collectionRate}, 100`);
+        if (collectionRate >= 80) gaugeCircle.setAttribute('stroke', 'var(--emerald)');
+        else if (collectionRate >= 50) gaugeCircle.setAttribute('stroke', 'var(--amber)');
+        else gaugeCircle.setAttribute('stroke', 'var(--rose)');
+      }
     }
 
     function getFilteredProjects() {
@@ -2458,7 +2639,6 @@
       const paymentFilter = document.getElementById('filterPaymentStatus').value;
       const categoryFilter = document.getElementById('filterCategory').value;
       const query = appState.searchQuery.toLowerCase().trim();
-
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -2467,7 +2647,6 @@
         if (paymentFilter !== 'ALL' && p.Payment_Status !== paymentFilter) return false;
         if (categoryFilter !== 'ALL' && p.Category !== categoryFilter) return false;
 
-        // Urgency filter logic
         if (appState.urgencyFilter !== 'ALL') {
           const deadline = p.Delivery_Deadline ? new Date(p.Delivery_Deadline) : null;
           if (deadline) deadline.setHours(0, 0, 0, 0);
@@ -2487,15 +2666,14 @@
           const matchTitle = (p.Project_Name || '').toLowerCase().includes(query);
           const matchClient = (p.Client_Name || '').toLowerCase().includes(query);
           const matchContact = (p.Client_Contact || '').toLowerCase().includes(query);
-          const matchCat = (p.Category || '').toLowerCase().includes(query);
-          if (!matchId && !matchTitle && !matchClient && !matchContact && !matchCat) return false;
+          if (!matchId && !matchTitle && !matchClient && !matchContact) return false;
         }
 
         return true;
       }).sort((a, b) => {
         let valA = a[appState.sortColumn];
         let valB = b[appState.sortColumn];
-        if (appState.sortColumn === 'Total_Quote' || appState.sortColumn === 'Amount_Paid' || appState.sortColumn === 'Pending_Balance') {
+        if (appState.sortColumn === 'Total_Quote' || appState.sortColumn === 'Amount_Paid') {
           valA = Number(valA) || 0;
           valB = Number(valB) || 0;
         } else {
@@ -2506,70 +2684,6 @@
         if (valA > valB) return appState.sortDirection === 'asc' ? 1 : -1;
         return 0;
       });
-    }
-
-    function renderKPIs(filteredProjects) {
-      let grossQuoted = 0;
-      let totalCleared = 0;
-      let totalReceivables = 0;
-      let activePipeline = 0;
-      let completedCount = 0;
-      let unpaidAccounts = 0;
-
-      appState.projects.forEach(p => {
-        grossQuoted += Number(p.Total_Quote) || 0;
-        const bal = (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0);
-        if (bal > 0) unpaidAccounts++;
-      });
-
-      filteredProjects.forEach(p => {
-        totalCleared += Number(p.Amount_Paid) || 0;
-        const bal = (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0);
-        totalReceivables += (bal > 0 ? bal : 0);
-
-        if (p.Project_Status === 'In Progress' || p.Project_Status === 'Client Revision') activePipeline++;
-        if (p.Project_Status === 'Completed') completedCount++;
-      });
-
-      const totalProjects = appState.projects.length;
-      const aov = totalProjects > 0 ? Math.round(grossQuoted / totalProjects) : 0;
-      const lifetimePaid = appState.projects.reduce((acc, p) => acc + (Number(p.Amount_Paid) || 0), 0);
-      const collectionRate = grossQuoted > 0 ? Math.min(100, Math.round((lifetimePaid / grossQuoted) * 100)) : 0;
-
-      document.getElementById('kpiGrossRevenue').textContent = formatINR(grossQuoted);
-      document.getElementById('kpiTotalProjectsCount').textContent = totalProjects;
-      document.getElementById('kpiClearedIncome').textContent = formatINR(totalCleared);
-      document.getElementById('kpiOutstandingDues').textContent = formatINR(totalReceivables);
-      document.getElementById('kpiUnpaidProjectsCount').textContent = `${unpaidAccounts} accounts pending`;
-      document.getElementById('kpiActivePipeline').textContent = activePipeline;
-      document.getElementById('kpiDeliveredCount').textContent = completedCount;
-      document.getElementById('kpiAOV').textContent = formatINR(aov);
-      document.getElementById('kpiCollectionRate').textContent = `${collectionRate}%`;
-      document.getElementById('gaugePctText').textContent = `${collectionRate}%`;
-
-      const gaugeCircle = document.getElementById('gaugeCircle');
-      if (gaugeCircle) {
-        gaugeCircle.setAttribute('stroke-dasharray', `${collectionRate}, 100`);
-        if (collectionRate >= 80) gaugeCircle.setAttribute('stroke', 'var(--emerald)');
-        else if (collectionRate >= 50) gaugeCircle.setAttribute('stroke', 'var(--amber)');
-        else gaugeCircle.setAttribute('stroke', 'var(--rose)');
-      }
-    }
-
-    function sortTable(columnName) {
-      playSound('click');
-      if (appState.sortColumn === columnName) {
-        appState.sortDirection = appState.sortDirection === 'asc' ? 'desc' : 'asc';
-      } else {
-        appState.sortColumn = columnName;
-        appState.sortDirection = 'desc';
-      }
-      renderAll();
-    }
-
-    function handleSearchChange() {
-      appState.searchQuery = document.getElementById('searchInput').value;
-      renderAll();
     }
 
     function renderAll() {
@@ -2586,24 +2700,19 @@
       document.getElementById('tableRecordCount').textContent = `Showing ${filtered.length} of ${appState.projects.length} missions`;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">No missions matching current filters.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">No missions matching current query.</td></tr>`;
         return;
       }
 
       filtered.forEach(p => {
         const tr = document.createElement('tr');
+        const curr = p.Currency || 'INR';
         const quote = Number(p.Total_Quote) || 0;
         const paid = Number(p.Amount_Paid) || 0;
         const pending = Math.max(0, quote - paid);
 
-        let payBadgeClass = 'badge-rose';
-        if (p.Payment_Status === 'Fully Paid') payBadgeClass = 'badge-emerald';
-        else if (p.Payment_Status === 'Partial Advance') payBadgeClass = 'badge-amber';
-        else if (p.Payment_Status === 'Refunded') payBadgeClass = 'badge-gray';
-
         const statuses = ['New Lead', 'In Progress', 'Draft Submitted', 'Client Revision', 'Completed', 'Cancelled'];
         const statusOptions = statuses.map(s => `<option value="${s}" ${s === p.Project_Status ? 'selected' : ''}>${s}</option>`).join('');
-        const isReadOnlyAttr = appState.isReadOnly ? 'disabled' : '';
 
         tr.innerHTML = `
           <td>
@@ -2614,38 +2723,32 @@
           </td>
           <td>
             <div class="project-title-cell" title="${escapeHtml(p.Project_Name)}">${escapeHtml(p.Project_Name)}</div>
-            <div style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono);">${getCategoryEmblem(p.Category)} ${escapeHtml(p.Category || 'Other')}</div>
+            <div style="font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono);">${escapeHtml(p.Category || 'Other')}</div>
           </td>
           <td>
-            <div style="display: flex; flex-direction: column;">
-              <span style="font-weight: 600; color: #fff;">${escapeHtml(p.Client_Name)}</span>
-              <span style="font-size: 0.72rem; color: var(--cyan); font-family: var(--font-mono); cursor: pointer;" onclick="sendWhatsAppReceipt('${p.Project_ID}')">
-                WA: ${escapeHtml(p.Client_Contact)}
-              </span>
+            <span style="font-weight: 600; color: #fff;">${escapeHtml(p.Client_Name)}</span>
+            <div style="font-size: 0.7rem; color: var(--cyan); font-family: var(--font-mono); cursor: pointer;" onclick="sendWhatsAppReceipt('${p.Project_ID}')">
+              WA: ${escapeHtml(p.Client_Contact)}
             </div>
           </td>
           <td>${getRelativeDateBadge(p.Delivery_Deadline)}</td>
-          <td><span class="currency-mono text-cyan privacy-sensitive">${formatINR(quote)}</span></td>
-          <td><span class="currency-mono text-emerald privacy-sensitive">${formatINR(paid)}</span></td>
-          <td><span class="currency-mono text-rose privacy-sensitive">${formatINR(pending)}</span></td>
-          <td><span class="badge ${payBadgeClass}">${escapeHtml(p.Payment_Status)}</span></td>
+          <td><span class="currency-mono text-cyan privacy-sensitive">${formatNativeCurrency(quote, curr)}</span></td>
+          <td><span class="currency-mono text-emerald privacy-sensitive">${formatNativeCurrency(paid, curr)}</span></td>
+          <td><span class="currency-mono text-rose privacy-sensitive">${formatNativeCurrency(pending, curr)}</span></td>
           <td>
-            <select class="status-select-inline" ${isReadOnlyAttr} onchange="handleInlineStatusChange('${p.Project_ID}', this.value)">
+            <select class="status-select-inline" onchange="handleInlineStatusChange('${p.Project_ID}', this.value)">
               ${statusOptions}
             </select>
           </td>
           <td>
-            <div class="actions-cell">
-              <button class="btn btn-sm btn-outline btn-icon" onclick="openUpiModalForProject('${p.Project_ID}')" title="Dynamic UPI QR">
-                <span style="font-size: 0.75rem;">QR</span>
-              </button>
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')" title="Clear Escrow">
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.3rem;">
+              <button class="btn btn-sm btn-outline btn-icon" onclick="openQuickPaymentModal('${p.Project_ID}')" title="Clear Escrow">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
-              <button class="btn btn-sm btn-outline btn-icon" onclick="sendWhatsAppReceipt('${p.Project_ID}')" title="WhatsApp Receipt">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <button class="btn btn-sm btn-outline btn-icon" onclick="openDetailDrawer('${p.Project_ID}')" title="Open Dossier & Tracking Link">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
               </button>
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')" title="Edit">
+              <button class="btn btn-sm btn-outline btn-icon" onclick="openEditProjectModal('${p.Project_ID}')" title="Edit">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
               </button>
             </div>
@@ -2660,33 +2763,24 @@
       container.innerHTML = '';
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="mission-card" style="text-align: center; color: var(--text-dim); padding: 2rem;">No mission telemetry records.</div>`;
+        container.innerHTML = `<div class="mission-card" style="text-align: center; color: var(--text-dim); padding: 2rem;">No missions found.</div>`;
         return;
       }
 
       filtered.forEach(p => {
         const card = document.createElement('div');
         card.className = 'mission-card';
-
+        const curr = p.Currency || 'INR';
         const quote = Number(p.Total_Quote) || 0;
         const paid = Number(p.Amount_Paid) || 0;
         const pending = Math.max(0, quote - paid);
 
-        let payBadgeClass = 'badge-rose';
-        if (p.Payment_Status === 'Fully Paid') payBadgeClass = 'badge-emerald';
-        else if (p.Payment_Status === 'Partial Advance') payBadgeClass = 'badge-amber';
-        else if (p.Payment_Status === 'Refunded') payBadgeClass = 'badge-gray';
-
         const statuses = ['New Lead', 'In Progress', 'Draft Submitted', 'Client Revision', 'Completed', 'Cancelled'];
         const statusOptions = statuses.map(s => `<option value="${s}" ${s === p.Project_Status ? 'selected' : ''}>${s}</option>`).join('');
-        const isReadOnlyAttr = appState.isReadOnly ? 'disabled' : '';
 
         card.innerHTML = `
           <div class="mission-card-header">
-            <div style="display: flex; align-items: center; gap: 0.4rem;">
-              <span class="project-id-cell font-mono" onclick="openDetailDrawer('${p.Project_ID}')">${p.Project_ID}</span>
-              <span class="badge badge-cyan">${getCategoryEmblem(p.Category)} ${escapeHtml(p.Category || 'Other')}</span>
-            </div>
+            <span class="project-id-cell font-mono" onclick="openDetailDrawer('${p.Project_ID}')">${p.Project_ID}</span>
             <div>${getRelativeDateBadge(p.Delivery_Deadline)}</div>
           </div>
 
@@ -2694,43 +2788,34 @@
 
           <div class="mission-card-client">
             <span>Operative: <strong style="color: #fff;">${escapeHtml(p.Client_Name)}</strong></span>
-            <div style="display: flex; gap: 0.35rem;">
-              <button class="btn btn-sm btn-outline" onclick="openUpiModalForProject('${p.Project_ID}')">📱 QR</button>
-              <button class="btn btn-sm btn-outline" onclick="sendWhatsAppReceipt('${p.Project_ID}')">💬 WA</button>
-            </div>
+            <button class="btn btn-sm btn-outline" onclick="sendWhatsAppReceipt('${p.Project_ID}')">💬 WA</button>
           </div>
 
           <div class="mission-card-metrics">
             <div class="metric-col">
               <span class="metric-col-label">Quoted</span>
-              <span class="metric-col-val text-cyan privacy-sensitive">${formatINR(quote)}</span>
+              <span class="metric-col-val text-cyan privacy-sensitive">${formatNativeCurrency(quote, curr)}</span>
             </div>
             <div class="metric-col">
               <span class="metric-col-label">Cleared</span>
-              <span class="metric-col-val text-emerald privacy-sensitive">${formatINR(paid)}</span>
+              <span class="metric-col-val text-emerald privacy-sensitive">${formatNativeCurrency(paid, curr)}</span>
             </div>
             <div class="metric-col">
               <span class="metric-col-label">Pending</span>
-              <span class="metric-col-val text-rose privacy-sensitive">${formatINR(pending)}</span>
+              <span class="metric-col-val text-rose privacy-sensitive">${formatNativeCurrency(pending, curr)}</span>
             </div>
           </div>
 
           <div class="mission-card-actions">
-            <div style="display: flex; align-items: center; gap: 0.35rem;">
-              <span class="badge ${payBadgeClass}">${escapeHtml(p.Payment_Status)}</span>
-              <select class="status-select-inline" ${isReadOnlyAttr} onchange="handleInlineStatusChange('${p.Project_ID}', this.value)">
-                ${statusOptions}
-              </select>
-            </div>
+            <select class="status-select-inline" onchange="handleInlineStatusChange('${p.Project_ID}', this.value)">
+              ${statusOptions}
+            </select>
             <div style="display: flex; gap: 0.3rem;">
-              <button class="btn btn-sm btn-emerald btn-icon" ${isReadOnlyAttr} onclick="openQuickPaymentModal('${p.Project_ID}')">
+              <button class="btn btn-sm btn-emerald btn-icon" onclick="openQuickPaymentModal('${p.Project_ID}')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
               <button class="btn btn-sm btn-outline btn-icon" onclick="openDetailDrawer('${p.Project_ID}')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-              </button>
-              <button class="btn btn-sm btn-outline btn-icon" ${isReadOnlyAttr} onclick="openEditProjectModal('${p.Project_ID}')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
               </button>
             </div>
           </div>
@@ -2757,7 +2842,6 @@
       renderStatusDonutChart(projects);
       renderCategoryChart(projects);
     }
-
     function renderCashflowChart(projects) {
       const canvas = document.getElementById('canvasCashflow');
       if (!canvas) return;
@@ -2766,7 +2850,6 @@
       const months = [];
       const monthMap = {};
       const today = new Date();
-
       for (let i = 5; i >= 0; i--) {
         const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -2780,10 +2863,11 @@
         const d = new Date(p.Creation_Timestamp);
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         if (monthMap[key]) {
-          const q = Number(p.Total_Quote) || 0;
-          const paid = Number(p.Amount_Paid) || 0;
-          monthMap[key].cleared += paid;
-          monthMap[key].pending += Math.max(0, q - paid);
+          const curr = p.Currency || 'INR';
+          const qINR = convertToINR(p.Total_Quote, curr);
+          const pINR = convertToINR(p.Amount_Paid, curr);
+          monthMap[key].cleared += pINR;
+          monthMap[key].pending += Math.max(0, qINR - pINR);
         }
       });
 
@@ -2792,12 +2876,8 @@
         if (m.cleared > maxVal) maxVal = m.cleared;
         if (m.pending > maxVal) maxVal = m.pending;
       });
-      maxVal = Math.ceil(maxVal / 10000) * 10000;
 
-      const padLeft = 48;
-      const padBottom = 26;
-      const padTop = 18;
-      const padRight = 12;
+      const padLeft = 48, padBottom = 26, padTop = 18, padRight = 12;
       const chartW = width - padLeft - padRight;
       const chartH = height - padTop - padBottom;
 
@@ -2807,15 +2887,14 @@
       ctx.font = '10px "JetBrains Mono", monospace';
       ctx.textAlign = 'right';
 
-      const steps = 3;
-      for (let i = 0; i <= steps; i++) {
-        const y = padTop + chartH - (i * (chartH / steps));
-        const val = Math.round((maxVal / steps) * i);
+      for (let i = 0; i <= 3; i++) {
+        const y = padTop + chartH - (i * (chartH / 3));
+        const val = Math.round((maxVal / 3) * i);
         ctx.beginPath();
         ctx.moveTo(padLeft, y);
         ctx.lineTo(width - padRight, y);
         ctx.stroke();
-        ctx.fillText('₹' + (val >= 1000 ? (val / 1000) + 'k' : val), padLeft - 6, y + 3);
+        ctx.fillText('₹' + (val >= 1000 ? Math.round(val / 1000) + 'k' : val), padLeft - 6, y + 3);
       }
 
       const groupWidth = chartW / months.length;
@@ -2825,25 +2904,18 @@
         const groupX = padLeft + (idx * groupWidth) + (groupWidth / 2);
         const clearedH = Math.max(0, (m.cleared / maxVal) * chartH);
         if (clearedH > 0) {
-          const clearedY = padTop + chartH - clearedH;
           ctx.fillStyle = '#00ff9d';
-          ctx.beginPath();
-          roundRect(ctx, groupX - barWidth - 2, clearedY, barWidth, clearedH, 3);
+          roundRect(ctx, groupX - barWidth - 2, padTop + chartH - clearedH, barWidth, clearedH, 3);
           ctx.fill();
         }
-
         const pendingH = Math.max(0, (m.pending / maxVal) * chartH);
         if (pendingH > 0) {
-          const pendingY = padTop + chartH - pendingH;
           ctx.fillStyle = '#ff0055';
-          ctx.beginPath();
-          roundRect(ctx, groupX + 2, pendingY, barWidth, pendingH, 3);
+          roundRect(ctx, groupX + 2, padTop + chartH - pendingH, barWidth, pendingH, 3);
           ctx.fill();
         }
-
         ctx.fillStyle = '#94a3b8';
         ctx.textAlign = 'center';
-        ctx.font = '10px "JetBrains Mono", monospace';
         ctx.fillText(m.label, groupX, height - 8);
       });
     }
@@ -2852,7 +2924,6 @@
       const canvas = document.getElementById('canvasStatusDonut');
       if (!canvas) return;
       const { ctx, width, height } = setupCanvasDPI(canvas);
-
       const counts = { 'New Lead': 0, 'In Progress': 0, 'Draft Submitted': 0, 'Client Revision': 0, 'Completed': 0, 'Cancelled': 0 };
       const colors = { 'New Lead': '#00f5ff', 'In Progress': '#ffaa00', 'Draft Submitted': '#8b5cf6', 'Client Revision': '#ec4899', 'Completed': '#00ff9d', 'Cancelled': '#64748b' };
       projects.forEach(p => { if (counts[p.Project_Status] !== undefined) counts[p.Project_Status]++; });
@@ -2861,24 +2932,21 @@
       ctx.clearRect(0, 0, width, height);
       if (total === 0) return;
 
-      const centerX = width * 0.36;
-      const centerY = height / 2;
+      const centerX = width * 0.36, centerY = height / 2;
       const outerR = Math.min(centerX - 8, centerY - 12);
       const innerR = outerR * 0.62;
-
       let startAngle = -Math.PI / 2;
+
       Object.keys(counts).forEach(status => {
         const count = counts[status];
         if (count === 0) return;
         const sliceAngle = (count / total) * 2 * Math.PI;
-
         ctx.beginPath();
         ctx.arc(centerX, centerY, outerR, startAngle, startAngle + sliceAngle);
         ctx.arc(centerX, centerY, innerR, startAngle + sliceAngle, startAngle, true);
         ctx.closePath();
         ctx.fillStyle = colors[status];
         ctx.fill();
-
         startAngle += sliceAngle;
       });
 
@@ -2889,33 +2957,17 @@
       ctx.font = '9px "JetBrains Mono", monospace';
       ctx.fillStyle = '#94a3b8';
       ctx.fillText('MISSIONS', centerX, centerY + 16);
-
-      const legendX = width * 0.70;
-      let legendY = 32;
-      ctx.textAlign = 'left';
-      ctx.font = '10px "Plus Jakarta Sans", sans-serif';
-
-      Object.keys(counts).forEach(status => {
-        if (counts[status] === 0) return;
-        ctx.fillStyle = colors[status];
-        ctx.beginPath();
-        ctx.arc(legendX, legendY - 4, 4, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.fillStyle = '#cbd5e1';
-        ctx.fillText(`${status} (${counts[status]})`, legendX + 8, legendY);
-        legendY += 20;
-      });
     }
 
     function renderCategoryChart(projects) {
       const canvas = document.getElementById('canvasCategoryRevenue');
       if (!canvas) return;
       const { ctx, width, height } = setupCanvasDPI(canvas);
-
       const catRevenue = {};
       projects.forEach(p => {
         const c = p.Category || 'Other';
-        catRevenue[c] = (catRevenue[c] || 0) + (Number(p.Total_Quote) || 0);
+        const curr = p.Currency || 'INR';
+        catRevenue[c] = (catRevenue[c] || 0) + convertToINR(p.Total_Quote, curr);
       });
 
       const categories = Object.keys(catRevenue).sort((a, b) => catRevenue[b] - catRevenue[a]);
@@ -2923,60 +2975,48 @@
       categories.forEach(c => { if (catRevenue[c] > maxRev) maxRev = catRevenue[c]; });
 
       ctx.clearRect(0, 0, width, height);
-
-      const padLeft = 95;
-      const padRight = 55;
-      const barH = 15;
-      const gap = 15;
+      const padLeft = 95, padRight = 55, barH = 15, gap = 15;
       let startY = 20;
 
       categories.slice(0, 5).forEach(c => {
         const rev = catRevenue[c];
         const barW = ((width - padLeft - padRight) * rev) / maxRev;
-
         ctx.fillStyle = '#94a3b8';
         ctx.font = '10px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'right';
         ctx.fillText(c, padLeft - 8, startY + 11);
 
         ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-        ctx.beginPath();
         roundRect(ctx, padLeft, startY, width - padLeft - padRight, barH, 3);
         ctx.fill();
 
-        const grad = ctx.createLinearGradient(padLeft, 0, padLeft + barW, 0);
-        grad.addColorStop(0, '#00f5ff');
-        grad.addColorStop(1, '#8b5cf6');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
+        ctx.fillStyle = '#00f5ff';
         roundRect(ctx, padLeft, startY, Math.max(4, barW), barH, 3);
         ctx.fill();
 
         ctx.fillStyle = '#fff';
         ctx.font = '9px "JetBrains Mono", monospace';
         ctx.textAlign = 'left';
-        ctx.fillText('₹' + (rev >= 1000 ? Math.round(rev / 1000) + 'k' : rev), padLeft + barW + 6, startY + 11);
-
+        ctx.fillText('₹' + Math.round(rev).toLocaleString(), padLeft + barW + 6, startY + 11);
         startY += barH + gap;
       });
     }
 
     function roundRect(ctx, x, y, width, height, radius) {
-      if (width < 2 * radius) radius = width / 2;
-      if (height < 2 * radius) radius = height / 2;
+      ctx.beginPath();
       ctx.moveTo(x + radius, y);
       ctx.arcTo(x + width, y, x + width, y + height, radius);
       ctx.arcTo(x + width, y + height, x, y + height, radius);
       ctx.arcTo(x, y + height, x, y, radius);
       ctx.arcTo(x, y, x + width, y, radius);
+      ctx.closePath();
     }
 
-    /* MISSION INTAKE MODAL */
+    /* MISSION INTAKE FORM (EXACT AMOUNTS & MULTI-CURRENCY) */
     function openNewProjectModal() {
       playSound('click');
-      if (appState.isReadOnly) { showToast('Read-Only mode locked', 'error'); return; }
       document.getElementById('formMode').value = 'CREATE';
-      document.getElementById('projectModalTitle').textContent = 'Initiate Mission Protocol';
+      document.getElementById('projectModalTitle').textContent = 'Deploy Mission Protocol';
       document.getElementById('btnSaveProjectText').textContent = 'Deploy Mission Protocol';
 
       const year = new Date().getFullYear();
@@ -2996,23 +3036,16 @@
       document.getElementById('inpClientName').value = '';
       document.getElementById('inpClientContact').value = '';
       document.getElementById('inpCategory').value = 'Engineering';
+      document.getElementById('inpCurrency').value = 'INR';
       document.getElementById('inpTotalQuote').value = '';
       document.getElementById('inpAmountPaid').value = '';
-      document.getElementById('inpPaymentChannel').value = 'UPI';
-      document.getElementById('inpPaymentStatus').value = 'Unpaid';
       document.getElementById('inpProjectStatus').value = 'New Lead';
       document.getElementById('inpDriveLink').value = '';
-
-      document.querySelectorAll('.cat-chip').forEach(c => {
-        if (c.textContent.includes('Engineering')) c.classList.add('active');
-        else c.classList.remove('active');
-      });
+      document.getElementById('inpInternalNotes').value = '';
 
       const nextWeek = new Date();
       nextWeek.setDate(nextWeek.getDate() + 7);
       document.getElementById('inpDeliveryDeadline').value = nextWeek.toISOString().split('T')[0];
-      document.getElementById('inpLoggedBy').value = appState.activePartner;
-      document.getElementById('inpInternalNotes').value = '';
 
       calculateBalanceIndicator();
       document.getElementById('projectModalBackdrop').classList.add('open');
@@ -3025,23 +3058,8 @@
       el.classList.add('active');
     }
 
-    function addCreditQuote(amt) {
-      playSound('click');
-      const cur = Number(document.getElementById('inpTotalQuote').value) || 0;
-      document.getElementById('inpTotalQuote').value = cur + amt;
-      calculateBalanceIndicator();
-    }
-
-    function setEscrowPct(pct) {
-      playSound('click');
-      const q = Number(document.getElementById('inpTotalQuote').value) || 0;
-      document.getElementById('inpAmountPaid').value = Math.round(q * pct);
-      calculateBalanceIndicator();
-    }
-
     function openEditProjectModal(projectId) {
       playSound('click');
-      if (appState.isReadOnly) { showToast('Read-Only mode locked', 'error'); return; }
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
@@ -3054,20 +3072,18 @@
       document.getElementById('inpClientName').value = p.Client_Name || '';
       document.getElementById('inpClientContact').value = p.Client_Contact || '';
       document.getElementById('inpCategory').value = p.Category || 'Other';
+      document.getElementById('inpCurrency').value = p.Currency || 'INR';
+      document.getElementById('inpTotalQuote').value = p.Total_Quote || 0;
+      document.getElementById('inpAmountPaid').value = p.Amount_Paid || 0;
+      document.getElementById('inpProjectStatus').value = p.Project_Status || 'In Progress';
+      document.getElementById('inpDeliveryDeadline').value = p.Delivery_Deadline || '';
       document.getElementById('inpDriveLink').value = p.Drive_Link || '';
+      document.getElementById('inpInternalNotes').value = p.Internal_Notes || '';
 
       document.querySelectorAll('.cat-chip').forEach(c => {
         if (c.textContent.includes(p.Category)) c.classList.add('active');
         else c.classList.remove('active');
       });
-
-      document.getElementById('inpTotalQuote').value = p.Total_Quote || 0;
-      document.getElementById('inpAmountPaid').value = p.Amount_Paid || 0;
-      document.getElementById('inpPaymentStatus').value = p.Payment_Status || 'Unpaid';
-      document.getElementById('inpProjectStatus').value = p.Project_Status || 'In Progress';
-      document.getElementById('inpDeliveryDeadline').value = p.Delivery_Deadline || '';
-      document.getElementById('inpLoggedBy').value = p.Logged_By || appState.activePartner;
-      document.getElementById('inpInternalNotes').value = p.Internal_Notes || '';
 
       calculateBalanceIndicator();
       document.getElementById('projectModalBackdrop').classList.add('open');
@@ -3076,28 +3092,31 @@
     function closeProjectModal() { document.getElementById('projectModalBackdrop').classList.remove('open'); }
 
     function calculateBalanceIndicator() {
+      const curr = document.getElementById('inpCurrency').value;
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
       const quote = Number(document.getElementById('inpTotalQuote').value) || 0;
       const advance = Number(document.getElementById('inpAmountPaid').value) || 0;
       const balance = Math.max(0, quote - advance);
 
-      document.getElementById('previewBalanceAmount').textContent = formatINR(balance);
-      const badge = document.getElementById('previewBalanceBadge');
-      const statusSelect = document.getElementById('inpPaymentStatus');
+      document.getElementById('previewBalanceAmount').textContent = `${sym}${balance.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
 
-      if (quote === 0 && advance === 0) {
-        badge.className = 'badge badge-gray';
-        badge.textContent = 'Zero Credits';
-      } else if (balance === 0 && advance >= quote) {
+      if (curr !== 'INR' && quote > 0) {
+        const inrEquiv = convertToINR(balance, curr);
+        document.getElementById('previewConvertedINR').textContent = `≈ ₹${Math.round(inrEquiv).toLocaleString('en-IN')} INR`;
+      } else {
+        document.getElementById('previewConvertedINR').textContent = '';
+      }
+
+      const badge = document.getElementById('previewBalanceBadge');
+      if (balance === 0 && advance >= quote && quote > 0) {
         badge.className = 'badge badge-emerald';
         badge.textContent = 'Fully Cleared';
-        if (statusSelect.value === 'Unpaid' || statusSelect.value === 'Partial Advance') statusSelect.value = 'Fully Paid';
       } else if (advance > 0 && balance > 0) {
         badge.className = 'badge badge-amber';
-        badge.textContent = `Partial: ${formatINR(balance)}`;
-        if (statusSelect.value === 'Unpaid' || statusSelect.value === 'Fully Paid') statusSelect.value = 'Partial Advance';
+        badge.textContent = 'Partial Advance';
       } else {
         badge.className = 'badge badge-rose';
-        badge.textContent = `Unpaid: ${formatINR(balance)}`;
+        badge.textContent = 'Unpaid';
       }
     }
 
@@ -3105,6 +3124,7 @@
       e.preventDefault();
       const mode = document.getElementById('formMode').value;
       const pId = document.getElementById('inpProjectId').value.trim();
+      const curr = document.getElementById('inpCurrency').value;
       const quote = Number(document.getElementById('inpTotalQuote').value) || 0;
       const paid = Number(document.getElementById('inpAmountPaid').value) || 0;
 
@@ -3114,32 +3134,30 @@
         Client_Name: document.getElementById('inpClientName').value.trim(),
         Client_Contact: document.getElementById('inpClientContact').value.trim(),
         Category: document.getElementById('inpCategory').value,
+        Currency: curr,
         Total_Quote: quote,
         Amount_Paid: paid,
         Pending_Balance: Math.max(0, quote - paid),
-        Payment_Status: document.getElementById('inpPaymentStatus').value,
+        Payment_Status: paid >= quote ? 'Fully Paid' : (paid > 0 ? 'Partial Advance' : 'Unpaid'),
         Project_Status: document.getElementById('inpProjectStatus').value,
         Delivery_Deadline: document.getElementById('inpDeliveryDeadline').value,
         Creation_Timestamp: mode === 'CREATE' ? new Date().toISOString() : (appState.projects.find(p => p.Project_ID === pId)?.Creation_Timestamp || new Date().toISOString()),
-        Logged_By: appState.activePartner,
         Drive_Link: document.getElementById('inpDriveLink').value.trim(),
         Internal_Notes: document.getElementById('inpInternalNotes').value.trim()
       };
 
       if (mode === 'CREATE') {
         appState.projects.unshift(projectData);
-        logAuditTrail(projectData.Project_ID, 'CREATE_PROJECT', `Mission "${projectData.Project_Name}" deployed by ${appState.activePartner}.`);
         playSound('success');
-        showToast(`Mission ${projectData.Project_ID} initiated!`, 'success');
-        dispatchApiPost('CREATE_PROJECT', { project: projectData, actor: appState.activePartner });
+        showToast(`Mission ${projectData.Project_ID} deployed!`, 'success');
+        dispatchApiPost('CREATE_PROJECT', { project: projectData, actor: 'Karan Khunt' });
       } else {
         const idx = appState.projects.findIndex(p => p.Project_ID === pId);
         if (idx !== -1) {
           appState.projects[idx] = projectData;
-          logAuditTrail(projectData.Project_ID, 'UPDATE_PROJECT', `Mission protocol updated by ${appState.activePartner}.`);
           playSound('success');
           showToast(`Mission ${projectData.Project_ID} updated`, 'success');
-          dispatchApiPost('UPDATE_PROJECT', { project: projectData, actor: appState.activePartner });
+          dispatchApiPost('UPDATE_PROJECT', { project: projectData, actor: 'Karan Khunt' });
         }
       }
 
@@ -3151,28 +3169,23 @@
 
     function handleInlineStatusChange(projectId, newStatus) {
       playSound('click');
-      if (appState.isReadOnly) { showToast('Read-Only mode is locked.', 'error'); renderAll(); return; }
       const project = appState.projects.find(p => p.Project_ID === projectId);
       if (!project) return;
-
-      const oldStatus = project.Project_Status;
       project.Project_Status = newStatus;
       saveProjectsToStorage();
-
-      logAuditTrail(projectId, 'STATUS_CHANGE', `Milestone changed from "${oldStatus}" to "${newStatus}" by ${appState.activePartner}.`);
-      showToast(`Milestone updated to "${newStatus}"`, 'success');
+      showToast(`Status updated to "${newStatus}"`, 'success');
       renderAll();
-
-      dispatchApiPost('QUICK_STATUS', { projectId, newStatus, actor: appState.activePartner });
+      dispatchApiPost('QUICK_STATUS', { projectId, newStatus, actor: 'Karan Khunt' });
     }
 
-    /* QUICK ESCROW CLEARANCE */
+    /* QUICK PAYMENT CLEARANCE */
     function openQuickPaymentModal(projectId) {
       playSound('click');
-      if (appState.isReadOnly) { showToast('Read-Only mode is locked.', 'error'); return; }
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
+      const curr = p.Currency || 'INR';
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
       const quote = Number(p.Total_Quote) || 0;
       const paid = Number(p.Amount_Paid) || 0;
       const pending = Math.max(0, quote - paid);
@@ -3180,11 +3193,10 @@
       document.getElementById('quickPayProjectId').value = projectId;
       document.getElementById('qpProjectTitle').textContent = `[${p.Project_ID}] ${p.Project_Name}`;
       document.getElementById('qpClientInfo').textContent = `Operative: ${p.Client_Name} (${p.Client_Contact})`;
-      document.getElementById('qpQuoted').textContent = formatINR(quote);
-      document.getElementById('qpPaid').textContent = formatINR(paid);
-      document.getElementById('qpPending').textContent = formatINR(pending);
+      document.getElementById('qpQuoted').textContent = `${sym}${quote.toLocaleString()}`;
+      document.getElementById('qpPaid').textContent = `${sym}${paid.toLocaleString()}`;
+      document.getElementById('qpPending').textContent = `${sym}${pending.toLocaleString()}`;
       document.getElementById('qpPaymentInput').value = pending > 0 ? pending : '';
-      document.getElementById('qpTransactionRef').value = '';
 
       document.getElementById('quickPaymentModalBackdrop').classList.add('open');
       setTimeout(() => document.getElementById('qpPaymentInput').focus(), 100);
@@ -3192,28 +3204,25 @@
     function closeQuickPaymentModal() { document.getElementById('quickPaymentModalBackdrop').classList.remove('open'); }
 
     function fillQuickPayFull() {
-      playSound('click');
       const pId = document.getElementById('quickPayProjectId').value;
       const p = appState.projects.find(i => i.Project_ID === pId);
       if (!p) return;
       document.getElementById('qpPaymentInput').value = Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0));
     }
     function fillQuickPayHalf() {
-      playSound('click');
       const pId = document.getElementById('quickPayProjectId').value;
       const p = appState.projects.find(i => i.Project_ID === pId);
       if (!p) return;
-      document.getElementById('qpPaymentInput').value = Math.round(Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0)) / 2);
+      document.getElementById('qpPaymentInput').value = (Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0)) / 2).toFixed(2);
     }
 
     function submitQuickPayment() {
       const pId = document.getElementById('quickPayProjectId').value;
       const payAmount = Number(document.getElementById('qpPaymentInput').value);
       const channel = document.getElementById('qpPaymentChannel').value;
-      const ref = document.getElementById('qpTransactionRef').value.trim();
 
       if (isNaN(payAmount) || payAmount <= 0) {
-        showToast('Please enter a valid credit amount', 'error');
+        showToast('Please enter a valid amount', 'error');
         return;
       }
 
@@ -3225,18 +3234,11 @@
       const newPaid = currentPaid + payAmount;
       p.Amount_Paid = newPaid;
       p.Pending_Balance = Math.max(0, quote - newPaid);
-
-      if (newPaid >= quote) p.Payment_Status = 'Fully Paid';
-      else p.Payment_Status = 'Partial Advance';
+      p.Payment_Status = newPaid >= quote ? 'Fully Paid' : 'Partial Advance';
 
       saveProjectsToStorage();
       playSound('success');
-
-      const refText = ref ? ` (Ref: ${ref})` : '';
-      const auditDesc = `Cleared balance escrow of ${formatINR(payAmount)} via ${channel}${refText} by ${appState.activePartner}.`;
-      logAuditTrail(pId, 'QUICK_PAYMENT', auditDesc);
-
-      showToast(`Escrow of ${formatINR(payAmount)} cleared!`, 'success');
+      showToast('Payment recorded successfully', 'success');
       closeQuickPaymentModal();
       renderAll();
 
@@ -3244,8 +3246,8 @@
       dispatchApiPost('QUICK_PAYMENT', {
         projectId: pId,
         paymentAmount: payAmount,
-        paymentChannel: channel + refText,
-        actor: appState.activePartner
+        paymentChannel: channel,
+        actor: 'Karan Khunt'
       });
     }
 
@@ -3256,6 +3258,8 @@
       if (!p) return;
 
       appState.activeDrawerProjectId = projectId;
+      const curr = p.Currency || 'INR';
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
       const quote = Number(p.Total_Quote) || 0;
       const paid = Number(p.Amount_Paid) || 0;
       const pending = Math.max(0, quote - paid);
@@ -3264,16 +3268,15 @@
       document.getElementById('drawerProjectTitle').textContent = p.Project_Name;
       document.getElementById('drawerProjectStatusBadge').textContent = p.Project_Status;
       document.getElementById('drawerPaymentStatusBadge').textContent = p.Payment_Status;
-      document.getElementById('drawerCategoryBadge').textContent = `${getCategoryEmblem(p.Category)} ${p.Category}`;
+      document.getElementById('drawerCategoryBadge').textContent = p.Category;
 
-      document.getElementById('drawerQuoted').textContent = formatINR(quote);
-      document.getElementById('drawerPaid').textContent = formatINR(paid);
-      document.getElementById('drawerPending').textContent = formatINR(pending);
+      document.getElementById('drawerQuoted').textContent = `${sym}${quote.toLocaleString()}`;
+      document.getElementById('drawerPaid').textContent = `${sym}${paid.toLocaleString()}`;
+      document.getElementById('drawerPending').textContent = `${sym}${pending.toLocaleString()}`;
 
       document.getElementById('drawerClientName').textContent = p.Client_Name || 'N/A';
       document.getElementById('drawerClientContact').textContent = p.Client_Contact || 'N/A';
       document.getElementById('drawerDeadline').textContent = p.Delivery_Deadline || 'N/A';
-      document.getElementById('drawerLoggedBy').textContent = p.Logged_By || 'N/A';
       document.getElementById('drawerNotes').textContent = p.Internal_Notes || 'No notes.';
 
       const driveEl = document.getElementById('drawerDriveLink');
@@ -3284,7 +3287,6 @@
         driveEl.style.display = 'none';
       }
 
-      renderProjectTimeline(projectId);
       document.getElementById('drawerBackdrop').classList.add('open');
       document.getElementById('detailDrawer').classList.add('open');
     }
@@ -3299,113 +3301,8 @@
     function triggerDrawerWhatsApp() {
       if (appState.activeDrawerProjectId) sendWhatsAppReceipt(appState.activeDrawerProjectId);
     }
-    function openUpiFromDrawer() {
-      if (appState.activeDrawerProjectId) openUpiModalForProject(appState.activeDrawerProjectId);
-    }
 
-    function renderProjectTimeline(projectId) {
-      const wrap = document.getElementById('drawerTimeline');
-      wrap.innerHTML = '';
-      const logs = appState.auditTrails.filter(a => a.Project_ID === projectId);
-      if (logs.length === 0) {
-        wrap.innerHTML = '<div style="color: var(--text-dim); font-size: 0.74rem;">No activity telemetry logged.</div>';
-        return;
-      }
-      logs.forEach(log => {
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-        item.innerHTML = `
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">${new Date(log.Timestamp).toLocaleString('en-IN')}</div>
-          <div class="timeline-content">${escapeHtml(log.Change_Description)}</div>
-        `;
-        wrap.appendChild(item);
-      });
-    }
-
-    function logAuditTrail(projectId, actionType, description) {
-      const newEntry = {
-        Log_ID: 'LOG-' + Date.now().toString(36).toUpperCase(),
-        Project_ID: projectId,
-        Action_Type: actionType,
-        Change_Description: description,
-        Timestamp: new Date().toISOString()
-      };
-      appState.auditTrails.unshift(newEntry);
-      saveAuditsToStorage();
-    }
-
-    /* ========================================================================= */
-    /* DYNAMIC UPI QR GENERATOR */
-    /* ========================================================================= */
-    let currentUpiData = {};
-    function openUpiModalForProject(projectId) {
-      playSound('click');
-      const p = appState.projects.find(i => i.Project_ID === projectId);
-      if (!p) return;
-
-      const quote = Number(p.Total_Quote) || 0;
-      const paid = Number(p.Amount_Paid) || 0;
-      const pending = Math.max(0, quote - paid);
-      const amountToCharge = pending > 0 ? pending : quote;
-
-      const upiId = appState.defaultUpi || 'nexusprime@upi';
-      const clientName = encodeURIComponent(p.Client_Name || 'Client');
-      const upiPayload = `upi://pay?pa=${upiId}&pn=${clientName}&am=${amountToCharge}&cu=INR&tn=${p.Project_ID}`;
-
-      currentUpiData = {
-        projectId: p.Project_ID,
-        clientName: p.Client_Name,
-        phone: p.Client_Contact,
-        amount: amountToCharge,
-        upiPayload: upiPayload
-      };
-
-      document.getElementById('upiProjectDesc').textContent = `Mission: [${p.Project_ID}] ${p.Project_Name}`;
-      document.getElementById('upiAmountText').textContent = formatINR(amountToCharge);
-      document.getElementById('upiVpaText').textContent = `Payee VPA: ${upiId}`;
-
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiPayload)}`;
-      document.getElementById('upiQrImage').src = qrUrl;
-
-      document.getElementById('upiModalBackdrop').classList.add('open');
-    }
-
-    function closeUpiModal() { document.getElementById('upiModalBackdrop').classList.remove('open'); }
-
-    function copyUpiLink() {
-      playSound('click');
-      if (currentUpiData.upiPayload && navigator.clipboard) {
-        navigator.clipboard.writeText(currentUpiData.upiPayload);
-        showToast('UPI Payment Link Copied', 'success');
-      }
-    }
-
-    function shareUpiWhatsApp() {
-      playSound('click');
-      let phone = (currentUpiData.phone || '').replace(/[^0-9]/g, '');
-      if (phone.length === 10) phone = '91' + phone;
-
-      const msg = 
-`⚡ *NEXUS PRIME // SECURE PAYMENT QR LINK*
-----------------------------------------
-*Mission:* ${currentUpiData.projectId}
-*Client:* ${currentUpiData.clientName}
-*Amount Due:* ${formatINR(currentUpiData.amount)}
-*UPI ID:* ${appState.defaultUpi}
-----------------------------------------
-👉 *Direct UPI Pay Link:*
-${currentUpiData.upiPayload}
-
-Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank you!`;
-
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
-    }
-
-    /* ========================================================================= */
-    /* CLIENTS CRM MODULE */
-    /* ========================================================================= */
+    /* CLIENT CRM */
     function openClientsModal() {
       playSound('click');
       renderCrmClients();
@@ -3422,19 +3319,11 @@ Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank 
             name: p.Client_Name || 'Unknown',
             contact: contact,
             missionsCount: 0,
-            totalQuoted: 0,
-            totalPaid: 0,
-            totalPending: 0,
             latestProject: p.Project_Name || '',
             latestProjectId: p.Project_ID || ''
           };
         }
         clientMap[contact].missionsCount++;
-        const q = Number(p.Total_Quote) || 0;
-        const paid = Number(p.Amount_Paid) || 0;
-        clientMap[contact].totalQuoted += q;
-        clientMap[contact].totalPaid += paid;
-        clientMap[contact].totalPending += Math.max(0, q - paid);
       });
       return Object.values(clientMap);
     }
@@ -3443,19 +3332,7 @@ Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank 
       const query = (document.getElementById('crmSearchInput').value || '').toLowerCase().trim();
       const list = document.getElementById('crmClientList');
       list.innerHTML = '';
-
       const clients = getUniqueClients();
-
-      let grandQuoted = 0;
-      let grandPending = 0;
-      clients.forEach(c => {
-        grandQuoted += c.totalQuoted;
-        grandPending += c.totalPending;
-      });
-
-      document.getElementById('crmTotalClients').textContent = clients.length;
-      document.getElementById('crmLifetimeQuoted').textContent = formatINR(grandQuoted);
-      document.getElementById('crmLifetimePending').textContent = formatINR(grandPending);
 
       const filtered = clients.filter(c => {
         if (!query) return true;
@@ -3463,7 +3340,7 @@ Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank 
       });
 
       if (filtered.length === 0) {
-        list.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 1.5rem;">No client operatives found.</div>';
+        list.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 1.5rem;">No clients found.</div>';
         return;
       }
 
@@ -3479,99 +3356,34 @@ Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank 
             <span class="badge badge-cyan">${c.missionsCount} Missions</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.4rem; background: rgba(0, 245, 255, 0.04); padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.75rem;">
-            <div><span style="color: var(--text-dim);">LTV:</span> <strong class="text-cyan font-mono">${formatINR(c.totalQuoted)}</strong></div>
-            <div><span style="color: var(--text-dim);">Paid:</span> <strong class="text-emerald font-mono">${formatINR(c.totalPaid)}</strong></div>
-            <div><span style="color: var(--text-dim);">Due:</span> <strong class="text-rose font-mono">${formatINR(c.totalPending)}</strong></div>
-          </div>
-
-          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.2rem;">
-            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'INTAKE')">🚀 Intake</button>
-            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'REMINDER', ${c.totalPending})">💰 Due Reminder</button>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.3rem;">
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'INTAKE')">🚀 Intake Msg</button>
+            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'REMINDER')">💰 Due Reminder</button>
             <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'DRAFT')">⚡ Draft Ready</button>
             <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'REVIEW')">⭐ 5-Star Review</button>
-            <button class="btn btn-sm btn-outline" onclick="sendCrmWhatsApp('${escapeHtml(c.contact)}', '${escapeHtml(c.name)}', 'PITCH')">📣 Re-Engage</button>
           </div>
         `;
         list.appendChild(card);
       });
     }
 
-    function sendCrmWhatsApp(rawPhone, name, templateType, amount = 0) {
+    function sendCrmWhatsApp(rawPhone, name, templateType) {
       playSound('click');
       let phone = (rawPhone || '').replace(/[^0-9]/g, '');
       if (phone.length === 10) phone = '91' + phone;
 
       let msg = '';
       if (templateType === 'INTAKE') {
-        msg = `Hi ${name}, greetings from NEXUS PRIME! We have successfully registered your project request. Our technical lead has initiated the assignment protocol. We will share your milestone update shortly!`;
+        msg = `Hi ${name}, thank you for choosing NEXUS PRIME! We have successfully registered your project request. Our technical team has initiated your assignment protocol. We will share your milestone update shortly!`;
       } else if (templateType === 'REMINDER') {
-        msg = `Hi ${name}, a friendly reminder regarding your project with NEXUS PRIME. The deliverables are ready for completion! Pending balance is ${formatINR(amount)}. Kindly clear escrow via UPI so we can send the final submission files.`;
+        msg = `Hi ${name}, a friendly reminder regarding your project with NEXUS PRIME. The deliverables are ready for completion! Kindly clear the pending balance so we can send the final submission files.`;
       } else if (templateType === 'DRAFT') {
         msg = `Hi ${name}, your initial draft deliverables are prepared and ready for inspection. Please review and provide your feedback so we can incorporate any adjustments right away.`;
       } else if (templateType === 'REVIEW') {
         msg = `Hi ${name}, hope you are delighted with the project deliverables! Could you please drop a quick 5-star rating and review for our team? Your feedback means the world to us!`;
-      } else if (templateType === 'PITCH') {
-        msg = `Hi ${name}, hope your submission went fantastic! If you or any of your classmates need assistance with upcoming semester assignments, thesis papers, or software development, feel free to ping us anytime for priority support.`;
       }
 
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    /* ========================================================================= */
-    /* CO-FOUNDER PROFIT SPLIT CALCULATOR */
-    /* ========================================================================= */
-    function openProfitSplitModal() {
-      playSound('click');
-      let totalCleared = 0;
-      appState.projects.forEach(p => { totalCleared += (Number(p.Amount_Paid) || 0); });
-
-      const reserve = Math.round(totalCleared * 0.10); // 10% reserve buffer
-      const distributable = totalCleared - reserve;
-      const partnerShare = Math.round(distributable / 2);
-
-      document.getElementById('splitGrossCleared').textContent = formatINR(totalCleared);
-      document.getElementById('splitReserve').textContent = formatINR(reserve);
-      document.getElementById('splitDistributable').textContent = formatINR(distributable);
-      document.getElementById('splitPartnerA').textContent = formatINR(partnerShare);
-      document.getElementById('splitPartnerB').textContent = formatINR(partnerShare);
-
-      document.getElementById('splitModalBackdrop').classList.add('open');
-    }
-    function closeProfitSplitModal() { document.getElementById('splitModalBackdrop').classList.remove('open'); }
-
-    function copyWeeklyBrief() {
-      playSound('click');
-      let totalQuoted = 0;
-      let totalPaid = 0;
-      appState.projects.forEach(p => {
-        totalQuoted += (Number(p.Total_Quote) || 0);
-        totalPaid += (Number(p.Amount_Paid) || 0);
-      });
-      const pending = Math.max(0, totalQuoted - totalPaid);
-      const reserve = Math.round(totalPaid * 0.10);
-      const share = Math.round((totalPaid - reserve) / 2);
-
-      const brief = 
-`⚡ *NEXUS PRIME // CO-FOUNDER TELEMETRY BRIEF*
-----------------------------------------
-📅 *Date:* ${new Date().toISOString().split('T')[0]}
-💼 *Total Missions:* ${appState.projects.length}
-💰 *Gross Quoted:* ${formatINR(totalQuoted)}
-🟢 *Cleared Escrow:* ${formatINR(totalPaid)}
-🔴 *Receivables Pending:* ${formatINR(pending)}
-----------------------------------------
-⚖️ *CO-FOUNDER PROFIT ALLOCATION:*
-• Reserve Buffer (10%): ${formatINR(reserve)}
-• Partner A (Ops Lead): ${formatINR(share)}
-• Partner B (Auditor): ${formatINR(share)}
-----------------------------------------
-*NEXUS PRIME Operations Core*`;
-
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(brief);
-        showToast('Weekly Brief Copied to Clipboard!', 'success');
-      }
     }
 
     /* WHATSAPP RECEIPT */
@@ -3583,36 +3395,98 @@ Kindly scan or tap above link via GPay / PhonePe / Paytm to clear escrow. Thank 
       let phone = (p.Client_Contact || '').replace(/[^0-9]/g, '');
       if (phone.length === 10) phone = '91' + phone;
 
-      const quote = formatINR(p.Total_Quote);
-      const paid = formatINR(p.Amount_Paid);
-      const pending = formatINR(Math.max(0, (Number(p.Total_Quote) || 0) - (Number(p.Amount_Paid) || 0)));
+      const curr = p.Currency || 'INR';
+      const sym = CURRENCY_SYMBOLS[curr] || '₹';
+      const quote = Number(p.Total_Quote) || 0;
+      const paid = Number(p.Amount_Paid) || 0;
+      const pending = Math.max(0, quote - paid);
 
       const receiptMsg = 
 `⚡ *NEXUS PRIME // MISSION CONFIRMATION & RECEIPT*
 ----------------------------------------
 *Mission ID:* ${p.Project_ID}
 *Assignment:* ${p.Project_Name}
+*Lead:* Karan Khunt (+91 6353002399)
 *Client:* ${p.Client_Name}
-*Total Quoted:* ${quote}
-*Amount Cleared:* ${paid}
-*Pending Escrow:* ${pending}
-*Milestone Status:* ${p.Project_Status}
+*Total Quoted:* ${sym}${quote.toLocaleString()}
+*Amount Cleared:* ${sym}${paid.toLocaleString()}
+*Pending Escrow:* ${sym}${pending.toLocaleString()}
+*Milestone:* ${p.Project_Status}
 *Target Horizon:* ${p.Delivery_Deadline || 'TBD'}
 ----------------------------------------
 Thank you for collaborating with us. For direct inquiries, reply directly to this line.`;
 
       if (navigator.clipboard) navigator.clipboard.writeText(receiptMsg).catch(() => {});
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(receiptMsg)}`, '_blank');
-      showToast('WhatsApp Receipt generated & copied!', 'info');
+      showToast('WhatsApp Receipt generated!', 'info');
     }
 
-    /* CSV EXPORT */
+    /* PERMANENT GOOGLE SCRIPT CLUSTER SYNC */
+    async function syncWithGoogleSheet() {
+      const hudStatus = document.getElementById('hudSyncStatus');
+      try {
+        const resp = await fetch(DEFAULT_API_URL, { method: 'GET' });
+        const result = await resp.json();
+        if (result.status === 'success' && result.data) {
+          if (Array.isArray(result.data.projects) && result.data.projects.length > 0) {
+            appState.projects = result.data.projects;
+            saveProjectsToStorage();
+          }
+          if (hudStatus) hudStatus.textContent = 'CONNECTED (SHEETS)';
+          renderAll();
+        }
+      } catch (err) {
+        if (hudStatus) hudStatus.textContent = 'STANDALONE CACHE';
+      }
+    }
+
+    async function dispatchApiPost(action, payload) {
+      try {
+        await fetch(DEFAULT_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action, ...payload })
+        });
+      } catch (err) {}
+    }
+
+    /* UI HELPERS */
+    function applyUrgencyFilter(filterType, el) {
+      playSound('click');
+      appState.urgencyFilter = filterType;
+      document.querySelectorAll('.urgency-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderAll();
+    }
+    function sortTable(col) {
+      playSound('click');
+      if (appState.sortColumn === col) {
+        appState.sortDirection = appState.sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        appState.sortColumn = col;
+        appState.sortDirection = 'desc';
+      }
+      renderAll();
+    }
+    function handleSearchChange() {
+      appState.searchQuery = document.getElementById('searchInput').value;
+      renderAll();
+    }
+    function togglePrivacyMode() {
+      playSound('click');
+      appState.isPrivacyActive = !appState.isPrivacyActive;
+      document.body.classList.toggle('privacy-active', appState.isPrivacyActive);
+      showToast(appState.isPrivacyActive ? 'Privacy Masking Active' : 'Unmasked', 'info');
+    }
+    function openSettingsModal() { playSound('click'); document.getElementById('settingsModalBackdrop').classList.add('open'); }
+    function closeSettingsModal() { document.getElementById('settingsModalBackdrop').classList.remove('open'); }
+
     function exportToCSV() {
       playSound('click');
       const filtered = getFilteredProjects();
-      if (filtered.length === 0) { showToast('No mission records to export', 'error'); return; }
+      if (filtered.length === 0) { showToast('No records to export', 'error'); return; }
 
-      const headers = ['Project_ID', 'Project_Name', 'Client_Name', 'Client_Contact', 'Category', 'Total_Quote', 'Amount_Paid', 'Pending_Balance', 'Payment_Status', 'Project_Status', 'Delivery_Deadline', 'Creation_Timestamp', 'Logged_By', 'Drive_Link', 'Internal_Notes'];
+      const headers = ['Project_ID', 'Project_Name', 'Client_Name', 'Client_Contact', 'Category', 'Currency', 'Total_Quote', 'Amount_Paid', 'Pending_Balance', 'Payment_Status', 'Project_Status', 'Delivery_Deadline', 'Creation_Timestamp'];
       const csvRows = [headers.join(',')];
 
       filtered.forEach(p => {
@@ -3621,9 +3495,9 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
         const balance = Math.max(0, quote - paid);
         const row = [
           csvSafe(p.Project_ID), csvSafe(p.Project_Name), csvSafe(p.Client_Name),
-          csvSafe(p.Client_Contact), csvSafe(p.Category), quote, paid, balance,
-          csvSafe(p.Payment_Status), csvSafe(p.Project_Status), csvSafe(p.Delivery_Deadline),
-          csvSafe(p.Creation_Timestamp), csvSafe(p.Logged_By), csvSafe(p.Drive_Link), csvSafe(p.Internal_Notes)
+          csvSafe(p.Client_Contact), csvSafe(p.Category), csvSafe(p.Currency || 'INR'),
+          quote, paid, balance, csvSafe(p.Payment_Status), csvSafe(p.Project_Status),
+          csvSafe(p.Delivery_Deadline), csvSafe(p.Creation_Timestamp)
         ];
         csvRows.push(row.join(','));
       });
@@ -3632,11 +3506,11 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `NEXUS_PRIME_TELEMETRY_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute("download", `NEXUS_PRIME_${new Date().toISOString().split('T')[0]}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showToast(`Exported ${filtered.length} missions to CSV`, 'success');
+      showToast('Exported to CSV', 'success');
     }
 
     function csvSafe(str) {
@@ -3644,47 +3518,18 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
       return `"${String(str).replace(/"/g, '""')}"`;
     }
 
-    /* PERMANENT GOOGLE APPS SCRIPT CLUSTER SYNC */
-    async function syncWithGoogleSheet() {
-      const url = appState.apiUrl || DEFAULT_API_URL;
-      const hudStatus = document.getElementById('hudSyncStatus');
-
-      try {
-        const resp = await fetch(url, { method: 'GET' });
-        const result = await resp.json();
-        if (result.status === 'success' && result.data) {
-          if (Array.isArray(result.data.projects) && result.data.projects.length > 0) {
-            appState.projects = result.data.projects;
-            saveProjectsToStorage();
-          }
-          if (Array.isArray(result.data.auditTrails) && result.data.auditTrails.length > 0) {
-            appState.auditTrails = result.data.auditTrails;
-            saveAuditsToStorage();
-          }
-          if (hudStatus) hudStatus.textContent = 'CONNECTED (SHEETS)';
-          renderAll();
-        }
-      } catch (err) {
-        console.warn('Google Sheet Cluster Sync:', err);
-        if (hudStatus) hudStatus.textContent = 'STANDALONE CACHE';
-      }
+    function getRelativeDateBadge(dateStr) {
+      if (!dateStr) return '';
+      const target = new Date(dateStr);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      target.setHours(0, 0, 0, 0);
+      const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) return `<span class="badge badge-rose">Overdue (${Math.abs(diffDays)}d)</span>`;
+      if (diffDays === 0) return `<span class="badge badge-amber">Due Today</span>`;
+      if (diffDays <= 3) return `<span class="badge badge-amber">T-${diffDays}d</span>`;
+      return `<span class="badge badge-gray">${dateStr}</span>`;
     }
-
-    async function dispatchApiPost(action, payload) {
-      const url = appState.apiUrl || DEFAULT_API_URL;
-      try {
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({ action, ...payload })
-        });
-      } catch (err) {
-        console.warn('Error sending POST to Google cluster:', err);
-      }
-    }
-
-    function openSettingsModal() { playSound('click'); document.getElementById('settingsModalBackdrop').classList.add('open'); }
-    function closeSettingsModal() { document.getElementById('settingsModalBackdrop').classList.remove('open'); }
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
