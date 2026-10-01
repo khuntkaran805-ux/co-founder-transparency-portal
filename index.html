@@ -2865,72 +2865,174 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
       showToast('Settings Saved', 'success');
     }
 
+    const MASTER_REAL_PROJECTS = [
+  {
+    "Project_ID": "PRJ-2026-001",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Nehal",
+    "Client_Contact": "+61 426 287 785",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 9500,
+    "Amount_Paid": 9500,
+    "Pending_Balance": 0,
+    "Payment_Status": "Fully Paid",
+    "Project_Status": "Client Revision",
+    "Delivery_Deadline": "2026-09-23",
+    "Creation_Timestamp": "2026-09-23T04:56:53.843Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  },
+  {
+    "Project_ID": "PRJ-2026-002",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Vijay",
+    "Client_Contact": "+61 493 012 555",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 9500,
+    "Amount_Paid": 9500,
+    "Pending_Balance": 0,
+    "Payment_Status": "Fully Paid",
+    "Project_Status": "Completed",
+    "Delivery_Deadline": "2026-09-22",
+    "Creation_Timestamp": "2026-09-23T04:59:28.328Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  },
+  {
+    "Project_ID": "PRJ-2026-003",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Romil",
+    "Client_Contact": "+61 400 000 000",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 8000,
+    "Amount_Paid": 8000,
+    "Pending_Balance": 0,
+    "Payment_Status": "Fully Paid",
+    "Project_Status": "Completed",
+    "Delivery_Deadline": "2026-09-24",
+    "Creation_Timestamp": "2026-09-23T10:15:17.883Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  },
+  {
+    "Project_ID": "PRJ-2026-004",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Yash",
+    "Client_Contact": "+61 400 000 000",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 8000,
+    "Amount_Paid": 8000,
+    "Pending_Balance": 0,
+    "Payment_Status": "Fully Paid",
+    "Project_Status": "Completed",
+    "Delivery_Deadline": "2026-09-23",
+    "Creation_Timestamp": "2026-09-23T14:14:25.847Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  },
+  {
+    "Project_ID": "PRJ-2026-005",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Ruchiket",
+    "Client_Contact": "+61 400 000 000",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 9500,
+    "Amount_Paid": 9500,
+    "Pending_Balance": 0,
+    "Payment_Status": "Fully Paid",
+    "Project_Status": "Completed",
+    "Delivery_Deadline": "2026-10-01",
+    "Creation_Timestamp": "2026-09-25T06:09:02.211Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  },
+  {
+    "Project_ID": "PRJ-2026-006",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Khushi",
+    "Client_Contact": "+61 400 000 000",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 9500,
+    "Amount_Paid": 9500,
+    "Pending_Balance": 0,
+    "Payment_Status": "Fully Paid",
+    "Project_Status": "In Progress",
+    "Delivery_Deadline": "2026-09-27",
+    "Creation_Timestamp": "2026-09-25T06:19:09.948Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  },
+  {
+    "Project_ID": "PRJ-2026-007",
+    "Project_Name": "Media management and leadership essay",
+    "Client_Name": "Priyanshi",
+    "Client_Contact": "414329417",
+    "Category": "Thesis",
+    "Currency": "INR",
+    "Total_Quote": 140,
+    "Amount_Paid": 0,
+    "Pending_Balance": 140,
+    "Payment_Status": "Unpaid",
+    "Project_Status": "New Lead",
+    "Delivery_Deadline": "2026-10-07",
+    "Creation_Timestamp": "2026-10-01T09:46:37.263Z",
+    "Logged_By": "Karan Khunt",
+    "Internal_Notes": ""
+  }
+];
+
     function loadData() {
       try {
-        const storedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS) || localStorage.getItem('nexus_projects_v4');
-        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS) || localStorage.getItem('nexus_audits_v4');
-        const storedExp = localStorage.getItem(STORAGE_KEY_EXPENSES);
+        // Clear any old fake mock data if present
+        const checkKeys = ['nexus_projects_v5', 'nexus_projects_v4', 'nexus_projects_v3', 'nexus_projects_v2', 'nexus_projects', 'co_founder_portal_projects', 'projects'];
+        let foundRealProjects = null;
 
-        if (storedProjects) {
-          appState.projects = JSON.parse(storedProjects);
+        for (const k of checkKeys) {
+          const raw = localStorage.getItem(k);
+          if (raw) {
+            try {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                // If it contains real clients like Nehal, Vijay, etc.
+                if (parsed.some(p => p.Client_Name === 'Nehal' || p.Client_Name === 'Vijay' || p.Client_Name === 'Priyanshi')) {
+                  foundRealProjects = parsed;
+                  break;
+                }
+              }
+            } catch (e) {}
+          }
+        }
+
+        if (foundRealProjects && foundRealProjects.length > 0) {
+          appState.projects = foundRealProjects;
         } else {
-          appState.projects = [
-            {
-              Project_ID: "PRJ-2026-001",
-              Project_Name: "Smart Grid Power Distribution Simulation in MATLAB",
-              Client_Name: "Aarav Patel",
-              Client_Contact: "919820112233",
-              Category: "Engineering",
-              Currency: "INR",
-              Total_Quote: 45000,
-              Amount_Paid: 30000,
-              Pending_Balance: 15000,
-              Payment_Status: "Partial Advance",
-              Project_Status: "In Progress",
-              Delivery_Deadline: "2026-10-05",
-              Creation_Timestamp: "2026-09-15T10:30:00.000Z",
-              Drive_Link: "https://drive.google.com",
-              Internal_Notes: "IEEE format paper + MATLAB Simulink files."
-            },
-            {
-              Project_ID: "PRJ-2026-002",
-              Project_Name: "Cross-Border E-Commerce Supply Chain Optimization Thesis",
-              Client_Name: "Pooja Hegde",
-              Client_Contact: "919876543210",
-              Category: "Management",
-              Currency: "USD",
-              Total_Quote: 250,
-              Amount_Paid: 250,
-              Pending_Balance: 0,
-              Payment_Status: "Fully Paid",
-              Project_Status: "Completed",
-              Delivery_Deadline: "2026-09-28",
-              Creation_Timestamp: "2026-09-02T14:15:00.000Z",
-              Drive_Link: "",
-              Internal_Notes: "Final draft submitted, plagiarism approved."
-            }
-          ];
+          // Always default to Karan's actual 7 projects from Google Sheets!
+          appState.projects = JSON.parse(JSON.stringify(MASTER_REAL_PROJECTS));
           saveProjectsToStorage();
         }
 
+        const storedExp = localStorage.getItem(STORAGE_KEY_EXPENSES);
         if (storedExp) {
           appState.expenses = JSON.parse(storedExp);
         } else {
-          appState.expenses = [
-            {
-              id: "EXP-01",
-              category: "AI Subscriptions",
-              description: "OpenAI & Claude Pro Subscriptions",
-              amount: 3800,
-              date: "2026-09-10"
-            }
-          ];
-          saveExpensesToStorage();
+          appState.expenses = [];
         }
 
-        if (storedAudits) appState.auditTrails = JSON.parse(storedAudits);
-      } catch (e) {}
+        const storedAudits = localStorage.getItem(STORAGE_KEY_AUDITS);
+        if (storedAudits) {
+          appState.auditTrails = JSON.parse(storedAudits);
+        }
+      } catch (err) {
+        appState.projects = JSON.parse(JSON.stringify(MASTER_REAL_PROJECTS));
+      }
 
+      renderAll();
       syncWithGoogleSheet();
       // Auto-refresh from Google Sheets every 10 seconds across all devices
       setInterval(syncWithGoogleSheet, 10000);
