@@ -2499,8 +2499,13 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Google Apps Script Web App Endpoint</label>
-          <input type="url" id="inpApiUrl" class="form-control font-mono" readonly style="background: rgba(0, 245, 255, 0.04);">
-          <span style="font-size: 0.68rem; color: var(--emerald);">Auto-connected permanently.</span>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="url" id="inpApiUrl" class="form-control font-mono" placeholder="https://script.google.com/macros/s/.../exec">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="testConnectionAndSync()" style="white-space: nowrap;">
+              <span>⚡ Test & Sync</span>
+            </button>
+          </div>
+          <span style="font-size: 0.68rem; color: var(--emerald);">Auto-syncs live with Google Spreadsheet 'Business_Transparency_DB'.</span>
         </div>
 
         <div class="form-group">
@@ -2535,7 +2540,7 @@
   <script>
     // PERMANENT HARDCODED GOOGLE APPS SCRIPT CLUSTER
     const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbxijQ18mCWP9k3lbpQ1mkUoyB4dWgZTDaquYJodX2KHMMQVA3mOXTzYlBSvsuJ6MIDF/exec';
-    
+        
     const STORAGE_KEY_PROJECTS = 'nexus_projects_v5';
     const STORAGE_KEY_AUDITS = 'nexus_audits_v5';
     const STORAGE_KEY_EXPENSES = 'nexus_expenses_v5';
@@ -2832,21 +2837,21 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
         const stored = localStorage.getItem(STORAGE_KEY_SETTINGS);
         if (stored) {
           const s = JSON.parse(stored);
-          appState.apiUrl = DEFAULT_API_URL;
+          appState.apiUrl = s.apiUrl || DEFAULT_API_URL;
           appState.masterPassword = s.masterPassword || 'karan2026';
           appState.adminPhone = s.adminPhone || '+91 6353002399';
           appState.adminEmail = s.adminEmail || 'karankhunt805@gmail.com';
           if (s.isAudioMuted !== undefined) appState.isAudioMuted = s.isAudioMuted;
         }
       } catch (e) {}
-      document.getElementById('inpApiUrl').value = DEFAULT_API_URL;
+      document.getElementById('inpApiUrl').value = appState.apiUrl || DEFAULT_API_URL;
       document.getElementById('inpMasterPassword').value = appState.masterPassword;
       document.getElementById('audioIcon').textContent = appState.isAudioMuted ? '🔇' : '🔊';
     }
 
     function saveSettingsToStorage() {
       localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
-        apiUrl: DEFAULT_API_URL,
+        apiUrl: appState.apiUrl || DEFAULT_API_URL,
         masterPassword: appState.masterPassword,
         adminPhone: appState.adminPhone,
         adminEmail: appState.adminEmail,
@@ -2860,9 +2865,27 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
       if (pass) appState.masterPassword = pass;
       appState.adminPhone = document.getElementById('inpAdminPhone').value.trim() || '+91 6353002399';
       appState.adminEmail = document.getElementById('inpAdminEmail').value.trim() || 'karankhunt805@gmail.com';
+      const newApiUrl = document.getElementById('inpApiUrl').value.trim();
+      if (newApiUrl) {
+        appState.apiUrl = newApiUrl;
+      }
       saveSettingsToStorage();
       closeSettingsModal();
       showToast('Settings Saved', 'success');
+      syncWithGoogleSheet();
+    }
+
+    async function testConnectionAndSync() {
+      playSound('click');
+      const inputUrl = document.getElementById('inpApiUrl').value.trim();
+      if (!inputUrl) {
+        showToast('Please enter your Google Apps Script endpoint URL', 'error');
+        return;
+      }
+      appState.apiUrl = inputUrl;
+      saveSettingsToStorage();
+      showToast('Testing database connection...', 'info');
+      await syncWithGoogleSheet(true);
     }
 
     const MASTER_REAL_PROJECTS = [
@@ -3357,6 +3380,90 @@ Verified by Karan Khunt // Lead Architect
         if (valA > valB) return appState.sortDirection === 'asc' ? 1 : -1;
         return 0;
       });
+    }
+
+    function convertToINR(val, currency = 'INR') {
+      const num = Number(val) || 0;
+      const rate = FOREX_RATES[currency] || 1;
+      return num * rate;
+    }
+
+    function formatNativeCurrency(val, currency = 'INR') {
+      const num = Number(val) || 0;
+      const sym = CURRENCY_SYMBOLS[currency] || '₹';
+      return `${sym}${num.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+    }
+
+    function renderKPIs(projects) {
+      let grossTotalINR = 0;
+      let clearedTotalINR = 0;
+      let pendingTotalINR = 0;
+      let unpaidCount = 0;
+      let activeCount = 0;
+
+      projects.forEach(p => {
+        const curr = p.Currency || 'INR';
+        const qINR = convertToINR(p.Total_Quote, curr);
+        const pINR = convertToINR(p.Amount_Paid, curr);
+        const pendINR = Math.max(0, qINR - pINR);
+
+        grossTotalINR += qINR;
+        clearedTotalINR += pINR;
+        pendingTotalINR += pendINR;
+
+        if (pendINR > 0) unpaidCount++;
+        if (p.Project_Status === 'In Progress' || p.Project_Status === 'Client Revision' || p.Project_Status === 'New Lead' || p.Project_Status === 'Draft Submitted') {
+          activeCount++;
+        }
+      });
+
+      let totalExpenses = 0;
+      if (Array.isArray(appState.expenses)) {
+        appState.expenses.forEach(e => {
+          totalExpenses += Number(e.amount) || 0;
+        });
+      }
+
+      const netProfit = clearedTotalINR - totalExpenses;
+      const collectionRate = grossTotalINR > 0 ? Math.round((clearedTotalINR / grossTotalINR) * 100) : 0;
+
+      const grossEl = document.getElementById('kpiGrossRevenue');
+      if (grossEl) grossEl.textContent = '₹' + Math.round(grossTotalINR).toLocaleString('en-IN');
+
+      const totalCountEl = document.getElementById('kpiTotalProjectsCount');
+      if (totalCountEl) totalCountEl.textContent = projects.length;
+
+      const clearedEl = document.getElementById('kpiClearedIncome');
+      if (clearedEl) clearedEl.textContent = '₹' + Math.round(clearedTotalINR).toLocaleString('en-IN');
+
+      const duesEl = document.getElementById('kpiOutstandingDues');
+      if (duesEl) duesEl.textContent = '₹' + Math.round(pendingTotalINR).toLocaleString('en-IN');
+
+      const unpaidCountEl = document.getElementById('kpiUnpaidProjectsCount');
+      if (unpaidCountEl) unpaidCountEl.textContent = `${unpaidCount} accounts pending`;
+
+      const expEl = document.getElementById('kpiTotalExpenses');
+      if (expEl) expEl.textContent = '₹' + Math.round(totalExpenses).toLocaleString('en-IN');
+
+      const netProfitEl = document.getElementById('kpiNetProfit');
+      if (netProfitEl) {
+        netProfitEl.textContent = (netProfit < 0 ? '-₹' : '₹') + Math.abs(Math.round(netProfit)).toLocaleString('en-IN');
+        netProfitEl.className = netProfit >= 0 ? 'kpi-value text-emerald privacy-sensitive' : 'kpi-value text-rose privacy-sensitive';
+      }
+
+      const activeEl = document.getElementById('kpiActivePipeline');
+      if (activeEl) activeEl.textContent = activeCount;
+
+      const rateEl = document.getElementById('kpiCollectionRate');
+      if (rateEl) rateEl.textContent = `${collectionRate}%`;
+
+      const gaugePct = document.getElementById('gaugePctText');
+      if (gaugePct) gaugePct.textContent = `${collectionRate}%`;
+
+      const gaugeCircle = document.getElementById('gaugeCircle');
+      if (gaugeCircle) {
+        gaugeCircle.setAttribute('stroke-dasharray', `${Math.min(100, Math.max(0, collectionRate))}, 100`);
+      }
     }
 
     function renderAll() {
@@ -4111,32 +4218,69 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
     }
 
     /* PERMANENT GOOGLE SCRIPT CLUSTER SYNC */
-    async function syncWithGoogleSheet() {
+    async function syncWithGoogleSheet(showFeedback = false) {
       const hudStatus = document.getElementById('hudSyncStatus');
+      const url = appState.apiUrl || DEFAULT_API_URL;
       try {
-        const resp = await fetch(DEFAULT_API_URL, { method: 'GET' });
+        if (hudStatus && !showFeedback) {
+          hudStatus.textContent = 'SYNCING...';
+        }
+        const resp = await fetch(url, { method: 'GET' });
+        if (!resp.ok) {
+          throw new Error(`HTTP Error ${resp.status}`);
+        }
         const result = await resp.json();
         if (result.status === 'success' && result.data) {
-          if (Array.isArray(result.data.projects) && result.data.projects.length > 0) {
+          if (Array.isArray(result.data.projects)) {
             appState.projects = result.data.projects;
             saveProjectsToStorage();
           }
-          if (hudStatus) hudStatus.textContent = 'CONNECTED (SHEETS)';
+          if (Array.isArray(result.data.expenses)) {
+            appState.expenses = result.data.expenses;
+            saveExpensesToStorage();
+          }
+          if (Array.isArray(result.data.auditTrails)) {
+            appState.auditTrails = result.data.auditTrails;
+            saveAuditsToStorage();
+          }
+          if (hudStatus) {
+            hudStatus.textContent = 'CONNECTED (SHEETS)';
+            hudStatus.className = 'text-emerald';
+          }
           renderAll();
+          if (showFeedback) {
+            showToast('Connected to Google Sheets successfully! Data synced.', 'success');
+          }
+          return true;
+        } else {
+          throw new Error(result.message || 'Malformed API response from Google Sheets');
         }
       } catch (err) {
-        if (hudStatus) hudStatus.textContent = 'STANDALONE CACHE';
+        console.warn('Sync with Google Sheets failed:', err);
+        if (hudStatus) {
+          hudStatus.textContent = 'STANDALONE CACHE';
+          hudStatus.className = 'text-amber';
+        }
+        if (showFeedback) {
+          showToast(`Connection failed: ${err.message || 'Check endpoint URL and deployment permissions'}`, 'error');
+        }
+        return false;
       }
     }
 
     async function dispatchApiPost(action, payload) {
       try {
-        await fetch(DEFAULT_API_URL, {
+        const url = appState.apiUrl || DEFAULT_API_URL;
+        const resp = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action, ...payload })
         });
-      } catch (err) {}
+        const json = await resp.json();
+        return json;
+      } catch (err) {
+        console.warn('API POST Error:', err);
+      }
     }
 
     /* UI HELPERS */
@@ -4473,7 +4617,7 @@ Karan Khunt (+91 6353002399 | karankhunt805@gmail.com)`;
         balanceDue: Math.max(0, (Number(document.getElementById('invTotalAmount').value) || 0) - (Number(document.getElementById('invAmountPaid').value) || 0))
       };
       await dispatchApiPost('DISPATCH_INVOICE_EMAIL', {
-        projectId: document.getElementById('invNumberBadge').textContent,
+        projectId: document.getElementById('billInvoiceNumber').textContent,
         clientEmail: email,
         invoiceData: invData
       });

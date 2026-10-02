@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nexus-prime-cache-v4';
+const CACHE_NAME = 'nexus-prime-cache-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -34,8 +34,8 @@ self.addEventListener('activate', (event) => {
 // Always fetch fresh HTML & assets from network first.
 // Only fall back to cache if offline.
 self.addEventListener('fetch', (event) => {
-  // Always bypass cache for Google Apps Script API calls or non-GET
-  if (event.request.url.includes('script.google.com') || event.request.method !== 'GET') {
+  // Always bypass cache for cross-origin API calls (like Google Apps Script) or non-GET
+  if (!event.request.url.startsWith(self.location.origin) || event.request.method !== 'GET') {
     return;
   }
 
