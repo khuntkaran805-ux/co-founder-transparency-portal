@@ -2,6 +2,7 @@ const CACHE_NAME = 'nexus-prime-cache-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './client.html',
   './manifest.json',
   './icon.svg'
 ];
