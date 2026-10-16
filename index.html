@@ -3359,11 +3359,7 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
     <button class="print-btn" onclick="window.print()">🖨️ Save as PDF / Print</button>
   </div>
   ${billEl.outerHTML}
-  <script>
-    window.onload = function() {
-      setTimeout(function() { window.print(); }, 500);
-    };
-  <\/script>
+  <scr' + 'ipt>\n    window.onload = function() {\n      setTimeout(function() { window.print(); }, 500);\n    };\n  </scr' + 'ipt>
 </body>
 </html>`);
       printWin.document.close();
