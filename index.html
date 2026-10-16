@@ -1233,6 +1233,23 @@
       .master-lock-card { width: 92% !important; max-width: 92% !important; padding: 1.6rem 1.2rem !important; }
       .drawer-panel { width: 100% !important; max-width: 100% !important; }
     }
+    @media (max-width: 880px) {
+      .table-container { display: none !important; }
+      .mobile-cards-view { display: flex !important; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .navbar { padding: 0.55rem 0.75rem; flex-wrap: wrap; }
+      .nav-brand { flex: 1 1 auto; }
+      .nav-actions { flex-wrap: wrap; gap: 0.35rem; }
+      .brand-title { font-size: 0.95rem; }
+      .brand-subtitle { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-full { grid-column: span 1; }
+      .modal-card { width: 95% !important; max-width: 95% !important; margin: 0.5rem auto; max-height: 94vh; }
+      .master-lock-card { width: 92% !important; max-width: 92% !important; padding: 1.6rem 1.2rem !important; }
+      .drawer-panel { width: 100% !important; max-width: 100% !important; }
+      .drawer-footer { flex-wrap: wrap; gap: 0.4rem; justify-content: stretch; }
+      .drawer-footer .btn { flex: 1 1 45%; font-size: 0.75rem; }
+    }
     @media (max-width: 480px) {
       .container { padding: 0.5rem; gap: 0.75rem; }
       .kpi-grid { grid-template-columns: 1fr; gap: 0.65rem; }
@@ -1248,6 +1265,7 @@
       .modal-header, .drawer-header { padding: 0.85rem 1rem !important; }
       .modal-body, .drawer-body { padding: 0.85rem 1rem !important; gap: 0.85rem !important; }
       .modal-footer, .drawer-footer { padding: 0.75rem 1rem !important; }
+      .drawer-footer .btn { flex: 1 1 100%; font-size: 0.75rem; }
     }
 
     .text-cyan { color: var(--cyan) !important; }
@@ -3121,8 +3139,8 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
       e.preventDefault();
       const cat = document.getElementById('expCategory').value;
       const amt = Number(document.getElementById('expAmount').value);
-      const desc = document.getElementById('expDescription').value.trim();
-      const date = document.getElementById('expDate').value;
+      const desc = document.getElementById('expDescription').value.trim() || 'General Expense';
+      const date = document.getElementById('expDate').value || new Date().toISOString().split('T')[0];
 
       if (isNaN(amt) || amt <= 0) {
         showToast('Please enter a valid expense amount', 'error');
@@ -3130,22 +3148,32 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
       }
 
       const newExp = {
+        Expense_ID: 'EXP-' + Date.now().toString(36).toUpperCase(),
         id: 'EXP-' + Date.now().toString(36).toUpperCase(),
+        Category: cat,
         category: cat,
+        Description: desc,
         description: desc,
+        Amount: amt,
         amount: amt,
-        date: date
+        Date: date,
+        date: date,
+        Currency: 'INR'
       };
 
+      if (!Array.isArray(appState.expenses)) appState.expenses = [];
       appState.expenses.unshift(newExp);
       saveExpensesToStorage();
       playSound('success');
-      showToast(`Expense of ₹${amt} recorded`, 'success');
+      showToast(`Expense of ₹${amt.toLocaleString('en-IN')} recorded`, 'success');
 
       document.getElementById('expAmount').value = '';
       document.getElementById('expDescription').value = '';
       renderExpensesList();
       renderAll();
+
+      // Dispatch to Google Apps Script backend
+      dispatchApiPost('ADD_EXPENSE', { expense: newExp, actor: 'Karan Khunt' });
     }
 
     function renderExpensesList() {
@@ -3165,14 +3193,19 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
         item.style.display = 'flex';
         item.style.alignItems = 'center';
         item.style.justifyContent = 'space-between';
+        const d = exp.description || exp.Description || 'Operational Cost';
+        const c = exp.category || exp.Category || 'General';
+        const rawDate = exp.date || exp.Date || '';
+        const dateStr = rawDate.includes('T') ? rawDate.split('T')[0] : (rawDate.includes(' ') ? rawDate.split(' ')[0] : rawDate);
+        const a = Number(exp.amount !== undefined ? exp.amount : exp.Amount) || 0;
         item.innerHTML = `
           <div>
-            <div style="font-weight: 700; color: #fff; font-size: 0.85rem;">${escapeHtml(exp.description)}</div>
-            <div style="font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono);">${escapeHtml(exp.category)} • ${exp.date}</div>
+            <div style="font-weight: 700; color: #fff; font-size: 0.85rem;">${escapeHtml(d)}</div>
+            <div style="font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono);">${escapeHtml(c)} • ${dateStr}</div>
           </div>
           <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <span class="currency-mono text-rose" style="font-size: 0.95rem;">-₹${Number(exp.amount).toLocaleString('en-IN')}</span>
-            <button class="btn btn-sm btn-outline btn-icon" onclick="deleteExpense(${idx})">✕</button>
+            <span class="currency-mono text-rose" style="font-size: 0.95rem;">-₹${a.toLocaleString('en-IN')}</span>
+            <button class="btn btn-sm btn-outline btn-icon" onclick="deleteExpense(${idx})" title="Delete Expense">✕</button>
           </div>
         `;
         listWrap.appendChild(item);
@@ -3181,10 +3214,15 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
 
     function deleteExpense(idx) {
       playSound('click');
+      const exp = appState.expenses[idx];
       appState.expenses.splice(idx, 1);
       saveExpensesToStorage();
       renderExpensesList();
       renderAll();
+      showToast('Expense removed', 'info');
+      if (exp && (exp.Expense_ID || exp.id)) {
+        dispatchApiPost('DELETE_EXPENSE', { expenseId: exp.Expense_ID || exp.id, actor: 'Karan Khunt' });
+      }
     }
 
     
@@ -3575,7 +3613,7 @@ Verified by Karan Khunt // Lead Architect
       let totalExpenses = 0;
       if (Array.isArray(appState.expenses)) {
         appState.expenses.forEach(e => {
-          totalExpenses += Number(e.amount) || 0;
+          totalExpenses += Number(e.amount !== undefined ? e.amount : e.Amount) || 0;
         });
       }
 
@@ -4343,8 +4381,7 @@ Verified by Karan Khunt // Lead Architect
       const p = appState.projects.find(item => item.Project_ID === projectId);
       if (!p) return;
 
-      let phone = (p.Client_Contact || '').replace(/[^0-9]/g, '');
-      if (phone.length === 10) phone = '91' + phone;
+      const phone = sanitizePhone(p.Client_Contact); if (!phone) { showToast("Client phone required", "error"); return; }
 
       const curr = p.Currency || 'INR';
       const sym = CURRENCY_SYMBOLS[curr] || '₹';
@@ -4578,8 +4615,7 @@ Thank you for collaborating with us. For direct inquiries, reply directly to thi
       playSound('click');
       const p = appState.projects.find(i => i.Project_ID === projectId);
       if (!p) return;
-      let phone = (p.Client_Contact || '').replace(/[^0-9]/g, '');
-      if (phone.length === 10) phone = '91' + phone;
+      const phone = sanitizePhone(p.Client_Contact); if (!phone) { showToast("Client phone required", "error"); return; }
 
       const sym = CURRENCY_SYMBOLS[p.Currency || 'INR'] || '₹';
       const quote = Number(p.Total_Quote) || 0;
@@ -4718,8 +4754,7 @@ Command Portal: https://khuntkaran805-ux.github.io/co-founder-transparency-porta
       playSound('click');
       const p = appState.projects.find(i => i.Project_ID === projectId);
       if (!p) return;
-      let phone = (p.Client_Contact || '').replace(/[^0-9]/g, '');
-      if (phone.length === 10) phone = '91' + phone;
+      const phone = sanitizePhone(p.Client_Contact); if (!phone) { showToast("Client phone required", "error"); return; }
 
       const msg = 
 `⭐ *NEXUS PRIME // 5-STAR TESTIMONIAL INVITATION*
