@@ -1830,15 +1830,31 @@
               </div>
             </div>
 
-            <!-- Client Info -->
-            <div class="form-group">
-              <label class="form-label"><span id="lblClientName">Primary Client Operative</span> <span class="text-rose">*</span></label>
-              <input type="text" id="inpClientName" class="form-control" placeholder="e.g. Rahul Verma" required>
+            <!-- Client Info (hidden in GROUP mode, replaced by group matrix) -->
+            <div id="individualClientFields" class="form-group form-full" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+              <div>
+                <label class="form-label"><span id="lblClientName">Primary Client Operative</span> <span class="text-rose">*</span></label>
+                <input type="text" id="inpClientName" class="form-control" placeholder="e.g. Rahul Verma" required>
+              </div>
+              <div>
+                <label class="form-label">Primary WhatsApp Comm-Link <span class="text-rose">*</span></label>
+                <input type="text" id="inpClientContact" class="form-control font-mono" placeholder="e.g. 9876543210 or +91 9876543210" required>
+              </div>
             </div>
-
-            <div class="form-group">
-              <label class="form-label">Primary WhatsApp Comm-Link <span class="text-rose">*</span></label>
-              <input type="text" id="inpClientContact" class="form-control font-mono" placeholder="e.g. 9876543210 or +91 9876543210" required>
+            <!-- Group mode hint (visible in GROUP mode only) -->
+            <div id="groupClientHint" class="form-group form-full" style="display: none; background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.35); border-radius: 8px; padding: 0.75rem 1rem;">
+              <div style="font-size: 0.78rem; color: var(--violet); font-family: var(--font-mono); font-weight: 800; margin-bottom: 0.2rem;">👥 GROUP MODE ACTIVE</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Enter the <strong style="color:#fff;">team lead / submitter</strong> name and their WhatsApp number. Then add all group members below.</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 0.65rem;">
+                <div>
+                  <label class="form-label">Team Lead / Primary Submitter <span class="text-rose">*</span></label>
+                  <input type="text" id="inpClientNameGroup" class="form-control" placeholder="e.g. Rahul (Team Lead)" oninput="syncGroupLeadToMain()">
+                </div>
+                <div>
+                  <label class="form-label">Team Lead WhatsApp <span class="text-rose">*</span></label>
+                  <input type="text" id="inpClientContactGroup" class="form-control font-mono" placeholder="e.g. 9876543210" oninput="syncGroupLeadToMain()">
+                </div>
+              </div>
             </div>
 
             <!-- Dynamic Group Members Matrix (Visible only when Group is selected) -->
@@ -2870,7 +2886,30 @@
       const trackId = urlParams.get('track');
 
       if (trackId) {
-        openClientLiveTracking(trackId);
+        // Show tracking view with loading state immediately
+        document.getElementById('masterLockScreen').style.display = 'none';
+        document.getElementById('mainAdminNavbar').style.display = 'none';
+        document.getElementById('mainAdminContainer').style.display = 'none';
+        const trackView = document.getElementById('clientTrackingView');
+        trackView.style.display = 'flex';
+        trackView.innerHTML = `
+          <div class="tracking-card" style="text-align: center; padding: 3rem;">
+            <div style="font-family: var(--font-display); font-size: 1.1rem; color: var(--cyan); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+              <div style="width: 18px; height: 18px; border: 3px solid var(--cyan); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+              SYNCING MISSION DATA...
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">Connecting to NEXUS PRIME live database. Please wait...</div>
+          </div>
+          <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+        `;
+
+        // First try to sync from Google Sheets (guaranteed fresh data), THEN render
+        syncWithGoogleSheet(false).then(() => {
+          openClientLiveTracking(trackId);
+        }).catch(() => {
+          // Sheets unreachable — use cached data
+          openClientLiveTracking(trackId);
+        });
       } else {
         // Check Master Lock Authorization
         checkMasterAuth();
@@ -2951,13 +2990,42 @@
 
       const p = appState.projects.find(item => item.Project_ID.toUpperCase() === projectId.toUpperCase());
       if (!p) {
+        // One final retry after 3s — sheets sync may still be in-flight
         trackView.innerHTML = `
           <div class="tracking-card" style="text-align: center; padding: 3rem;">
-            <h2 style="color: var(--rose);">Mission Not Found</h2>
-            <p style="color: var(--text-dim); margin-top: 0.5rem;">Could not locate project tracking ID: <strong>${escapeHtml(projectId)}</strong>.</p>
-            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem;">Contact Karan Khunt on WhatsApp: <a href="https://wa.me/916353002399" class="text-cyan">+91 6353002399</a></p>
+            <div style="font-family: var(--font-display); font-size: 1rem; color: var(--amber); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+              <div style="width: 16px; height: 16px; border: 3px solid var(--amber); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+              LOCATING MISSION [${escapeHtml(projectId)}]...
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">Fetching live data from secure database. Retrying in 3 seconds...</div>
+            <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
           </div>
         `;
+        setTimeout(() => {
+          syncWithGoogleSheet(false).then(() => {
+            const retryProject = appState.projects.find(item => item.Project_ID.toUpperCase() === projectId.toUpperCase());
+            if (retryProject) {
+              openClientLiveTracking(projectId);
+            } else {
+              trackView.innerHTML = `
+                <div class="tracking-card" style="text-align: center; padding: 3rem;">
+                  <h2 style="color: var(--rose); font-family: var(--font-display);">Mission Not Found</h2>
+                  <p style="color: var(--text-dim); margin-top: 0.5rem; font-size: 0.85rem;">Could not locate project tracking ID: <strong style="color:#fff;">${escapeHtml(projectId)}</strong>.</p>
+                  <p style="color: var(--text-muted); font-size: 0.78rem; margin-top: 0.5rem;">This link may have expired or the project ID may be incorrect.</p>
+                  <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem;">Contact Karan Khunt on WhatsApp: <a href="https://wa.me/916353002399" class="text-cyan" style="text-decoration: underline;">+91 6353002399</a></p>
+                </div>
+              `;
+            }
+          }).catch(() => {
+            trackView.innerHTML = `
+              <div class="tracking-card" style="text-align: center; padding: 3rem;">
+                <h2 style="color: var(--rose); font-family: var(--font-display);">Connection Error</h2>
+                <p style="color: var(--text-dim); margin-top: 0.5rem; font-size: 0.85rem;">Could not reach the NEXUS PRIME database. Please check your internet connection and try again.</p>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem;">Contact Karan Khunt: <a href="https://wa.me/916353002399" class="text-cyan" style="text-decoration: underline;">+91 6353002399</a></p>
+              </div>
+            `;
+          });
+        }, 3000);
         return;
       }
 
@@ -4362,7 +4430,7 @@ Verified by Karan Khunt // Lead Architect
       document.getElementById('inpProjectName').value = p.Project_Name || '';
       document.getElementById('inpClientName').value = p.Client_Name || '';
       document.getElementById('inpClientContact').value = p.Client_Contact || '';
-      setGroupMembersData(p.Assignment_Type || 'INDIVIDUAL', p.Group_Members || []);
+      setGroupMembersData(p.Assignment_Type || 'INDIVIDUAL', p.Group_Members || [], p.Client_Name, p.Client_Contact);
       document.getElementById('inpCategory').value = p.Category || 'Other';
       document.getElementById('inpCurrency').value = p.Currency || 'INR';
       document.getElementById('inpTotalQuote').value = p.Total_Quote || 0;
@@ -4418,18 +4486,42 @@ Verified by Karan Khunt // Lead Architect
     /* ========================================================================= */
     function toggleAssignmentType() {
       const isGroup = document.getElementById('typeRadioGroup').checked;
+
+      // Show/hide group members matrix
       const groupSec = document.getElementById('groupMembersSection');
-      groupSec.style.display = isGroup ? 'flex' : 'none';
-      const lbl = document.getElementById('lblClientName');
-      if (lbl) lbl.textContent = isGroup ? 'Primary Team Lead / Submitter' : 'Client Operative Name';
-      
-      if (isGroup) {
+      if (groupSec) groupSec.style.display = isGroup ? 'flex' : 'none';
+
+      // Show individual fields OR group hint (never both)
+      const indivDiv = document.getElementById('individualClientFields');
+      const groupHint = document.getElementById('groupClientHint');
+      if (indivDiv) indivDiv.style.display = isGroup ? 'none' : 'grid';
+      if (groupHint) groupHint.style.display = isGroup ? 'block' : 'none';
+
+      // If switching to individual, clear hidden fields so validation passes
+      if (!isGroup) {
+        const n = document.getElementById('inpClientNameGroup');
+        const c = document.getElementById('inpClientContactGroup');
+        if (n) n.value = '';
+        if (c) c.value = '';
+      } else {
+        // Auto-seed group member rows if empty
         const container = document.getElementById('groupMembersContainer');
-        if (container.children.length === 0) {
+        if (container && container.children.length === 0) {
           addGroupMemberRow();
           addGroupMemberRow();
         }
+        // Copy any previously typed values into the real hidden fields
+        syncGroupLeadToMain();
       }
+    }
+
+    function syncGroupLeadToMain() {
+      const nameVal = document.getElementById('inpClientNameGroup')?.value || '';
+      const contVal = document.getElementById('inpClientContactGroup')?.value || '';
+      const realName = document.getElementById('inpClientName');
+      const realCont = document.getElementById('inpClientContact');
+      if (realName) realName.value = nameVal;
+      if (realCont) realCont.value = contVal;
     }
 
     function addGroupMemberRow(name = '', contact = '') {
@@ -4473,11 +4565,19 @@ Verified by Karan Khunt // Lead Architect
       return members;
     }
 
-    function setGroupMembersData(assignmentType, members) {
+    function setGroupMembersData(assignmentType, members, leadName, leadContact) {
       const isGroup = assignmentType === 'GROUP';
       document.getElementById('typeRadioGroup').checked = isGroup;
       document.getElementById('typeRadioIndividual').checked = !isGroup;
       toggleAssignmentType();
+
+      if (isGroup && leadName) {
+        const n = document.getElementById('inpClientNameGroup');
+        const c = document.getElementById('inpClientContactGroup');
+        if (n) n.value = leadName;
+        if (c) c.value = leadContact || '';
+        syncGroupLeadToMain();
+      }
 
       const container = document.getElementById('groupMembersContainer');
       container.innerHTML = '';
