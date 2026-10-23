@@ -2886,30 +2886,12 @@
       const trackId = urlParams.get('track');
 
       if (trackId) {
-        // Show tracking view with loading state immediately
-        document.getElementById('masterLockScreen').style.display = 'none';
-        document.getElementById('mainAdminNavbar').style.display = 'none';
-        document.getElementById('mainAdminContainer').style.display = 'none';
-        const trackView = document.getElementById('clientTrackingView');
-        trackView.style.display = 'flex';
-        trackView.innerHTML = `
-          <div class="tracking-card" style="text-align: center; padding: 3rem;">
-            <div style="font-family: var(--font-display); font-size: 1.1rem; color: var(--cyan); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 0.75rem;">
-              <div style="width: 18px; height: 18px; border: 3px solid var(--cyan); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
-              SYNCING MISSION DATA...
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">Connecting to NEXUS PRIME live database. Please wait...</div>
-          </div>
-          <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
-        `;
-
-        // First try to sync from Google Sheets (guaranteed fresh data), THEN render
-        syncWithGoogleSheet(false).then(() => {
+        // Render INSTANTLY from URL snapshot (zero API wait)
+        openClientLiveTracking(trackId);
+        // Then silently refresh from Google Sheets for latest status
+        syncWithGoogleSheet(false).then(function() {
           openClientLiveTracking(trackId);
-        }).catch(() => {
-          // Sheets unreachable — use cached data
-          openClientLiveTracking(trackId);
-        });
+        }).catch(function() { /* snapshot already shown */ });
       } else {
         // Check Master Lock Authorization
         checkMasterAuth();
@@ -2979,6 +2961,57 @@
     /* ========================================================================= */
     /* PUBLIC CLIENT LIVE TRACKING ENGINE */
     /* ========================================================================= */
+    function decodeTrackingSnapshot() {
+      try {
+        var hash = window.location.hash || '';
+        var match = hash.match(/[#&]d=([^&]+)/);
+        if (match) {
+          var json = decodeURIComponent(escape(atob(match[1].replace(/-/g,'+').replace(/_/g,'/'))));
+          var decoded = JSON.parse(json);
+          if (decoded && decoded.id) return decoded;
+        }
+      } catch(e) {}
+      return null;
+    }
+
+    function buildProjectFromSnapshot(snap) {
+      return {
+        Project_ID: snap.id || '',
+        Project_Name: snap.name || '',
+        Client_Name: snap.client || '',
+        Project_Status: snap.status || 'In Progress',
+        Delivery_Deadline: snap.deadline || '',
+        Total_Quote: Number(snap.quote) || 0,
+        Amount_Paid: Number(snap.paid) || 0,
+        Pending_Balance: Math.max(0, (Number(snap.quote) || 0) - (Number(snap.paid) || 0)),
+        Currency: snap.currency || 'INR',
+        Category: snap.category || '',
+        Client_Contact: snap.contact || ''
+      };
+    }
+
+    function generateTrackingLink(projectId) {
+      var proj = appState.projects.find(function(i){ return i.Project_ID === projectId; });
+      var base = window.location.origin + window.location.pathname + '?track=' + projectId;
+      if (!proj) return base;
+      try {
+        var snap = {
+          id: proj.Project_ID,
+          name: proj.Project_Name,
+          client: proj.Client_Name,
+          status: proj.Project_Status,
+          deadline: proj.Delivery_Deadline || '',
+          quote: proj.Total_Quote || 0,
+          paid: proj.Amount_Paid || 0,
+          currency: proj.Currency || 'INR',
+          category: proj.Category || '',
+          contact: proj.Client_Contact || ''
+        };
+        var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(snap))));
+        return base + '#d=' + b64;
+      } catch(e) { return base; }
+    }
+
     function openClientLiveTracking(projectId) {
       // Hide Master Lock and Admin Dashboard
       document.getElementById('masterLockScreen').style.display = 'none';
@@ -2988,9 +3021,13 @@
       const trackView = document.getElementById('clientTrackingView');
       trackView.style.display = 'flex';
 
-      const p = appState.projects.find(item => item.Project_ID.toUpperCase() === projectId.toUpperCase());
+      var _stateProj = appState.projects.find(function(item){ return item.Project_ID.toUpperCase() === projectId.toUpperCase(); });
+      var _snap = decodeTrackingSnapshot();
+      var _snapProj = (_snap && _snap.id && _snap.id.toUpperCase() === projectId.toUpperCase()) ? buildProjectFromSnapshot(_snap) : null;
+      var p = _stateProj || _snapProj;
+
       if (!p) {
-        // One final retry after 3s — sheets sync may still be in-flight
+        // Still not found — show spinner and do one sync+retry
         trackView.innerHTML = `
           <div class="tracking-card" style="text-align: center; padding: 3rem;">
             <div style="font-family: var(--font-display); font-size: 1rem; color: var(--amber); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 0.75rem;">
@@ -3080,10 +3117,21 @@
     function copyClientTrackingLink() {
       playSound('click');
       if (!appState.activeDrawerProjectId) return;
-      const link = `${window.location.origin}${window.location.pathname}?track=${appState.activeDrawerProjectId}`;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(link);
-        showToast('Client Live Tracking Link Copied!', 'success');
+      var link = generateTrackingLink(appState.activeDrawerProjectId);
+      function fallbackCopy() {
+        var ta = document.createElement('textarea');
+        ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(e) {}
+        document.body.removeChild(ta);
+        showToast('Tracking Link Copied! (works on any device instantly)', 'success');
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(function() {
+          showToast('Tracking Link Copied! (works on any device instantly)', 'success');
+        }).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
       }
     }
 
@@ -3099,7 +3147,7 @@
         return;
       }
 
-      const link = `${window.location.origin}${window.location.pathname}?track=${p.Project_ID}`;
+      const link = generateTrackingLink(p.Project_ID);
       const horizonDisplay = p.Delivery_Deadline ? p.Delivery_Deadline.split('T')[0] : 'TBD';
       const msg = 
 `⚡ *NEXUS PRIME // LIVE PROJECT TRACKING LINK*
@@ -3317,12 +3365,9 @@ You can inspect the milestone timeline and delivery countdown at any time. For q
           if (raw) {
             try {
               const parsed = JSON.parse(raw);
-              if (Array.isArray(parsed) && parsed.length > 0) {
-                // If it contains real clients like Nehal, Vijay, etc.
-                if (parsed.some(p => p.Client_Name === 'Nehal' || p.Client_Name === 'Vijay' || p.Client_Name === 'Priyanshi')) {
-                  foundRealProjects = parsed;
-                  break;
-                }
+              if (Array.isArray(parsed) && parsed.length > 0 && parsed[0] && parsed[0].Project_ID) {
+                foundRealProjects = parsed;
+                break;
               }
             } catch (e) {}
           }
@@ -4430,7 +4475,7 @@ Verified by Karan Khunt // Lead Architect
       document.getElementById('inpProjectName').value = p.Project_Name || '';
       document.getElementById('inpClientName').value = p.Client_Name || '';
       document.getElementById('inpClientContact').value = p.Client_Contact || '';
-      setGroupMembersData(p.Assignment_Type || 'INDIVIDUAL', p.Group_Members || [], p.Client_Name, p.Client_Contact);
+      setGroupMembersData(p.Assignment_Type || 'INDIVIDUAL', p.Group_Members || []);
       document.getElementById('inpCategory').value = p.Category || 'Other';
       document.getElementById('inpCurrency').value = p.Currency || 'INR';
       document.getElementById('inpTotalQuote').value = p.Total_Quote || 0;
@@ -4600,7 +4645,7 @@ Verified by Karan Khunt // Lead Architect
       const paid = Number(p.Amount_Paid) || 0;
       const bal = Math.max(0, quote - paid);
       const perHeadBal = (bal / count).toFixed(2);
-      const link = `${window.location.origin}${window.location.pathname}?track=${p.Project_ID}`;
+      const link = generateTrackingLink(p.Project_ID);
 
       let opened = 0;
       members.forEach((m, idx) => {
@@ -4704,7 +4749,7 @@ Karan Khunt (+91 6353002399)`;
 
     function notifyClientTrackingStatusChange(p, oldStatus, newStatus) {
       if (!p) return;
-      const link = `${window.location.origin}${window.location.pathname}?track=${p.Project_ID}`;
+      const link = generateTrackingLink(p.Project_ID);
       const msg = 
 `🚨 *NEXUS PRIME // LIVE MILESTONE STATUS UPDATE*
 ----------------------------------------
